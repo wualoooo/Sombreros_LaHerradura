@@ -1,0 +1,64 @@
+.pie_pag{
+    display: flex;
+}
+
+.cont_pie_pag {
+    width: 100%;
+    height:45%;
+    background: linear-gradient(#8B0000,#000);
+    color: white;
+    z-index: 1000;
+}
+
+.Herradura_pie{
+    height: 20%;
+    display: flex;
+    justify-content: center;
+}
+
+.Herradura_pie>img{
+    height: 400px;
+
+}
+
+.menu_pie{
+    display: flex;
+    justify-content: center;
+    background-color: #41090996;
+}
+
+.elementos_pie > a{
+    color: #fff;
+    text-decoration: none;
+    padding: 0 1.5rem;
+}
+
+.Derechos_de_autor{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.logos{
+    padding-right: 4rem;
+}
+
+.logos>svg{
+    padding: 0.5rem;
+}
+
+.text_derechos{
+    padding-left: 4rem;
+}
+
+.space_left{
+    width: 25%;
+    height: auto;
+    background: linear-gradient(#8B0000,#000);
+}
+
+.space_right{
+    width: 25%;
+    height: auto;
+    background: linear-gradient(#8B0000,#000);
+}

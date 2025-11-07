@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar{
+    height: 9rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(#000,#8B0000);
+    color: white;
+    position: fixed;
+    top: 0;
+    box-shadow: 5px 5px 20px #000;
+    z-index: 1000;
+}
+
+.logo{
+    padding: 0.8rem 3rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 3rem !important;
+}
+
+.logo img{
+    box-sizing: border-box !important;
+    height: 130px !important; 
+}
+
+.logo h1 {
+    font-family: "Cinzel Decorative";
+    font-size: 30px;
+    padding: 0.5rem 0;
+    margin: 0;
+    text-align: center;
+}
+
+.nav-links{
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links li {
+    margin: auto;
+}
+
+
+.nav-links a{
+    text-align: center;
+    padding: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+.nav-links a:hover{
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #b0b0b0;
+    color: #000000;
+    font-size: 25px;
+}
+
+.nav-links a:active{
+    color:rgb(188, 246, 0);
+}
+
+.bi-cart-fill{
+    padding-right: 2rem;
+}
+
+/*Header admin*/
+.nav-links-admin{
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin-right: 5%;
+    list-style: none;
+    padding: 0;
+}
+.opcion{
+    position: relative;
+}
+
+.opcionesAdmin{
+    text-decoration: none;
+    color: #000;
+}
+
+.desplegable {
+    opacity:0;
+    visibility: hidden;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 0.5rem 0.8rem ;
+    margin: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
+}
+
+.desplegable li {
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+#op-somb:hover #despl-somb{
+    margin-left: 1%;
+    opacity: 1; 
+    visibility: visible;
+}
+
+#op-tex:hover #despl-tex{
+    opacity: 1; 
+    visibility: visible;
+}
+
+#op-cint:hover #despl-cint{
+    opacity: 1; 
+    visibility: visible;
+}
+
+#op-bot:hover #despl-bot{
+    opacity: 1; 
+    visibility: visible;
+}
+
+#op-admin:hover #despl-admin{
+    opacity: 1; 
+    visibility: visible;
+}
+
+#pedidosLink, .nav-links-admin li{
+    text-align: center;
+    padding: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 25px;
+}
+
+.nav-links-admin li:hover{
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #b0b0b0;
+    color: #000000;
+    font-size: 25px;
+}
+
+#pedidosLink:hover{
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #b0b0b0;
+    color: #000000;
+    font-size: 25px;
+}
+
+.nav-links-admin li {
+    margin: auto;
+}

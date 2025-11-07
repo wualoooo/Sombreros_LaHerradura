@@ -1,0 +1,130 @@
+.modal-Cc, .modal-ra {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-ra{
+    z-index: 10000;
+}
+
+.modal-content-cc {
+    background: #fff;
+    margin: 2% auto;
+    padding: 15px;
+    border-radius: 10px;
+    width: 30vw;
+    height: 90vh;
+    color: black;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: rgb(179, 179, 179);
+    padding: 5px 9px;
+    color: rgb(59, 59, 59);
+    border-radius: 6px;
+    box-shadow: -2px 2px 3px 1px rgba(0, 0, 0, 0.555);
+}
+
+#CrearCuenta-text{ 
+    margin: 2rem;
+    text-align: center;
+    font-size: 5vh;
+}
+
+#RegAdmin-text{
+    font-size: 4vh;
+    margin: 1.7rem;
+    text-align: center;
+}
+
+
+form{
+    width: 100%;
+}
+
+.input-register{
+    background-color: #f5f5f5;
+    padding-left: 0.7rem;
+    margin: 0.3rem 0 1.3rem 0;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    height: 5vh;
+    font-size: 2.5vh;
+}
+
+.input-admin{
+    background-color: #f5f5f5;
+    padding-left: 0.7rem;
+    margin: 0.3rem 0 1rem 0;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    height: 5vh;
+    font-size: 2.5vh;
+}
+
+.campo-password {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 12%;
+    right: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.cont-form-cc{
+    padding: 0 3rem;
+}
+
+#divButton{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#buttonCrearCuenta{
+    padding: 15px 20px;
+    font-size: 2.5vh;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
+    background-color: rgb(42, 145, 16);
+    color: #fff;
+}
+
+#buttonCrearCuentaAdmin{
+    padding: 13px 15px;
+    font-size: 2.5vh;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
+    background-color: rgb(42, 145, 16);
+    color: #fff;
+    margin-top: 1.2rem;
+    cursor: pointer;
+}
+
+#spaceRol{
+    display: flex;
+    justify-content: space-between;
+}
+
+#RolAdmin{
+    background-color: #f5f5f5;
+    font-size: 2.7vh;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
