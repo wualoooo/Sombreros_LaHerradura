@@ -20,7 +20,7 @@
             </li>
             <li class="opcion" id="op-tex">Texanas
                 <ul class="desplegable" id="despl-tex">
-                    <li><a class="opcionesAdmin" href="#">Panel</a></li>
+                    <li><a class="opcionesAdmin" href="../pages/panelTexanas.php">Panel</a></li>
                     <li><a class="opcionesAdmin" href="#">Ver</a></li>
                 </ul>
             </li>

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
-</head>
+
 <body>
     <header>
         <?php 
@@ -29,7 +29,46 @@
             <th>Tamaño copa</th>
             <th>Material</th>
             <th>Acciones</th>
-        <tbody>
+        <tbody id="tabla-sombreros-body">
+            <?php 
+            include ('../../Model/conexion.php');
+
+            $sql = "SELECT id_sombrero, Nombre, Precio, Color, Horma, Copa, Tam_Copa, Material FROM sombreros";
+            $result = $conn -> query($sql);
+
+            if ($result -> num_rows>0){
+                while($row = $result -> fetch_assoc()){
+                    echo("
+                        <tr>
+                            <td>".$row["id_sombrero"]."</td>
+                            <td>".$row["Nombre"]."</td>
+                            <td>".$row["Precio"]. "</td>
+                            <td>".$row["Color"]. "</td>
+                            <td>".$row["Horma"]."</td>
+                            <td>".$row["Copa"]."</td>
+                            <td>".$row["Tam_Copa"]."</td>
+                            <td>".$row["Material"]."</td>
+                            <td>
+                                <button class='btn btn-editar' data-id='".$row["id_sombrero"]."'>Editar</button>
+                                <button class='btn btn-eliminar' data-id='".$row["id_sombrero"]."'>Eliminar</button>
+                            </td>
+                        </tr>"
+                    );
+                }
+
+            }
+
+            else{
+                echo("
+                    <tr>
+                        <td colspan='4'>No hay resultados</td>
+                    </tr>
+                ");
+            }
+
+        ?>
+
+        <!--</tbody>
             <tr>
                 <td>1</td>
                 <td>Sombrero Bangora Natural Ventilado</td>
@@ -44,13 +83,17 @@
                     <button class="btn btn-eliminar">Eliminar</button>
                 </td>
             </tr>
-        </tbody>
+        </tbody>-->
+
         </table>
         <?php 
-    include('../modals/modal-AggSombrero.php')
-    ?>
+        include('../modals/modal-EditarSombrero.php');
+        include('../modals/modal-AggSombrero.php')
+        ?>
     </main>
+
     <script src="../../public/viewImages.js"></script>
+    <script src="../../public/adminSombreros.js"></script>
     <script src="../../public/modals.js"></script>
 </body>
 </html>

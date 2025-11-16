@@ -8,14 +8,20 @@
         <h2 id="name-sombrero-vp">Sombrero Bangora Natural Ventilado</h2>
         <div id="complete">
             <div id="img-sombrero">
-                
+                <div id="vista-foto">
+                    
+                </div>
+                <div id="vista-miniaturas">
+                    
+                </div>
             </div>
             <div id="info-sombrero">
                 <h5 id="precio-vp">$800.00 mxn</h5>
                 <h6 class="details-sombrero" id="modal-color">Color: Blanco</h6>
                 <h6 class="details-sombrero" id="modal-horma">Horma: Chihuahua</h6>
                 <h6 class="details-sombrero" id="modal-copa">Copa: Malboro</h6>
-                <h6 class="details-sombrero" id="modal-tam-copa">Tamaño copa: 21cm</h6>
+                <h6 class="details-sombrero" id="modal-tam-copa">Tamaño de copa: 21cm</h6>
+                <h6 class="details-sombrero" id="modal-tam-ala">Tamaño de ala: 21cm</h6>
                 <h6 class="details-sombrero" id="modal-material">Material: Bangora</h6>
                 <div id="container-tallas">
                     <div class="talla">54</div>

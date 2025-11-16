@@ -1,4 +1,3 @@
-
 function setupImagePreview(inputId, previewId) {
     
     const input = document.getElementById(inputId);
@@ -38,7 +37,13 @@ function setupImagePreview(inputId, previewId) {
     });
 }
 
+setupImagePreview('imgEditSombrero1', 'previewEditSombrero1');
+setupImagePreview('imgEditSombrero2', 'previewEditSombrero2');
+setupImagePreview('imgEditSombrero3', 'previewEditSombrero3');
+setupImagePreview('imgEditSombrero4', 'previewEditSombrero4');
+
 setupImagePreview('imgSombrero1', 'previewSombrero1');
 setupImagePreview('imgSombrero2', 'previewSombrero2');
 setupImagePreview('imgSombrero3', 'previewSombrero3');
 setupImagePreview('imgSombrero4', 'previewSombrero4');
+

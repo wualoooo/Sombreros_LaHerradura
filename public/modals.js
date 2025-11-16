@@ -26,7 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
   activarModal("openLogin", "modal-Login"); 
   activarModal("buttonCrear", "modal-CrearCuenta");
   activarModal("btnAgg-Sombrero", "modal-AggSombrero")
+  activarModal("btnAgg-Texana", "modal-AggTexana")
   activarModal("btnAgg-Admin", "modal-RegAdmin")
+  activarModal("btn-editar", "modal-EditSombrero")
 
   // --- B. LA NUEVA LÓGICA PARA LAS TARJETAS DE PRODUCTO ---
   const modalId_vp = "modal-ViewProducts";

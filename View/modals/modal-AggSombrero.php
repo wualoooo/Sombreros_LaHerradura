@@ -5,29 +5,29 @@
         <span class="close">&times;</span>
         <h2 id="AggSom-text">Agregar sombrero</h2>
         <div class="cont-form-AggSom">
-            <form class="AggSom" id="form-AggSom" action="../../Controller/registroSombreros.php" method="POST" enctype="multipart/form-data">
+            <form class="AggSom" id="form-AggSom" action="../../Controller/CRUD_Sombreros/registroSombreros.php" method="POST" enctype="multipart/form-data">
                 
                 <div id="div-AggSomb">
                     <div id="AggSom-left">
 
                         <label class="lbl-AggSom" for="NombreSombrero">Nombre</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="NombreSombrero" id="NombreSombrero">
+                        <input class="input-AggSom" type="text" name="NombreSombrero" id="NombreSombrero" placeholder="Ingresa el nombre completo">
                         <br>
 
                         <label class="lbl-AggSom" for="Color">Color</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="ColorSombrero" id="ColorSombrero">
+                        <input class="input-AggSom" type="text" name="ColorSombrero" id="ColorSombrero" placeholder="Ingresa el color">
                         <br>
 
                         <label class="lbl-AggSom" for="Horma">Horma</label>
                         <br>
                         <select class="input-AggSom Selects-Agg" name="HormaSombrero" id="HormaSombrero">
                             <option value="Null">Selecciona una opcion</option>
-                            <option value="">horma1</option>
-                            <option value="">horma2</option>
-                            <option value="">horma3</option>
-                            <option value="">horma4</option>
+                            <option value="horma1">horma1</option>
+                            <option value="horma2">horma2</option>
+                            <option value="horma3">horma3</option>
+                            <option value="horma4">horma4</option>
                         </select>
                         <br>
 
@@ -35,26 +35,32 @@
                         <br>
                         <select class="input-AggSom Selects-Agg" name="CopaSombrero" id="CopaSombrero">
                             <option value="Null">Selecciona una opcion</option>
-                            <option value="">Copa1</option>
-                            <option value="">Copa2</option>
-                            <option value="">Copa3</option>
-                            <option value="">Copa4</option>
+                            <option value="Copa1">Copa1</option>
+                            <option value="Copa2">Copa2</option>
+                            <option value="Copa3">Copa3</option>
+                            <option value="Copa4">Copa4</option>
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom" for="">Tamaño copa</label>
-                        <br>
-                        <input class="input-AggSom" type="text" name="TamañoCopaSombrero" id="TamañoCopaSombrero">
-                        <br>
+                        <div class="inputsTamaños">
+                            <div class="inputsTamañosCopa">
+                                <label class="lbl-AggSom" for="">Tamaño copa</label> <br>
+                                <input class="input-AggSom" type="text" name="TamañoCopaSombrero" id="TamañoCopaSombrero" placeholder="(Numeros)">   
+                            </div>
+                            <div class="inputsTamañosAla">
+                                <label class="lbl-AggSom" for="">Tamaño ala</label> <br>
+                                <input class="input-AggSom" type="text" name="TamañoAlaSombrero" id="TamañoAlaSombrero" placeholder="(Numeros)">
+                            </div>
+                        </div>
 
                         <label class="lbl-AggSom"  for="">Material</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="MaterialSombrero" id="MaterialSombrero">
+                        <input class="input-AggSom" type="text" name="MaterialSombrero" id="MaterialSombrero" placeholder="Ingresa el material">
                         <br>
 
                         <label class="lbl-AggSom"for="">Precio</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="PrecioSombrero" id="PrecioSombrero">
+                        <input class="input-AggSom" type="text" name="PrecioSombrero" id="PrecioSombrero" placeholder="Solo numeros     Ej: 500">
                     </div>
 
                     <div id="AggSom-right">

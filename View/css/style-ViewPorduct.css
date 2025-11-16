@@ -1,3 +1,7 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 .modal-vp {
     display: none;
     position: fixed;
@@ -10,6 +14,7 @@
 }
 
 .modal-content-vp {
+    overflow: hidden;
     background: #fff;
     margin: 10% auto;
     padding: 15px;
@@ -32,8 +37,8 @@
 
 #name-sombrero-vp{
     text-align: center;
-    font-size: 2.8rem;
-    margin: 1rem 0 2rem 0;
+    font-size: 2rem;
+    margin: 1rem 0 1.5rem 0;
 }
 
 #complete{
@@ -101,4 +106,54 @@
     padding: 1rem;
     border: none;
     background-color: #4C8F43;
+}
+
+#img-sombrero{
+    height: 100%;
+    width: 100%;
+    /*background-color: #4C8F43;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+#img-sombrero #vista-foto {
+
+    border-bottom: 1px solid #eee;
+}
+
+#vista-foto{
+    height: 80%;
+    object-fit: contain;
+}
+
+#main-image-modal {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Contenedor de las miniaturas */
+#img-sombrero #vista-miniaturas {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.thumbnail-modal {
+    width: 60px; 
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.thumbnail-modal:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
 }

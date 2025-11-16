@@ -1,5 +1,5 @@
 <?php
-require('../Model/conexion.php');
+require('../../Model/conexion.php');
 header('Content-Type: application/json'); // Siempre envía JSON
 
 // 1. Verifica si el ID llegó
