@@ -119,13 +119,18 @@
 
 
 #img-sombrero #vista-foto {
-
     border-bottom: 1px solid #eee;
 }
 
 #vista-foto{
-    height: 80%;
+    align-items: center;
+    height: 85%;
     object-fit: contain;
+}
+
+#vista-foto img{
+    max-height: 100%;
+    max-width: 100%;
 }
 
 #main-image-modal {

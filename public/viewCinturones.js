@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Selecciona el modal y sus partes
-    const modal = document.getElementById('modal-ViewProducts');
+    const modal = document.getElementById('modal-ViewCinturones');
     // ... (todos tus otros selectores 'modalNombre', 'modalPrecio', etc. están bien)
 
     // Usamos delegación de eventos para más eficiencia
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log("Haciendo fetch para el ID:", id);
             // 2. Llamamos a nuestro PHP usando fetch
-            fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+            fetch(`/LaHerradura/Controller/CRUD_Cinturones/ViewCinturones.php?id=${id}`)
                 .then(response => response.json()) // Convierte la respuesta a JSON
                 .then(data => {
                     // 3. Rellenamos el modal con los datos recibidos
@@ -28,13 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 
                     // Rellenamos los detalles (usando los nuevos IDs)
-                    document.getElementById('modal-color').textContent = `Color: ${data.Color}`;
-                    document.getElementById('modal-horma').textContent = `Horma: ${data.Horma}`;
-                    document.getElementById('modal-copa').textContent = `Copa: ${data.Copa}`;
-                    document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
-                    document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
                     document.getElementById('modal-material').textContent = `Material: ${data.Material}`;
-
+                    document.getElementById('modal-adorno').textContent = `Adorno: ${data.Adorno}`;
+                    document.getElementById('modal-tamaño').textContent = `Tamaño: ${data.Tamaño} cm`;
                     // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
                     
                     // En lugar de una sola imagen, generamos la galería completa
@@ -45,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Asignamos un ID único a la imagen principal del modal
                     let galeriaHtml = `
                         <div id="vista-foto">
-                            <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
+                            <img id="main-image-modal" src="/LaHerradura/uploads/cinturones/${data.Img1}" alt="${data.Nombre}">
                         </div>
                         <div id="vista-miniaturas">
                     `;
@@ -60,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // 3. Generamos el HTML de cada miniatura
                     imagenes.forEach(imgSrc => {
-                        const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
+                        const rutaCompleta = `/LaHerradura/uploads/cinturones/${imgSrc}`;
                         // Usamos una clase única para las miniaturas del modal
                         galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
                     });

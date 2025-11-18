@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../css/style-CrearCuenta.css">
+<link rel="stylesheet" href="../../css/style-CrearCuenta.css">
 
 <div class="modal-Cc" id="modal-CrearCuenta">
     <div class="modal-content-cc">

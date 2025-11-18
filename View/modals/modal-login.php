@@ -1,11 +1,11 @@
-<link rel="stylesheet" href="../css/style-login.css">
+<link rel="stylesheet" href="../../css/style-login.css">
 
 <div class="modal" id="modal-Login">
     <div class="modal-content-login">
         <span class="close">&times;</span>
         <h2 id="login-text">Ingresar</h2>
         <div id="cont-form-login">
-            <form action="../../Controller/InicioSesion.php" method="POST" id="loginForm">
+            <form action="../../../Controller/InicioSesion.php" method="POST" id="loginForm">
                 <label for="email">Correo Electrónico</label>
                 <br>
                 <input class="input-login" type="email" name="Correo" id="Correo" placeholder="Ingresa tu usuario">
@@ -33,9 +33,9 @@
                 </div>
             </form>
             <?php 
-            include('../modals/modal-CrearCuenta.php')
+            include('../../modals/modal-CrearCuenta.php')
             ?>
         </div>
     </div>
 </div>
-<script src="../../public/iniciosesion.js"></script>
+<script src="../../../public/iniciosesion.js"></script>

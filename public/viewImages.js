@@ -1,15 +1,28 @@
-function setupImagePreview(inputId, previewId) {
-    
+/**
+ * Función REUTILIZABLE para conectar un input de archivo a una vista previa de imagen
+ * y opcionalmente mostrar el nombre del archivo en un span.
+ * * @param {string} inputId - El ID del <input type="file">
+ * @param {string} previewId - El ID del <img> para la vista previa
+ * @param {string} [spanId] - (Opcional) El ID del <span> donde mostrar el nombre del archivo
+ */
+function setupImagePreview(inputId, previewId, spanId) {
+
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
+    
+    // Solo busca el span SI se pasó el spanId como argumento
+    const fileNameSpan = spanId ? document.getElementById(spanId) : null;
 
-    // NUEVO: Encontrar el span para el nombre del archivo
-    // (Asume que se llama 'fileName1' si el input es 'imgInput1')
-    const spanId = 'fileName' + inputId.replace('imgSombrero', '');
-    const fileNameSpan = document.getElementById(spanId);
+    if (!input) {
+        // console.warn(`(viewImages) No se encontró el input #${inputId}`);
+        return;
+    }
+    if (!preview) {
+        // console.warn(`(viewImages) No se encontró el preview #${previewId}`);
+        return;
+    }
 
     input.addEventListener('change', function() {
-        
         const file = this.files[0];
 
         if (file) {
@@ -20,7 +33,7 @@ function setupImagePreview(inputId, previewId) {
             }
             reader.readAsDataURL(file);
 
-            // NUEVO: Muestra el nombre del archivo en el span
+            // Muestra el nombre del archivo en el span (si existe)
             if (fileNameSpan) {
                 fileNameSpan.textContent = file.name;
             }
@@ -28,8 +41,8 @@ function setupImagePreview(inputId, previewId) {
         } else {
             preview.src = '#';
             preview.style.display = 'none';
-            
-            // NUEVO: Limpia el nombre del archivo si se cancela
+
+            // Limpia el nombre del archivo si se cancela
             if (fileNameSpan) {
                 fileNameSpan.textContent = '';
             }
@@ -37,13 +50,5 @@ function setupImagePreview(inputId, previewId) {
     });
 }
 
-setupImagePreview('imgEditSombrero1', 'previewEditSombrero1');
-setupImagePreview('imgEditSombrero2', 'previewEditSombrero2');
-setupImagePreview('imgEditSombrero3', 'previewEditSombrero3');
-setupImagePreview('imgEditSombrero4', 'previewEditSombrero4');
-
-setupImagePreview('imgSombrero1', 'previewSombrero1');
-setupImagePreview('imgSombrero2', 'previewSombrero2');
-setupImagePreview('imgSombrero3', 'previewSombrero3');
-setupImagePreview('imgSombrero4', 'previewSombrero4');
-
+// ¡YA NO HAY LLAMADAS A LA FUNCIÓN AQUÍ!
+// Este archivo ahora solo DEFINE la función, no la ejecuta.

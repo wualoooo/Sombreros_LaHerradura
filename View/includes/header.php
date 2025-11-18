@@ -1,25 +1,22 @@
-    <link rel="stylesheet" href="../css/style-Header.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-Header.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style-login.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-login.css">
 
     <nav class="navbar">
         <div class="logo">
-            <a href="../pages/index.php"><img src="../images/Logo_Herradura.png" alt="Logo Herradura"></a>
+            <a href="/LaHerradura/View/pages/index.php"><img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura"></a>
             <h1>
                 Sombreros <br> La Herradura
             </h1>
         </div>
         <ul class="nav-links">
-            <li><a href="../pages/sombreros.php">Sombreros</a></li>
-            <li><a href="#">Texanas</a></li>
-            <li><a href="#">Cinturones</a></li>
-            <li><a href="#">Botines</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Sombreros.php">Sombreros</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Texanas.php">Texanas</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Cinturones.php">Cinturones</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Botines.php">Botines</a></li>
             <li><a href="#" id="openLogin">Mi cuenta</a></li>
-            <?php 
-            include "../modals/modal-login.php"; 
-            ?>
             <li><a href="#">Guia de tallas</a></li>
             <li><a href="#">Probador virtual</a></li>
                 <li><a href="#">    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi-cart-fill" viewBox="0 0 16 16">
@@ -27,13 +24,12 @@
                 </svg>
             </a></li>
         </ul>
-        <div id="modal-Login" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Guía de tallas</h2>
-                <p>Aquí puedes mostrar una tabla, imagen o texto explicativo.</p>
+    
             </div>
-            </div>
+
+            <?php 
+            include(ROOT_PATH . 'View/modals/modal-login.php')
+            ?>
     </nav>
 
     

@@ -52,11 +52,22 @@
             margin: 0 0 2rem 2rem;
             border-radius: 10px;
         }
-        .btn-editar {
+        .btn-editar, 
+        .btn-editarSombrero, 
+        .btn-editarTexana,
+        .btn-editarCinturon, 
+        .btn-editarBotin 
+        {
             background-color: #ffc107; 
             color: #333;
         }
-        .btn-eliminar {
+
+        .btn-eliminar, 
+        .btn-eliminarSombrero, 
+        .btn-eliminarTexana,
+        .btn-eliminarCinturon, 
+        .btn-eliminarBotin 
+        {
             background-color: #dc3545;
         }
 

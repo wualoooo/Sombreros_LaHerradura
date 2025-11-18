@@ -37,11 +37,11 @@ $Img2_nombre_db = subirImagen('imgSombrero2', $carpeta_destino);
 $Img3_nombre_db = subirImagen('imgSombrero3', $carpeta_destino);
 $Img4_nombre_db = subirImagen('imgSombrero4', $carpeta_destino);
 
-$sql = "INSERT INTO sombreros (Nombre, Color, Horma, Copa, Tam_Copa, Tam_Ala, Material, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO sombreros (Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $insert = $conn->prepare($sql);
 
 $insert->bind_param(
-    "sssssssssss",
+    "ssssssssssss",
     $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, $Img1_nombre_db,  $Img2_nombre_db, $Img3_nombre_db,  $Img4_nombre_db);
 
 if ($insert->execute()) {

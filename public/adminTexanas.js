@@ -4,17 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // (Usamos los IDs y Clases de tu HTML)
     
     // El modal y su formulario
-    const modalEditar = document.getElementById('modal-EditSombrero');
-    const formEditar = document.getElementById('form-EditSom');
+    const modalEditar = document.getElementById('modal-EditTexana');
+    const formEditar = document.getElementById('form-EditTexana');
     
     // (Asegúrate de que tu botón de cerrar tenga la clase 'close')
     const btnCerrar = modalEditar.querySelector('.close');
 
     // (Asegúrate de que tu <tbody> de la tabla tenga este ID)
-    const tablaBody = document.getElementById('tabla-sombreros-body'); 
+    const tablaBody = document.getElementById('tabla-texana-body'); 
 
     if (!tablaBody) {
-        console.error("No se encontró el <tbody> con ID 'tabla-sombreros-body'.");
+        console.error("No se encontró el <tbody> con ID 'tabla-texana-body'.");
         return;
     }
 
@@ -34,33 +34,32 @@ document.addEventListener('DOMContentLoaded', () => {
     tablaBody.addEventListener('click', (e) => {
         
         // --- LÓGICA DE "EDITAR" ---
-        if (e.target.classList.contains('btn-editarSombrero')) {
+        if (e.target.classList.contains('btn-editarTexana')) {
             const id = e.target.dataset.id; //
             
-            // Usamos tu script de "ver sombrero" para obtener los datos
-            fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+            // Usamos tu script de "ver texana" para obtener los datos
+            fetch(`/LaHerradura/Controller/CRUD_Texanas/ViewTexanas.php?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     // Rellenamos el formulario con los datos recibidos
                     // (Usamos los 'id' de tus inputs)
                     
                     // ¡EL MÁS IMPORTANTE! Rellenamos el ID oculto
-                    document.getElementById('edit-id-sombrero').value = data.id_sombrero; 
-
-                    document.getElementById('NombreSombrero').value = data.Nombre;
-                    document.getElementById('ColorSombrero').value = data.Color;
-                    document.getElementById('HormaSombrero').value = data.Horma;
-                    document.getElementById('CopaSombrero').value = data.Copa;
-                    document.getElementById('TamañoCopaSombrero').value = data.Tam_Copa;
-                    document.getElementById('MaterialSombrero').value = data.Material;
-                    document.getElementById('PrecioSombrero').value = data.Precio;
+                    document.getElementById('edit-id-Texana').value = data.id_texana; 
+                    document.getElementById('NombreTexana').value = data.Nombre;
+                    document.getElementById('ColorTexana').value = data.Color;
+                    document.getElementById('HormaTexana').value = data.Horma;
+                    document.getElementById('CopaTexana').value = data.Copa;
+                    document.getElementById('TamañoCopaTexana').value = data.Tam_Copa;
+                    document.getElementById('MaterialTexana').value = data.Material;
+                    document.getElementById('PrecioTexana').value = data.Precio;
                     
                     // Rellenamos las vistas previas de imágenes
-                    const rutaBase = '/LaHerradura/uploads/sombreros/';
+                    const rutaBase = '/LaHerradura/uploads/texanas/';
                     const placeholder = '#'; // O una imagen placeholder
 
                     // Imagen 1
-                    const img1 = document.getElementById('previewEditSombrero1');
+                    const img1 = document.getElementById('previewEditTexana1');
                     if (data.Img1) {
                         img1.src = rutaBase + data.Img1;
                         img1.style.display = 'block';
@@ -70,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 2
-                    const img2 = document.getElementById('previewEditSombrero2');
+                    const img2 = document.getElementById('previewEditTexana2');
                     if (data.Img2) {
                         img2.src = rutaBase + data.Img2;
                         img2.style.display = 'block';
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 3
-                    const img3 = document.getElementById('previewEditSombrero3');
+                    const img3 = document.getElementById('previewEditTexana3');
                     if (data.Img3) {
                         img3.src = rutaBase + data.Img3;
                         img3.style.display = 'block';
@@ -90,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 4
-                    const img4 = document.getElementById('previewEditSombrero4');
+                    const img4 = document.getElementById('previewEditTexana4');
                     if (data.Img4) {
                         img4.src = rutaBase + data.Img4;
                         img4.style.display = 'block';
@@ -108,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LÓGICA DE "ELIMINAR" ---
-        if (e.target.classList.contains('btn-eliminarSombrero')) {
+        if (e.target.classList.contains('btn-eliminarTexana')) {
             const id = e.target.dataset.id;
 
             if (confirm(`¿Estás seguro de que quieres eliminar el producto ID ${id}?`)) {
@@ -116,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('id', id);
 
-                fetch('/LaHerradura/Controller/CRUD_Sombreros/eliminarSombreros.php', {
+                fetch('/LaHerradura/Controller/CRUD_Texanas/eliminarTexana.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -152,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 // Si todo salió bien
                 modalEditar.style.display = 'none';
-                alert('¡Sombrero actualizado con éxito!');
+                alert('¡Texana actualizado con éxito!');
                 location.reload(); // Recargamos la página para ver los cambios
             } else {
                 // Si el PHP devolvió un error
@@ -162,16 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error al enviar el formulario:', error));
     });
 
-    // Para el modal de AGREGAR Sombrero
-    setupImagePreview('imgSombrero1', 'previewSombrero1', 'fileNameAgg1');
-    setupImagePreview('imgSombrero2', 'previewSombrero2', 'fileNameAgg2');
-    setupImagePreview('imgSombrero3', 'previewSombrero3', 'fileNameAgg3');
-    setupImagePreview('imgSombrero4', 'previewSombrero4', 'fileNameAgg4');
+    // Para el modal de AGREGAR Texana
+    setupImagePreview('imgTexana1', 'previewTexana1', 'fileNameAgg1');
+    setupImagePreview('imgTexana2', 'previewTexana2', 'fileNameAgg2');
+    setupImagePreview('imgTexana3', 'previewTexana3', 'fileNameAgg3');
+    setupImagePreview('imgTexana4', 'previewTexana4', 'fileNameAgg4');
 
-    // Para el modal de EDITAR Sombrero
-    setupImagePreview('imgEditSombrero1', 'previewEditSombrero1', 'fileNameEdit1');
-    setupImagePreview('imgEditSombrero2', 'previewEditSombrero2', 'fileNameEdit2');
-    setupImagePreview('imgEditSombrero3', 'previewEditSombrero3', 'fileNameEdit3');
-    setupImagePreview('imgEditSombrero4', 'previewEditSombrero4', 'fileNameEdit4');
+    // Para el modal de EDITAR Texana
+    setupImagePreview('imgEditTexana1', 'previewEditTexana1', 'fileNameEdit1');
+    setupImagePreview('imgEditTexana2', 'previewEditTexana2', 'fileNameEdit2');
+    setupImagePreview('imgEditTexana3', 'previewEditTexana3', 'fileNameEdit3');
+    setupImagePreview('imgEditTexana4', 'previewEditTexana4', 'fileNameEdit4');
 
 });

@@ -4,17 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // (Usamos los IDs y Clases de tu HTML)
     
     // El modal y su formulario
-    const modalEditar = document.getElementById('modal-EditSombrero');
-    const formEditar = document.getElementById('form-EditSom');
+    const modalEditar = document.getElementById('modal-EditCinturon');
+    const formEditar = document.getElementById('form-EditCinturon');
     
     // (Asegúrate de que tu botón de cerrar tenga la clase 'close')
     const btnCerrar = modalEditar.querySelector('.close');
 
     // (Asegúrate de que tu <tbody> de la tabla tenga este ID)
-    const tablaBody = document.getElementById('tabla-sombreros-body'); 
+    const tablaBody = document.getElementById('tabla-cinturones-body'); 
 
     if (!tablaBody) {
-        console.error("No se encontró el <tbody> con ID 'tabla-sombreros-body'.");
+        console.error("No se encontró el <tbody> con ID 'tabla-cinturones-body'.");
         return;
     }
 
@@ -34,33 +34,31 @@ document.addEventListener('DOMContentLoaded', () => {
     tablaBody.addEventListener('click', (e) => {
         
         // --- LÓGICA DE "EDITAR" ---
-        if (e.target.classList.contains('btn-editarSombrero')) {
+        if (e.target.classList.contains('btn-editarCinturon')) {
             const id = e.target.dataset.id; //
             
-            // Usamos tu script de "ver sombrero" para obtener los datos
-            fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+            // Usamos tu script de "ver texana" para obtener los datos
+            fetch(`../../../Controller/CRUD_Cinturones/ViewCinturones.php?id=${id}`)
                 .then(response => response.json())
                 .then(data => {
                     // Rellenamos el formulario con los datos recibidos
                     // (Usamos los 'id' de tus inputs)
                     
                     // ¡EL MÁS IMPORTANTE! Rellenamos el ID oculto
-                    document.getElementById('edit-id-sombrero').value = data.id_sombrero; 
-
-                    document.getElementById('NombreSombrero').value = data.Nombre;
-                    document.getElementById('ColorSombrero').value = data.Color;
-                    document.getElementById('HormaSombrero').value = data.Horma;
-                    document.getElementById('CopaSombrero').value = data.Copa;
-                    document.getElementById('TamañoCopaSombrero').value = data.Tam_Copa;
-                    document.getElementById('MaterialSombrero').value = data.Material;
-                    document.getElementById('PrecioSombrero').value = data.Precio;
+                    document.getElementById('edit-id-cinturon').value = data.id_cinturon; 
+                    document.getElementById('NombreCinturon').value = data.Nombre;
+                    document.getElementById('PrecioCinturon').value = data.Precio;
+                    document.getElementById('MaterialCinturon').value = data.Material;
+                    document.getElementById('AdornoCinturon').value = data.Adorno;
+                    document.getElementById('TamañoCinturon').value = data.Tamaño;
+                    
                     
                     // Rellenamos las vistas previas de imágenes
-                    const rutaBase = '/LaHerradura/uploads/sombreros/';
+                    const rutaBase = '../../../uploads/cinturones/';
                     const placeholder = '#'; // O una imagen placeholder
 
                     // Imagen 1
-                    const img1 = document.getElementById('previewEditSombrero1');
+                    const img1 = document.getElementById('previewEditCinturon1');
                     if (data.Img1) {
                         img1.src = rutaBase + data.Img1;
                         img1.style.display = 'block';
@@ -70,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 2
-                    const img2 = document.getElementById('previewEditSombrero2');
+                    const img2 = document.getElementById('previewEditCinturon2');
                     if (data.Img2) {
                         img2.src = rutaBase + data.Img2;
                         img2.style.display = 'block';
@@ -80,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 3
-                    const img3 = document.getElementById('previewEditSombrero3');
+                    const img3 = document.getElementById('previewEditCinturon3');
                     if (data.Img3) {
                         img3.src = rutaBase + data.Img3;
                         img3.style.display = 'block';
@@ -90,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Imagen 4
-                    const img4 = document.getElementById('previewEditSombrero4');
+                    const img4 = document.getElementById('previewEditCinturon4');
                     if (data.Img4) {
                         img4.src = rutaBase + data.Img4;
                         img4.style.display = 'block';
@@ -108,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LÓGICA DE "ELIMINAR" ---
-        if (e.target.classList.contains('btn-eliminarSombrero')) {
+        if (e.target.classList.contains('btn-eliminarCinturon')) {
             const id = e.target.dataset.id;
 
             if (confirm(`¿Estás seguro de que quieres eliminar el producto ID ${id}?`)) {
@@ -116,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formData = new FormData();
                 formData.append('id', id);
 
-                fetch('/LaHerradura/Controller/CRUD_Sombreros/eliminarSombreros.php', {
+                fetch('../../../Controller/CRUD_Cinturones/eliminarCinturon.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -152,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 // Si todo salió bien
                 modalEditar.style.display = 'none';
-                alert('¡Sombrero actualizado con éxito!');
+                alert('¡Cinturon actualizado con éxito!');
                 location.reload(); // Recargamos la página para ver los cambios
             } else {
                 // Si el PHP devolvió un error
@@ -162,16 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error al enviar el formulario:', error));
     });
 
-    // Para el modal de AGREGAR Sombrero
-    setupImagePreview('imgSombrero1', 'previewSombrero1', 'fileNameAgg1');
-    setupImagePreview('imgSombrero2', 'previewSombrero2', 'fileNameAgg2');
-    setupImagePreview('imgSombrero3', 'previewSombrero3', 'fileNameAgg3');
-    setupImagePreview('imgSombrero4', 'previewSombrero4', 'fileNameAgg4');
+    // Para el modal de AGREGAR Cinturon
+    setupImagePreview('imgCinturon1', 'previewCinturon1', 'fileNameAgg1');
+    setupImagePreview('imgCinturon2', 'previewCinturon2', 'fileNameAgg2');
+    setupImagePreview('imgCinturon3', 'previewCinturon3', 'fileNameAgg3');
+    setupImagePreview('imgCinturon4', 'previewCinturon4', 'fileNameAgg4');
 
-    // Para el modal de EDITAR Sombrero
-    setupImagePreview('imgEditSombrero1', 'previewEditSombrero1', 'fileNameEdit1');
-    setupImagePreview('imgEditSombrero2', 'previewEditSombrero2', 'fileNameEdit2');
-    setupImagePreview('imgEditSombrero3', 'previewEditSombrero3', 'fileNameEdit3');
-    setupImagePreview('imgEditSombrero4', 'previewEditSombrero4', 'fileNameEdit4');
+    // Para el modal de EDITAR Cinturon
+    setupImagePreview('imgEditCinturon1', 'previewEditCinturon1', 'fileNameEdit1');
+    setupImagePreview('imgEditCinturon2', 'previewEditCinturon2', 'fileNameEdit2');
+    setupImagePreview('imgEditCinturon3', 'previewEditCinturon3', 'fileNameEdit3');
+    setupImagePreview('imgEditCinturon4', 'previewEditCinturon4', 'fileNameEdit4');
 
 });

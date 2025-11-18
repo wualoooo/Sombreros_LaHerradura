@@ -1,4 +1,4 @@
-.modal-AggSom {
+.modal-EditSom {
     display: none;
     position: fixed;
     z-index: 999;
@@ -10,9 +10,7 @@
     z-index: 1000;
 }
 
-
-
-.modal-content-AggSom {
+.modal-content-EditSom {
     background: #fff;
     margin: 2.5% auto;
     padding: 15px;
@@ -33,13 +31,13 @@
     box-shadow: -2px 2px 3px 1px rgba(0, 0, 0, 0.555);
 }
 
-#AggSom-text{ 
+#EditSom-text{ 
     margin: 1rem 0 2rem 0;
     text-align: center;
     font-size: 5vh;
 }
 
-.lbl-AggSom{
+.lbl-EditSom{
     font-size: 1.65rem;
 }
 
@@ -48,7 +46,8 @@ form{
     width: 100%;
 }
 
-#div-AggSomb, #div-AggCinturon{
+#div-EditSomb, 
+#div-EditCinturon{
     width: 100%;
     height: auto;
     display: flex;
@@ -56,33 +55,34 @@ form{
     justify-content: space-around;
 }
 
-#div-AggCinturon{
-    height: 78%;
-}
-
-#AggSom-left, #AggSCinturon-left{
+#EditSom-left,
+#EditCinturon-left{
     border-radius: 20px;
-    box-sizing:border-box;  
-    padding: 1rem 5rem 1rem 5rem;
+    box-sizing:border-box;
+    padding: 1rem 0 1rem 5rem;
     width: 40%;
     background-color: #f3f3f3;
 }
 
-#AggSCinturon-left{
+#div-EditCinturon{
+    height: 78%;
+}
+
+#EditCinturon-left{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    padding-right: 4rem;
 }
 
-#AggSom-right{
+#EditSom-right{
     border-radius: 20px;
     width: 40%;
     height: auto;
     background-color: #f3f3f3;
 }
 
-.input-AggSom{
-    width: 100%;
+.input-EditSom{
     background-color: #d1d1d1;
     padding-left: 0.7rem;
     margin: 0.2rem 0 0.8rem 0;
@@ -92,11 +92,11 @@ form{
     font-size: 2.5vh;
 }
 
-.Selects-Agg{
+.Selects-Edit{
     padding: 0 1.4rem;
 }
 
-.cont-form-AggSom{
+.cont-form-EditSom{
     padding: 0 3rem;
 }
 
@@ -107,10 +107,10 @@ form{
     justify-content: center;
 }
 
-#btnGuardarAgg, 
-#btnGuardarAggTexana,
-#btnGuardarAggCinturon,
-#btnGuardarAggBotin
+#btnGuardarEditSombreros, 
+#btnGuardarEditTexanas,
+#btnGuardarEditCinturon,
+#btnGuardarEditBotin
 {
     padding: 15px 20px;
     font-size: 2.5vh;
@@ -160,6 +160,7 @@ form{
 
 .label-boton {
     font-size: 1.2rem !important;
+    
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -176,18 +177,4 @@ form{
     margin-left: 10px;
     font-size: 0.9em;
     color: #333;
-}
-
-.inputsTamaños{
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-#TamañoAlaSombrero, #TamañoCopaSombrero, #TamañoAlaTexana, #TamañoCopaTexana {
-    width: 90%;
 }

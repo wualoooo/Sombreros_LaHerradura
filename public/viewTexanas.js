@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log("Haciendo fetch para el ID:", id);
             // 2. Llamamos a nuestro PHP usando fetch
-            fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+            fetch(`/LaHerradura/Controller/CRUD_Texanas/ViewTexanas.php?id=${id}`)
                 .then(response => response.json()) // Convierte la respuesta a JSON
                 .then(data => {
                     // 3. Rellenamos el modal con los datos recibidos
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Asignamos un ID único a la imagen principal del modal
                     let galeriaHtml = `
                         <div id="vista-foto">
-                            <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
+                            <img id="main-image-modal" src="/LaHerradura/uploads/texanas/${data.Img1}" alt="${data.Nombre}">
                         </div>
                         <div id="vista-miniaturas">
                     `;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // 3. Generamos el HTML de cada miniatura
                     imagenes.forEach(imgSrc => {
-                        const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
+                        const rutaCompleta = `/LaHerradura/uploads/texanas/${imgSrc}`;
                         // Usamos una clase única para las miniaturas del modal
                         galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
                     });

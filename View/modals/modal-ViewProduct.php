@@ -1,11 +1,9 @@
-<link rel="stylesheet" href="../css/style-ViewPorduct.css">
-
-<script src="../../public/viewSombreros.js"></script>
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ViewPorduct.css">
 
 <div class="modal-vp" id="modal-ViewProducts">
     <div class="modal-content-vp">
         <span class="close">&times;</span>
-        <h2 id="name-sombrero-vp">Sombrero Bangora Natural Ventilado</h2>
+        <h2 id="name-sombrero-vp"></h2>
         <div id="complete">
             <div id="img-sombrero">
                 <div id="vista-foto">
@@ -16,13 +14,13 @@
                 </div>
             </div>
             <div id="info-sombrero">
-                <h5 id="precio-vp">$800.00 mxn</h5>
-                <h6 class="details-sombrero" id="modal-color">Color: Blanco</h6>
-                <h6 class="details-sombrero" id="modal-horma">Horma: Chihuahua</h6>
-                <h6 class="details-sombrero" id="modal-copa">Copa: Malboro</h6>
-                <h6 class="details-sombrero" id="modal-tam-copa">Tamaño de copa: 21cm</h6>
-                <h6 class="details-sombrero" id="modal-tam-ala">Tamaño de ala: 21cm</h6>
-                <h6 class="details-sombrero" id="modal-material">Material: Bangora</h6>
+                <h5 id="precio-vp"></h5>
+                <h6 class="details-sombrero" id="modal-color"></h6>
+                <h6 class="details-sombrero" id="modal-horma"></h6>
+                <h6 class="details-sombrero" id="modal-copa"></h6>
+                <h6 class="details-sombrero" id="modal-tam-copa"></h6>
+                <h6 class="details-sombrero" id="modal-tam-ala"></h6>
+                <h6 class="details-sombrero" id="modal-material"></h6>
                 <div id="container-tallas">
                     <div class="talla">54</div>
                     <div class="talla">55</div>

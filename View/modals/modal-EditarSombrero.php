@@ -1,11 +1,11 @@
-<link rel="stylesheet" href="../css/style-EditSombrero.css">
+<link rel="stylesheet" href="../../css/style-Modal-Edit-Som-Tex.css">
 
 <div class="modal-EditSom" id="modal-EditSombrero">
     <div class="modal-content-EditSom">
         <span class="close">&times;</span>
         <h2 id="EditSom-text">Editar Sombrero</h2> <div class="cont-form-EditSom">
             
-            <form class="EditSom" id="form-EditSom" action="../../Controller/CRUD_Sombreros/ActualizarSombrero.php" method="POST" enctype="multipart/form-data">
+            <form class="EditSom" id="form-EditSom" action="/LaHerradura/Controller/CRUD_Sombreros/ActualizarSombrero.php" method="POST" enctype="multipart/form-data">
                 
                 <div id="div-EditSomb">
                     <div id="EditSom-left">
@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div id="divButton">
-                    <input type="submit" id="btnGuardarEdit" value="Guardar Cambios">
+                    <input type="submit" id="btnGuardarEditSombreros" value="Guardar Cambios">
                 </div>
             </form>
         </div>

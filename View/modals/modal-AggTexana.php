@@ -1,28 +1,28 @@
 <link rel="stylesheet" href="../../css/style-AggSombrero.css">
 
-<div class="modal-AggSom" id="modal-AggSombrero">
+<div class="modal-AggSom" id="modal-AggTexana">
     <div class="modal-content-AggSom">
         <span class="close">&times;</span>
-        <h2 id="AggSom-text">Agregar sombrero</h2>
+        <h2 id="AggSom-text">Agregar Texana</h2>
         <div class="cont-form-AggSom">
-            <form class="AggSom" id="form-AggSom" action="/LaHerradura/Controller/CRUD_Sombreros/registroSombreros.php" method="POST" enctype="multipart/form-data">
+            <form class="AggSom" id="form-AggSom" action="/LaHerradura/Controller/CRUD_Texanas/registroTexanas.php" method="POST" enctype="multipart/form-data">
                 
                 <div id="div-AggSomb">
                     <div id="AggSom-left">
 
-                        <label class="lbl-AggSom" for="NombreSombrero">Nombre</label>
+                        <label class="lbl-AggSom" for="NombreTexana">Nombre</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="NombreSombrero" id="NombreSombrero" placeholder="Ingresa el nombre completo">
+                        <input class="input-AggSom" type="text" name="NombreTexana" id="NombreTexana" placeholder="Ingresa el nombre completo">
                         <br>
 
                         <label class="lbl-AggSom" for="Color">Color</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="ColorSombrero" id="ColorSombrero" placeholder="Ingresa el color">
+                        <input class="input-AggSom" type="text" name="ColorTexana" id="ColorTexana" placeholder="Ingresa el color">
                         <br>
 
                         <label class="lbl-AggSom" for="Horma">Horma</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="HormaSombrero" id="HormaSombrero">
+                        <select class="input-AggSom Selects-Agg" name="HormaTexana" id="HormaTexana">
                             <option value="Null">Selecciona una opcion</option>
                             <option value="horma1">horma1</option>
                             <option value="horma2">horma2</option>
@@ -33,7 +33,7 @@
 
                         <label class="lbl-AggSom" for="">Copa</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="CopaSombrero" id="CopaSombrero">
+                        <select class="input-AggSom Selects-Agg" name="CopaTexana" id="CopaTexana">
                             <option value="Null">Selecciona una opcion</option>
                             <option value="Copa1">Copa1</option>
                             <option value="Copa2">Copa2</option>
@@ -45,63 +45,63 @@
                         <div class="inputsTamaños">
                             <div class="inputsTamañosCopa">
                                 <label class="lbl-AggSom" for="">Tamaño copa</label> <br>
-                                <input class="input-AggSom" type="text" name="TamañoCopaSombrero" id="TamañoCopaSombrero" placeholder="(Numeros)">   
+                                <input class="input-AggSom" type="text" name="TamañoCopaTexana" id="TamañoCopaTexana" placeholder="(Numeros)">   
                             </div>
                             <div class="inputsTamañosAla">
                                 <label class="lbl-AggSom" for="">Tamaño ala</label> <br>
-                                <input class="input-AggSom" type="text" name="TamañoAlaSombrero" id="TamañoAlaSombrero" placeholder="(Numeros)">
+                                <input class="input-AggSom" type="text" name="TamañoAlaTexana" id="TamañoAlaTexana" placeholder="(Numeros)">
                             </div>
                         </div>
 
                         <label class="lbl-AggSom"  for="">Material</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="MaterialSombrero" id="MaterialSombrero" placeholder="Ingresa el material">
+                        <input class="input-AggSom" type="text" name="MaterialTexana" id="MaterialTexana" placeholder="Ingresa el material">
                         <br>
 
                         <label class="lbl-AggSom"for="">Precio</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="PrecioSombrero" id="PrecioSombrero" placeholder="Solo numeros     Ej: 500">
+                        <input class="input-AggSom" type="text" name="PrecioTexana" id="PrecioTexana" placeholder="Solo numeros     Ej: 500">
                     </div>
 
                     <div id="AggSom-right">
                         <div class="contenedor-preview">
             
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero1" id="imgSombrero1" class="input-img-oculto" accept="image/*">
-                                <label for="imgSombrero1" class="label-boton">
+                                <input type="file" name="imgTexana1" id="imgTexana1" class="input-img-oculto" accept="image/*">
+                                <label for="imgTexana1" class="label-boton">
                                     Seleccionar archivo
                                 </label>
-                                <img id="previewSombrero1" class="preview" src="#" alt="Vista previa 1">
+                                <img id="previewTexana1" class="preview" src="#" alt="Vista previa 1">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero2" id="imgSombrero2" class="input-img-oculto" accept="image/*">
-                                <label for="imgSombrero2" class="label-boton">
+                                <input type="file" name="imgTexana2" id="imgTexana2" class="input-img-oculto" accept="image/*">
+                                <label for="imgTexana2" class="label-boton">
                                     Seleccionar archivo
                                 </label>
-                                <img id="previewSombrero2" class="preview" src="#" alt="Vista previa 2">
+                                <img id="previewTexana2" class="preview" src="#" alt="Vista previa 2">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero3" id="imgSombrero3" class="input-img-oculto" accept="image/*">
-                                <label for="imgSombrero3" class="label-boton">
+                                <input type="file" name="imgTexana3" id="imgTexana3" class="input-img-oculto" accept="image/*">
+                                <label for="imgTexana3" class="label-boton">
                                     Seleccionar archivo
                                 </label>
-                                <img id="previewSombrero3" class="preview" src="#" alt="Vista previa 3">
+                                <img id="previewTexana3" class="preview" src="#" alt="Vista previa 3">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero4" id="imgSombrero4" class="input-img-oculto" accept="image/*">
-                                <label for="imgSombrero4" class="label-boton">
+                                <input type="file" name="imgTexana4" id="imgTexana4" class="input-img-oculto" accept="image/*">
+                                <label for="imgTexana4" class="label-boton">
                                     Seleccionar archivo
                                 </label>
-                                <img id="previewSombrero4" class="preview" src="#" alt="Vista previa 4">
+                                <img id="previewTexana4" class="preview" src="#" alt="Vista previa 4">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="divButton">
-                    <input type="submit" id="btnGuardarAgg" value="Guardar">
+                    <input type="submit" id="btnGuardarAggTexana" value="Guardar">
                 </div>
             </form>
         </div>
