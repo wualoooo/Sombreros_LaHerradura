@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // ------------------------------------------------
         // B) BOTÓN ELIMINAR
         // ------------------------------------------------
-        if (e.target.classList.contains('btn-eliminarSombrero')) {
+        /*if (e.target.classList.contains('btn-eliminarSombrero')) {
             const id = e.target.dataset.id;
 
             if (confirm(`¿Estás seguro de eliminar el sombrero ID ${id}?`)) {
@@ -154,7 +154,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.error(err));
             }
         }
+    });*/
+    if (e.target.classList.contains('btn-eliminarSombrero')) {
+  const id = e.target.dataset.id;
+
+  alertConfirm(`¿Eliminar sombrero ID ${id}?`, () => {
+    const formData = new FormData();
+    formData.append('id', id);
+
+    fetch('/LaHerradura/Controller/CRUD_Sombreros/eliminarSombreros.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        e.target.closest('tr').remove();
+        alertSuccess('Sombrero eliminado correctamente');
+      } else {
+        alertError(data.error);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alertError('Error de conexión al eliminar');
     });
+  });
+}
+});
+
 
     // ==========================================
     // 4. ENVIAR FORMULARIO DE EDICIÓN (GUARDAR)
