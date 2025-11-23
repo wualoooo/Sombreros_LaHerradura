@@ -59,7 +59,7 @@ form{
 #EditCinturon-left{
     border-radius: 20px;
     box-sizing:border-box;
-    padding: 1rem 0 1rem 5rem;
+    padding: 1rem 5rem 1rem 5rem;
     width: 40%;
     background-color: #f3f3f3;
 }
@@ -83,6 +83,7 @@ form{
 }
 
 .input-EditSom{
+    width: 100%;
     background-color: #d1d1d1;
     padding-left: 0.7rem;
     margin: 0.2rem 0 0.8rem 0;
@@ -178,3 +179,28 @@ form{
     font-size: 0.9em;
     color: #333;
 }
+
+.inputsTamaños{
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#TamañoAlaSombrero, 
+#TamañoCopaSombrero, 
+#TamañoAlaTexana, 
+#TamañoCopaTexana, 
+#edit-TamañoAlaSombrero,  
+#edit-TamañoCopaSombrero 
+{
+    width: 80%;
+}
+
+/*
+.Selects-Edit{
+    width: 80%;
+}*/

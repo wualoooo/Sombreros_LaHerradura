@@ -191,3 +191,35 @@ form{
 #TamañoAlaSombrero, #TamañoCopaSombrero, #TamañoAlaTexana, #TamañoCopaTexana {
     width: 90%;
 }
+
+/* Borde rojo para inputs normales */
+.input-error {
+    border: 2px solid #dc3545 !important; /* Rojo fuerte */
+    background-color: #fff8f8 !important;
+}
+
+/* Borde rojo para la CAJA de las imágenes (importante) */
+.caja-error {
+    border: 2px solid #dc3545 !important;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3); 
+}
+
+/* Contenedor del mensaje de error global */
+#mensaje-error-js {
+    position: absolute; /* Flota sobre el contenido, no lo empuja */
+    top: 10px; /* Se pega arriba */
+    left: 0;
+    right: 0;
+    margin: 0 auto; /* Centrado */
+    width: 90%; /* Que no ocupe todo el ancho */
+    z-index: 1000; /* Asegura que quede encima de todo */
+    
+    background-color: rgba(255, 240, 240, 0.95); /* Un poco transparente */
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para que destaque */
+    display: none;
+}

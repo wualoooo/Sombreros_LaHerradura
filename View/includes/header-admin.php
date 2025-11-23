@@ -36,6 +36,14 @@
                     <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/user/Botines.php" target="_blank">Ver</a></li>
                 </ul>
             </li>
+            <li class="opcion" id="op-bot">Extras
+                <ul class="desplegable" id="despl-bot">
+                    <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelHormas.php">Hormas</a></li>
+                    <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelCopas.php">Copas</a></li>
+                    <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelMateriales.php">Materiales</a></li>
+                    <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelColores.php">Colores</a></li>
+                </ul>
+            </li>
             <li class="opcion" id="op-admin">Administrador
                 <ul class="desplegable" id="despl-admin">
                     <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelUsuarios.php">Usuarios</a></li>

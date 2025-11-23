@@ -31,6 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
   activarModal("btn-editar", "modal-EditSombrero")
   activarModal("btnAgg-Cinturon", "modal-AggCinturon")
   activarModal("btnAgg-Botin", "modal-AggBotin")
+  activarModal("btnAgg-Horma", "modal-AggHorma")
+  activarModal("btnAgg-Copa", "modal-AggCopa")
+  activarModal("btnAgg-Material", "modal-AggMaterial")
+  activarModal("btnAgg-Color", "modal-AggColor")
 
   // --- B. LA NUEVA LÓGICA PARA LAS TARJETAS DE PRODUCTO ---
   const modalId_vp = "modal-ViewProducts";

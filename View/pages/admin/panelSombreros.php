@@ -28,13 +28,14 @@
             <th>Copa</th>
             <th>Horma</th>
             <th>Tamaño copa</th>
+            <th>Tamaño ala</th>
             <th>Material</th>
             <th>Acciones</th>
         <tbody id="tabla-sombreros-body">
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
 
-            $sql = "SELECT id_sombrero, Nombre, Precio, Color, Horma, Copa, Tam_Copa, Material FROM sombreros";
+            $sql = "SELECT id_sombrero, Nombre, Precio, Color, Horma, Copa, Tam_Copa, Tam_ala, Material FROM sombreros";
             $result = $conn -> query($sql);
 
             if ($result -> num_rows>0){
@@ -48,6 +49,7 @@
                             <td>".$row["Horma"]."</td>
                             <td>".$row["Copa"]."</td>
                             <td>".$row["Tam_Copa"]."</td>
+                            <td>".$row["Tam_ala"]."</td>
                             <td>".$row["Material"]."</td>
                             <td>
                                 <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>Editar</button>
@@ -96,5 +98,6 @@
     <script src="/LaHerradura/public/viewImages.js"></script>
     <script src="/LaHerradura/public/adminSombreros.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
+    <script src="/LaHerradura/public/validacion.js"></script>
 </body>
 </html>

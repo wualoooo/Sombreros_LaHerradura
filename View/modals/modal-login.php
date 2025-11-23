@@ -5,7 +5,7 @@
         <span class="close">&times;</span>
         <h2 id="login-text">Ingresar</h2>
         <div id="cont-form-login">
-            <form action="../../../Controller/InicioSesion.php" method="POST" id="loginForm">
+            <form action="/LaHerradura/Controller/InicioSesion.php" method="POST" id="loginForm">
                 <label for="email">Correo Electrónico</label>
                 <br>
                 <input class="input-login" type="email" name="Correo" id="Correo" placeholder="Ingresa tu usuario">
@@ -38,4 +38,4 @@
         </div>
     </div>
 </div>
-<script src="../../../public/iniciosesion.js"></script>
+<script src="/LaHerradura/public/iniciosesion.js"></script>

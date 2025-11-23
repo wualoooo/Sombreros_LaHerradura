@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const formData = new FormData(loginForm);
 
         // 4. Usamos fetch para enviar los datos a PHP
-        fetch('../../Controller/InicioSesion.php', {
+        fetch('/LaHerradura/Controller/InicioSesion.php', {
             method: 'POST',
             body: formData
         })
@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // ¡AQUÍ ESTÁ EL PROBLEMA MÁS PROBABLE!
             // Esta ruta relativa 'view/pages/pedidos.php' 
             // probablemente es incorrecta desde la URL donde estás.
-            window.location.href = '/LaHerradura/View/pages/pedidos.php'; 
+            window.location.href = '/LaHerradura/View/pages/admin/pedidos.php'; 
+
+            alert('BIENVENIDO Has entrado como administrador.');
 
         } else {
             console.log("Rol de usuario detectado.");
