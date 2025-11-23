@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(data => {
                     // 3. Rellenamos el modal con los datos recibidos
                     console.log("Datos recibidos del PHP:", data);
-
                     document.getElementById('name-sombrero-vp').textContent = data.Nombre;
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 

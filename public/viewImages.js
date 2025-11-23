@@ -52,3 +52,4 @@ function setupImagePreview(inputId, previewId, spanId) {
 
 // ¡YA NO HAY LLAMADAS A LA FUNCIÓN AQUÍ!
 // Este archivo ahora solo DEFINE la función, no la ejecuta.
+
