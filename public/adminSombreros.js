@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (errores.length > 0) {
             // Mostramos errores y cancelamos
-            let mensaje = "⚠️ No se pueden guardar los cambios:\n\n";
+            let mensaje = "No se pueden guardar los cambios:\n\n";
             mensaje += errores.join("\n");
             alert(mensaje);
             
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.disabled = false;
 
             if (data.success) {
-                alert('✅ Sombrero actualizado correctamente.');
+                alert('Sombrero actualizado correctamente.');
                 modalEditar.style.display = 'none';
                 location.reload(); 
             } else {

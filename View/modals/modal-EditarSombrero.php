@@ -20,61 +20,88 @@
 
                         <label class="lbl-EditSom" for="edit-ColorSombrero">Color</label>
                         <br>
-                        <input class="input-EditSom" type="text" name="ColorSombrero" id="edit-ColorSombrero" required>
+                        <select class="input-EditSom" name="ColorSombrero" id="edit-ColorSombrero">
+                            <?php 
+                                define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verColores = "SELECT id_color, Nombre FROM colores";
+                                $resultColores = $conn->query($verColores);
+
+                                    while ($rowColores = $resultColores -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowColores['Nombre'].">".$rowColores['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
+                        </select>
                         <br>
 
                         <label class="lbl-EditSom" for="edit-HormaSombrero">Horma</label>
                         <br>
-                        <select class="input-EditSom Selects-Edit" name="HormaSombrero" id="edit-HormaSombrero" required>
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Malboro">Malboro</option>
-                            <option value="Malboro copa alta">Malboro copa alta</option>
-                            <option value="Malboro copa media/Sinalona">Malboro copa media/Sinalona</option>
-                            <option value="Ocho Segundos">Ocho Segundos</option>
-                            <option value="Cuernos chuecos">Cuernos chuecos</option>
-                            <option value="Chihuahua">Chihuahua</option>
-                            <option value="Indiana">Indiana</option>
-                            <option value="Joan Sebastian">Joan Sebastian</option>
-                            <option value="Patrón">Patrón</option>
-                            <option value="Viejón">Viejón</option>
-                            <option value="Pedradas de corazón">Pedradas de corazón</option>
+                        <select class="input-EditSom" name="HormaSombrero" id="edit-HormaSombrero">
+                                <?php 
+                                    include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                    $verhormas = "SELECT id_horma, Nombre FROM hormas";
+                                    $resulthormas = $conn->query($verhormas);
+
+                                        while ($rowhormas = $resulthormas -> fetch_assoc()){
+                                            echo "
+                                            <option value=".$rowhormas['Nombre'].">".$rowhormas['Nombre']."</option>
+                                            ";
+                                        }
+                                ?>
                         </select>
                         <br>
 
                         <label class="lbl-EditSom" for="edit-CopaSombrero">Copa</label> <br>
                         <select class="input-EditSom Selects-Edit" name="CopaSombrero" id="edit-CopaSombrero" required>
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Malboro">Malboro</option>
-                            <option value="Malboro copa alta">Malboro copa alta</option>
-                            <option value="Malboro copa media/Sinalona">Malboro copa media/Sinalona</option>
-                            <option value="Ocho Segundos">Ocho Segundos</option>
-                            <option value="Cuernos chuecos">Cuernos chuecos</option>
-                            <option value="Chihuahua">Chihuahua</option>
-                            <option value="Indiana">Indiana</option>
-                            <option value="Joan Sebastian">Joan Sebastian</option>
-                            <option value="Patrón">Patrón</option>
-                            <option value="Viejón">Viejón</option>
-                            <option value="Pedradas de corazón">Pedradas de corazón</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verCopas = "SELECT id_copa, Nombre FROM copas";
+                                $resultcopas = $conn->query($verCopas);
+
+                                    while ($rowcopas = $resultcopas -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowcopas['Nombre'].">".$rowcopas['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
                         
                         <div class="inputsTamaños">
                             <div class="inputsTamañosCopa">
                                 <label class="lbl-EditSom" for="edit-TamañoCopaSombrero">Tamaño copa</label> <br>
-                                <input class="input-EditSom" type="number" step="0.1" name="TamañoCopaSombrero" id="edit-TamañoCopaSombrero" required>   
+                                <input class="input-EditSom" type="number" step="0.5" name="TamañoCopaSombrero" id="edit-TamañoCopaSombrero" min="8">   
                             </div>
                             <div class="inputsTamañosAla">
                                 <label class="lbl-EditSom" for="edit-TamañoAlaSombrero">Tamaño ala</label> <br>
-                                <input class="input-EditSom" type="number" step="0.1" name="TamañoAlaSombrero" id="edit-TamañoAlaSombrero" required>
+                                <input class="input-EditSom" type="number" step="0.5" name="TamañoAlaSombrero" id="edit-TamañoAlaSombrero" min="8">
                             </div>
                         </div>
 
                         <label class="lbl-EditSom" for="edit-MaterialSombrero">Material</label> <br>
-                        <input class="input-EditSom" type="text" name="MaterialSombrero" id="edit-MaterialSombrero" required>
+                        <select class="input-EditSom" name="MaterialSombrero" id="edit-MaterialSombrero">
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['Nombre'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
+                        </select>
                         <br>
 
                         <label class="lbl-EditSom" for="edit-PrecioSombrero">Precio</label> <br>
-                        <input class="input-EditSom" type="number" step="10" name="PrecioSombrero" id="edit-PrecioSombrero" required>
+                        <input class="input-EditSom" type="number" step="10" name="PrecioSombrero" id="edit-PrecioSombrero" min="0" required>
                     </div>
 
                     <div id="EditSom-right">

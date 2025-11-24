@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- VALIDACIÓN ROBUSTA (Busca por name, no por ID) ---
 
         // 1. Textos (Nombre, Color, Material)
-        const camposTexto = ['NombreSombrero', 'ColorSombrero', 'MaterialSombrero'];
+        const camposTexto = ['NombreSombrero', 'ColorSombrero'];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             const nombreCampo = name.replace('Sombrero', ''); // Para que el mensaje diga "Nombre" y no "NombreSombrero"
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // 2. Selects
-        const selects = ['HormaSombrero', 'CopaSombrero'];
+        const selects = ['HormaSombrero', 'CopaSombrero', 'ColorSombrero', 'MaterialSombrero'];
         selects.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             if (!input || input.value === "Null") {

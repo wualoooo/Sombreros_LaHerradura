@@ -47,14 +47,14 @@ try {
         }
     }
 
-    // 2. INTENTAR SUBIR LAS IMÁGENES
+    // INTENTAR SUBIR LAS IMÁGENES
     // Si una falla, el catch atrapará el error y no se insertará nada en la BD
     $img1 = procesarImagen('imgSombrero1', $carpeta_destino, $imagenes_subidas);
     $img2 = procesarImagen('imgSombrero2', $carpeta_destino, $imagenes_subidas);
     $img3 = procesarImagen('imgSombrero3', $carpeta_destino, $imagenes_subidas);
     $img4 = procesarImagen('imgSombrero4', $carpeta_destino, $imagenes_subidas);
 
-    // 3. PREPARAR DATOS PARA BD
+    // PREPARAR DATOS PARA BD
     $Nombre = trim($_POST['NombreSombrero']);
     $Color = trim($_POST['ColorSombrero']);
     $Horma = $_POST['HormaSombrero'];
@@ -64,7 +64,7 @@ try {
     $Material = trim($_POST['MaterialSombrero']);
     $Precio = $_POST['PrecioSombrero'];
 
-    // 4. INSERTAR EN BD
+    // INSERTAR EN BD
     $sql = "INSERT INTO sombreros (Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
@@ -72,13 +72,12 @@ try {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    $stmt->bind_param("ssssddsdssss", 
+    $stmt->bind_param("ssssddsissss", 
         $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, 
         $img1, $img2, $img3, $img4
     );
 
     if ($stmt->execute()) {
-        // ¡ÉXITO TOTAL!
         $response['success'] = true;
         $response['message'] = 'Sombrero registrado correctamente.';
     } else {

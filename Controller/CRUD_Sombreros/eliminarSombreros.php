@@ -11,8 +11,7 @@ $response = ['success' => false, 'error' => 'Error desconocido.'];
 // Solo continuamos si los datos se enviaron por POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // --- 3. OBTENER EL ID ---
-    // El JavaScript envía el ID en un FormData
+    //OBTENER EL ID
     $id = $_POST['id'];
 
     if (empty($id)) {
@@ -21,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // --- 4. (NUEVO) OBTENER NOMBRES DE ARCHIVOS ANTES DE BORRAR ---
-    // Preparamos un SELECT para saber qué archivos borrar del servidor
+    //OBTENER NOMBRES DE ARCHIVOS A BORRAR
     $sql_select = "SELECT Img1, Img2, Img3, Img4 FROM sombreros WHERE id_sombrero = ?";
     $stmt_select = $conn->prepare($sql_select);
     
@@ -39,14 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $row = $result->fetch_assoc();
     $stmt_select->close();
 
-    // --- 5. (NUEVO) BORRAR ARCHIVOS FÍSICOS DEL SERVIDOR ---
-    if ($row) { // Solo si se encontró el registro
-        
-        // IMPORTANTE: Verifica que esta ruta sea correcta
-        // Desde /Controller/, debería ser '../' para subir un nivel
-        $ruta_base = "../uploads/sombreros/"; 
-        
-        // Creamos un array con los nombres de las imágenes
+    // BORRAR ARCHIVOS
+    if ($row) {
+        $ruta_base = "../../uploads/sombreros/"; 
+
+        // ARRAY DE LAS IMAGENES
         $imagenes_a_borrar = [
             $row['Img1'], 
             $row['Img2'], 
@@ -55,11 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
 
         foreach ($imagenes_a_borrar as $nombre_img) {
-            // Verificamos que el nombre no esté vacío
+            // VERIFICACIONES
             if (!empty($nombre_img)) {
                 $ruta_completa = $ruta_base . $nombre_img;
-                
-                // Verificamos si el archivo existe en el servidor
                 if (file_exists($ruta_completa)) {
                     unlink($ruta_completa); // ¡Borra el archivo!
                 }
@@ -67,34 +60,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // --- 6. (AHORA ES PASO 6) PREPARAR Y EJECUTAR EL DELETE ---
-    // Usamos el nombre de tu tabla "sombreros" y tu columna "id_sombrero"
-    $sql_delete = "DELETE FROM sombreros WHERE id_sombrero = ?";
+    // PREPARAR LA CONSULTA PARA ELIMINAR
+    $sql = "DELETE FROM sombreros WHERE id_sombrero = ?";
     
-    $stmt_delete = $conn->prepare($sql_delete);
+    $stmt = $conn->prepare($sql);
 
-    // Verificamos si la preparación falló
-    if ($stmt_delete === false) {
+    // VERIFICAMOS SI FALLÓ
+    if ($stmt === false) {
         $response['error'] = 'Error al preparar la consulta: ' . $conn->error;
         echo json_encode($response);
         $conn->close();
         exit;
     }
 
-    // 'i' significa que el ID es un tipo 'integer' (entero)
-    $stmt_delete->bind_param("i", $id);
+    $stmt->bind_param("i", $id);
 
-    // --- 7. (AHORA ES PASO 7) VERIFICAR ÉXITO ---
-    if ($stmt_delete->execute()) {
-        // Si el 'DELETE' funcionó
+    // VERIFICAR ÉXITO ---
+    if ($stmt->execute()) {
         $response['success'] = true;
         $response['error'] = '';
     } else {
-        // Si el 'DELETE' falló
-        $response['error'] = 'Error al ejecutar el borrado: ' . $stmt_delete->error;
+        $response['error'] = 'Error al ejecutar el borrado: ' . $stmt->error;
     }
 
-    $stmt_delete->close();
+    $stmt->close();
 
 } else {
     // Si alguien intenta acceder al script sin POST

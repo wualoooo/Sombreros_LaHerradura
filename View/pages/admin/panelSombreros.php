@@ -34,10 +34,12 @@
         <tbody id="tabla-sombreros-body">
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
-
+            
+            // RECOLECTAR LOS DATOS DE LA BASE DE DATOS
             $sql = "SELECT id_sombrero, Nombre, Precio, Color, Horma, Copa, Tam_Copa, Tam_ala, Material FROM sombreros";
             $result = $conn -> query($sql);
 
+            // MOSTRAR LOS DATOS EN UNA TABLA
             if ($result -> num_rows>0){
                 while($row = $result -> fetch_assoc()){
                     echo("
@@ -58,7 +60,6 @@
                         </tr>"
                     );
                 }
-
             }
 
             else{

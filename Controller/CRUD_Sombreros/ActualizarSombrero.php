@@ -6,20 +6,20 @@ header('Content-Type: application/json');
 $response = ['success' => false, 'error' => 'Error desconocido.'];
 
 try {
-    // --- 2. VERIFICACIÓN ---
+    //VERIFICACIÓN
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception('Método no permitido.');
     }
 
-    // --- 3. OBTENER DATOS ---
-    $id = $_POST['id_sombrero'] ?? ''; // ID oculto
+    // OBTENER DATOS
+    $id = $_POST['id_sombrero'] ?? '';
 
-    // Validación básica del ID
+    // VALIDACIÓN DEL ID
     if (empty($id)) {
         throw new Exception('Error: ID de sombrero no encontrado.');
     }
 
-    // Campos de texto
+    // OBTENER LOS DATOS DE TEXTO ACTUALIZADOS
     $nombre = $_POST['NombreSombrero'];
     $color = $_POST['ColorSombrero'];
     $horma = $_POST['HormaSombrero'];
@@ -29,7 +29,7 @@ try {
     $material = $_POST['MaterialSombrero'];
     $precio = $_POST['PrecioSombrero'];
 
-    // --- 4. ACTUALIZAR DATOS DE TEXTO ---
+    // ACTUALIZAR DATOS DE TEXTO
     $sql = "UPDATE sombreros SET 
                 Nombre = ?, 
                 Color = ?, 
@@ -44,8 +44,7 @@ try {
     $stmt = $conn->prepare($sql);
     if (!$stmt) throw new Exception("Error en prepare SQL texto: " . $conn->error);
 
-    // Nota: Ajusté los tipos de datos a 'd' (double) para los tamaños y precio por si acaso usan decimales
-    $stmt->bind_param("ssssddsdi", 
+    $stmt->bind_param("ssssddsii", 
         $nombre, $color, $horma, $copa, $tam_copa, $tam_ala, $material, $precio, $id
     );
 
@@ -54,10 +53,9 @@ try {
     }
     $stmt->close();
 
-    // --- 5. MANEJO DE IMÁGENES (ACTUALIZAR Y BORRAR VIEJAS) ---
-    
+    //MANEJO DE IMÁGENES 
     $imagenes_form = ['imgSombrero1', 'imgSombrero2', 'imgSombrero3', 'imgSombrero4'];
-    $columnas_db = ['Img1', 'Img2', 'Img3', 'Img4'];
+    $columnas_bd = ['Img1', 'Img2', 'Img3', 'Img4'];
     $ruta_subida = "../../uploads/sombreros/"; 
 
     // Asegurar que la carpeta exista
@@ -65,14 +63,12 @@ try {
 
     for ($i = 0; $i < count($imagenes_form); $i++) {
         
-        $nombre_input = $imagenes_form[$i]; // ej: 'imgSombrero1'
-        $columna_actual = $columnas_db[$i]; // ej: 'Img1'
+        $nombre_input = $imagenes_form[$i]; 
+        $columna_actual = $columnas_bd[$i];
         
-        // Verificamos si el usuario subió una imagen nueva en este input
         if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] == 0) {
             
-            // A) OBTENER EL NOMBRE DE LA IMAGEN VIEJA
-            // Necesitamos saber qué archivo hay actualmente para borrarlo
+            // OBTENER EL NOMBRE DE LA IMAGEN VIEJA
             $sql_get_old = "SELECT $columna_actual FROM sombreros WHERE id_sombrero = ?";
             $stmt_get = $conn->prepare($sql_get_old);
             $stmt_get->bind_param("i", $id);
@@ -81,24 +77,22 @@ try {
             $stmt_get->fetch();
             $stmt_get->close();
 
-            // B) SUBIR LA NUEVA IMAGEN
+            //SUBIR LA NUEVA IMAGEN
             $ext = pathinfo($_FILES[$nombre_input]['name'], PATHINFO_EXTENSION);
             $nombre_nuevo = uniqid('ImgSombrero_') . '.' . $ext;
             $ruta_destino = $ruta_subida . $nombre_nuevo;
 
             if (move_uploaded_file($_FILES[$nombre_input]['tmp_name'], $ruta_destino)) {
                 
-                // C) BORRAR LA IMAGEN VIEJA DEL SERVIDOR
-                // Solo si existe y no está vacía
+                // BORRAR LA IMAGEN VIEJA 
                 if (!empty($imagen_vieja)) {
                     $ruta_vieja = $ruta_subida . $imagen_vieja;
                     if (file_exists($ruta_vieja)) {
-                        unlink($ruta_vieja); // <--- ESTO BORRA EL ARCHIVO
+                        unlink($ruta_vieja);
                     }
                 }
 
-                // D) ACTUALIZAR LA BD CON EL NOMBRE NUEVO
-                // CORREGIDO: Tabla 'sombreros' y columna 'id_sombrero'
+                //ACTUALIZAR LA BD CON EL NOMBRE NUEVO
                 $sql_update_img = "UPDATE sombreros SET $columna_actual = ? WHERE id_sombrero = ?";
                 $stmt_img = $conn->prepare($sql_update_img);
                 $stmt_img->bind_param("si", $nombre_nuevo, $id);
