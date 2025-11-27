@@ -1,0 +1,78 @@
+.modal-AggExtras {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1000;
+}
+
+
+.modal-content-AggExtra {
+    background: #fff;
+    margin: 15% auto;
+    padding: 15px;
+    border-radius: 10px;
+    width: 30vw;
+    height: 27vh;
+    color: black;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: rgb(179, 179, 179);
+    padding: 5px 9px;
+    color: rgb(59, 59, 59);
+    border-radius: 6px;
+    box-shadow: -2px 2px 3px 1px rgba(0, 0, 0, 0.555);
+}
+
+.AggExtra-text{ 
+    margin: 1rem 0 2rem 0;
+    text-align: center;
+    font-size: 5vh;
+}
+
+.lbl-AggExtra{
+    font-size: 1.65rem;
+}
+
+
+form{
+    width: 100%;
+}
+
+.cont-form-AggExtra{
+    width: 100%;
+    display:flex;
+    justify-content: space-around;
+    text-align:center;
+}
+
+.input-AggExtra{
+    width: 80%;
+    background-color: #d1d1d1;
+    padding-left: 0.7rem;
+    margin: 0.2rem 0 0.8rem 0;
+    border: none;
+    border-radius: 5px;
+    height: 4vh;
+    font-size: 2.5vh;
+}
+
+.ButtonGuardarExtras
+{
+    padding: 15px 20px;
+    font-size: 2.5vh;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
+    background-color: rgb(42, 145, 16);
+    color: #fff;
+    cursor: pointer;
+}

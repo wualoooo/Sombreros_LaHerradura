@@ -10,8 +10,10 @@
     z-index: 1000;
 }
 
+
+
 .modal-content-AggSom {
-    background: #fff;
+    background: #f4f4f7;
     margin: 2.5% auto;
     padding: 15px;
     border-radius: 10px;
@@ -46,7 +48,7 @@ form{
     width: 100%;
 }
 
-#div-AggSomb{
+#div-AggSomb, #div-AggCinturon{
     width: 100%;
     height: auto;
     display: flex;
@@ -54,24 +56,36 @@ form{
     justify-content: space-around;
 }
 
-#AggSom-left{
+#div-AggCinturon{
+    height: 78%;
+}
+
+#AggSom-left, #AggSCinturon-left{
     border-radius: 20px;
     box-sizing:border-box;  
     padding: 1rem 5rem 1rem 5rem;
     width: 40%;
-    background-color: #f3f3f3;
+    background-color: #fff;
+    box-shadow: 0 0 10px 2px #0000006b;
+}
+
+#AggSCinturon-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 #AggSom-right{
     border-radius: 20px;
     width: 40%;
     height: auto;
-    background-color: #f3f3f3;
+    background-color: #fff;
+    box-shadow: 0 0 10px 2px #0000006b;
 }
 
 .input-AggSom{
     width: 100%;
-    background-color: #d1d1d1;
+    background-color: #efeaea;
     padding-left: 0.7rem;
     margin: 0.2rem 0 0.8rem 0;
     border: none;
@@ -95,7 +109,11 @@ form{
     justify-content: center;
 }
 
-#btnGuardarAgg{
+#btnGuardarAgg, 
+#btnGuardarAggTexana,
+#btnGuardarAggCinturon,
+#btnGuardarAggBotin
+{
     padding: 15px 20px;
     font-size: 2.5vh;
     border-radius: 10px;
@@ -172,6 +190,38 @@ form{
     justify-content: space-around;
 }
 
-#TamañoAlaSombrero, #TamañoCopaSombrero{
+#TamañoAlaSombrero, #TamañoCopaSombrero, #TamañoAlaTexana, #TamañoCopaTexana {
     width: 90%;
+}
+
+/* Borde rojo para inputs normales */
+.input-error {
+    border: 2px solid #dc3545 !important; /* Rojo fuerte */
+    background-color: #fff8f8 !important;
+}
+
+/* Borde rojo para la CAJA de las imágenes (importante) */
+.caja-error {
+    border: 2px solid #dc3545 !important;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3); 
+}
+
+/* Contenedor del mensaje de error global */
+#mensaje-error-js {
+    position: absolute; /* Flota sobre el contenido, no lo empuja */
+    top: 10px; /* Se pega arriba */
+    left: 0;
+    right: 0;
+    margin: 0 auto; /* Centrado */
+    width: 90%; /* Que no ocupe todo el ancho */
+    z-index: 1000; /* Asegura que quede encima de todo */
+    
+    background-color: rgba(255, 240, 240, 0.95); /* Un poco transparente */
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra para que destaque */
+    display: none;
 }
