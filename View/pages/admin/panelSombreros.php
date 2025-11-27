@@ -21,7 +21,6 @@
         <h2 class="titleGestion">Gestión de Sombreros</h2>
         <button class="btn btn-agregar" id="btnAgg-Sombrero">Agregar nuevo sombrero</button>
         <table>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Color</th>
@@ -44,7 +43,6 @@
                 while($row = $result -> fetch_assoc()){
                     echo("
                         <tr>
-                            <td>".$row["id_sombrero"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>".$row["Precio"]. "</td>
                             <td>".$row["Color"]. "</td>
@@ -91,14 +89,14 @@
 
         </table>
         <?php 
-        include(ROOT_PATH.'View/modals/modal-EditarSombrero.php');
-        include(ROOT_PATH.'View/modals/modal-AggSombrero.php')
+        include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarSombrero.php');
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggSombrero.php')
         ?>
     </main>
 
-    <script src="/LaHerradura/public/viewImages.js"></script>
-    <script src="/LaHerradura/public/adminSombreros.js"></script>
+    <script src="/LaHerradura/public/ViewPeroducts/viewImages.js"></script>
+    <script src="/LaHerradura/public/AdminProducts/adminSombreros.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
-    <script src="/LaHerradura/public/validacion.js"></script>
+    <script src="/LaHerradura/public/Validations/validacionSombreros.js"></script>
 </body>
 </html>

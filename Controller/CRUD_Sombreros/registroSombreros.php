@@ -31,7 +31,7 @@ try {
         }
         
         $ext = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'heif', 'AVIF'])) {
             throw new Exception("Formato inválido en $key.");
         }
 
