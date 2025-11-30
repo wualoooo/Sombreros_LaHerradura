@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,edit" />
 </head>
 
 <body>
@@ -52,8 +53,12 @@
                             <td>".$row["Tam_ala"]."</td>
                             <td>".$row["Material"]."</td>
                             <td>
-                                <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>Editar</button>
-                                <button class='btn btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>Eliminar</button>
+                                <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
+                                    <span class='material-symbols-outlined'>edit</span>
+                                </button>
+                                <button class='btn btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
+                                    <span class='material-symbols-outlined'>delete</span>
+                                </button>
                             </td>
                         </tr>"
                     );

@@ -14,6 +14,7 @@ body {
     top: 0;
     box-shadow: 5px 5px 20px #000;
     z-index: 1000;
+    padding-right: 1rem;
 }
 
 .logo{
@@ -64,11 +65,33 @@ body {
 }
 
 .nav-links a:active{
-    color:rgb(188, 246, 0);
+    color:rgb(234, 246, 0);
 }
 
-.bi-cart-fill{
-    padding-right: 2rem;
+#Cart {
+    font-size: 4vh;
+    vertical-align: middle; /* Baja el icono para centrarlo */
+    line-height: 1;         /* Evita que tenga altura extra invisible */
+    display: inline-block;  /* Asegura que respete el tamaño */
+}
+
+/* 2. Asegurar que el enlace (la caja gris) crezca con el icono */
+/* Usamos :has para detectar el enlace que tiene el carrito (Funciona en navegadores modernos) */
+.nav-links a:has(#Cart) {
+    display: inline-flex;      /* Usa flexbox solo para este botón */
+    align-items: center;       /* Centra verticalmente perfecto */
+    justify-content: center;   /* Centra horizontalmente */
+    height: auto;              /* Deja que la altura se adapte al icono */
+    padding: 10px;     /* Un poco más de aire si lo necesitas */
+}
+
+.material-symbols-outlined {
+    
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 900,
+    'GRAD' 200,
+    'opsz' 48
 }
 
 /*Header admin*/
