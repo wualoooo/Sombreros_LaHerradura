@@ -94,7 +94,7 @@
         ?>
     </main>
 
-    <script src="/LaHerradura/public/ViewPeroducts/viewImages.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewImages.js"></script>
     <script src="/LaHerradura/public/AdminProducts/adminSombreros.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
     <script src="/LaHerradura/public/Validations/validacionSombreros.js"></script>

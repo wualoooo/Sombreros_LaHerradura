@@ -51,7 +51,7 @@
         </div>
 
         <?php 
-        include(ROOT_PATH . 'View/modals/modal-ViewProduct.php')
+        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php')
 
         ?>
 
@@ -70,6 +70,6 @@
         include(ROOT_PATH . 'View/includes/footer.php')
         ?>
     </footer>
-    <script src="/LaHerradura/public/viewTexanas.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewTexanas.js"></script>
 </body>
 </html>
