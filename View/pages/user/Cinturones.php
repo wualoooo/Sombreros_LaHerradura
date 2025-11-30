@@ -50,7 +50,7 @@
         </div>
 
         <?php 
-        include(ROOT_PATH . 'View/modals/modal-ViewCinturones.php')
+        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewCinturones.php')
 
         ?>
 
@@ -69,6 +69,6 @@
         include(ROOT_PATH . 'View/includes/footer.php')
         ?>
     </footer>
-    <script src="/LaHerradura/public/viewCinturones.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewCinturones.js"></script>
 </body>
 </html>

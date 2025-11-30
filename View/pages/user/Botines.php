@@ -70,6 +70,6 @@
         include(ROOT_PATH . 'View/includes/footer.php')
         ?>
     </footer>
-    <script src="/LaHerradura/public/viewBotines.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewBotines.js"></script>
 </body>
 </html>
