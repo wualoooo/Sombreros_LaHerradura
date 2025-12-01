@@ -108,25 +108,25 @@
                         <div class="contenedor-preview">
                             
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero1" id="imgEditSombrero1" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgSombrero1" id="imgEditSombrero1" class="input-img-oculto" accept="image/*,.HEIF,.HEIC,.AVIF">
                                 <label for="imgEditSombrero1" class="label-boton">Seleccionar archivo</label>
                                 <img id="previewEditSombrero1" class="preview" src="#" alt="Vista previa 1">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero2" id="imgEditSombrero2" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgSombrero2" id="imgEditSombrero2" class="input-img-oculto" accept="image/*,.HEIF,.HEIC,.AVIF">
                                 <label for="imgEditSombrero2" class="label-boton">Seleccionar archivo</label>
                                 <img id="previewEditSombrero2" class="preview" src="#" alt="Vista previa 2">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero3" id="imgEditSombrero3" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgSombrero3" id="imgEditSombrero3" class="input-img-oculto" accept="image/*,.HEIF,.HEIC,.AVIF">
                                 <label for="imgEditSombrero3" class="label-boton">Seleccionar archivo</label>
                                 <img id="previewEditSombrero3" class="preview" src="#" alt="Vista previa 3">
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgSombrero4" id="imgEditSombrero4" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgSombrero4" id="imgEditSombrero4" class="input-img-oculto" accept="image/*,.HEIF,.HEIC,.AVIF">
                                 <label for="imgEditSombrero4" class="label-boton">Seleccionar archivo</label>
                                 <img id="previewEditSombrero4" class="preview" src="#" alt="Vista previa 4">
                             </div>
