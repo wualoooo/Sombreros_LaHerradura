@@ -51,7 +51,7 @@
         </div>
 
         <?php 
-        include(ROOT_PATH . 'View/modals/modal-ViewBotines.php')
+        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewBotines.php')
 
         ?>
 
