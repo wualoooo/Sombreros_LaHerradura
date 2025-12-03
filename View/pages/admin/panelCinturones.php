@@ -13,7 +13,8 @@
 <body>
     <header>
         <?php 
-        include('../../includes/header-admin.php')
+        define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+        include(ROOT_PATH.'View/includes/header-admin.php')
         ?>
     </header>
     <main>
@@ -29,7 +30,7 @@
             <th>Acciones</th>
         <tbody id="tabla-cinturones-body">   
             <?php 
-            include ('../../../Model/conexion.php');
+            include (ROOT_PATH.'Model/conexion.php');
 
             $sql = "SELECT id_cinturon, Nombre, Precio, Material, Adorno, Tamaño FROM cinturones";
             $result = $conn -> query($sql);
@@ -83,13 +84,13 @@
 
         </table>
         <?php 
-        include('../../modals/modal-EditarCinturon.php');
-        include('../../modals/modal-AggCinturon.php')
+        include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarCinturon.php');
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggCinturon.php')
         ?>
     </main>
 
-    <script src="../../../public/viewImages.js"></script>
-    <script src="../../../public/adminCinturones.js"></script>
-    <script src="../../../public/modals.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewImages.js"></script>
+    <script src="/LaHerradura/public/AdminProducts/adminCinturones.js"></script>
+    <script src="/LaHerradura/public/modals.js"></script>
 </body>
 </html>

@@ -84,13 +84,13 @@
 
         </table>
         <?php 
-        include(ROOT_PATH.'View/modals/modal-EditarBotin.php');
-        include(ROOT_PATH.'View/modals/modal-AggBotin.php')
+        include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarBotin.php');
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggBotin.php')
         ?>
     </main>
 
-    <script src="/LaHerradura/public/viewImages.js"></script>
-    <script src="/LaHerradura/public/adminBotines.js"></script>
+    <script src="/LaHerradura/public/ViewProducts/viewImages.js"></script>
+    <script src="/LaHerradura/public/AdminProducts/adminBotines.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
 </body>
 </html>
