@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- VALIDACIÓN ROBUSTA (Busca por name, no por ID) ---
 
         // 1. Textos (Nombre, Color, Material)
-        const camposTexto = ['NombreSombrero', 'ColorSombrero'];
+        const camposTexto = ['NombreSombrero',];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             const nombreCampo = name.replace('Sombrero', ''); // Para que el mensaje diga "Nombre" y no "NombreSombrero"
