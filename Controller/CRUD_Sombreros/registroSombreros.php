@@ -56,7 +56,7 @@ try {
 
     // PREPARAR DATOS PARA BD
     $Nombre = trim($_POST['NombreSombrero']);
-    $Color = trim($_POST['ColorSombrero']);
+    $Color = ($_POST['ColorSombrero']);
     $Horma = $_POST['HormaSombrero'];
     $Copa = $_POST['CopaSombrero'];
     $Tam_Copa = $_POST['TamañoCopaSombrero'];
@@ -72,7 +72,7 @@ try {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    $stmt->bind_param("ssssddsissss", 
+    $stmt->bind_param("siiiddidssss", 
         $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, 
         $img1, $img2, $img3, $img4
     );

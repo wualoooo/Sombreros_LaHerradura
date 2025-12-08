@@ -16,11 +16,11 @@
 .modal-content-vp {
     overflow: hidden;
     background: #fff;
-    margin: 10% auto;
+    margin: 6% auto;
     padding: 20px;  /*espacidao de elementos*/
     border-radius: 40px;
     width: 45vw;
-    height: 68vh;
+    height: auto;
     color: black;
 }
 

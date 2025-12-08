@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="../../css/style-Modal-Edit-Som-Tex.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-Modal-Edit-Som-Tex.css">
 
 <div class="modal-EditSom" id="modal-EditSombrero">
     <div class="modal-content-EditSom">
@@ -25,12 +25,12 @@
                                 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
                                 include(ROOT_PATH . 'Model/conexion.php') ;
 
-                                $verColores = "SELECT id_color, Nombre FROM colores";
+                                $verColores = "SELECT id_color, Nombre FROM colores WHERE Producto = 'Sombreros'";
                                 $resultColores = $conn->query($verColores);
 
                                     while ($rowColores = $resultColores -> fetch_assoc()){
                                         echo "
-                                        <option value=".$rowColores['Nombre'].">".$rowColores['Nombre']."</option>
+                                        <option value=".$rowColores['id_color'].">".$rowColores['Nombre']."</option>
                                         ";
                                     }
                             ?>
@@ -48,7 +48,7 @@
 
                                         while ($rowhormas = $resulthormas -> fetch_assoc()){
                                             echo "
-                                            <option value=".$rowhormas['Nombre'].">".$rowhormas['Nombre']."</option>
+                                            <option value=".$rowhormas['id_horma'].">".$rowhormas['Nombre']."</option>
                                             ";
                                         }
                                 ?>
@@ -65,7 +65,7 @@
 
                                     while ($rowcopas = $resultcopas -> fetch_assoc()){
                                         echo "
-                                        <option value=".$rowcopas['Nombre'].">".$rowcopas['Nombre']."</option>
+                                        <option value=".$rowcopas['id_copa'].">".$rowcopas['Nombre']."</option>
                                         ";
                                     }
                             ?>
@@ -88,12 +88,12 @@
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
 
-                                $verMateriales = "SELECT id_material, Nombre FROM materiales";
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Sombreros'";
                                 $resultMateriales = $conn->query($verMateriales);
 
                                     while ($rowMateriales = $resultMateriales -> fetch_assoc()){
                                         echo "
-                                        <option value=".$rowMateriales['Nombre'].">".$rowMateriales['Nombre']."</option>
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
                                         ";
                                     }
                             ?>

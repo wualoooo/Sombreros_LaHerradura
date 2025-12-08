@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,edit" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
@@ -20,7 +20,8 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Sombreros</h2>
-        <button class="btn btn-agregar" id="btnAgg-Sombrero">Agregar nuevo sombrero</button>
+        <button class="btn btn-agregar" id="btnAgg-Sombrero">
+            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo sombrero</button>
         <table>
             <th>Nombre</th>
             <th>Precio</th>
@@ -36,34 +37,48 @@
             include (ROOT_PATH.'Model/conexion.php');
             
             // RECOLECTAR LOS DATOS DE LA BASE DE DATOS
-            $sql = "SELECT id_sombrero, Nombre, Precio, Color, Horma, Copa, Tam_Copa, Tam_ala, Material FROM sombreros";
+            $sql = "SELECT 
+            s.id_sombrero,
+            s.Nombre,              -- Este es el nombre del Sombrero
+            s.Precio,
+            c.Nombre AS Nombre_Color,    -- Renombramos para que no choque
+            h.Nombre AS Nombre_Horma,    -- Renombramos
+            cp.Nombre AS Nombre_Copa,    -- Renombramos
+            s.Tam_Copa,
+            s.Tam_ala,
+            m.Nombre AS Nombre_Material  -- Renombramos
+        FROM sombreros s
+        INNER JOIN colores c ON s.Color = c.id_color
+        INNER JOIN hormas h ON s.Horma = h.id_horma
+        INNER JOIN copas cp ON s.Copa = cp.id_copa
+        INNER JOIN materiales m ON s.Material = m.id_material";
             $result = $conn -> query($sql);
 
             // MOSTRAR LOS DATOS EN UNA TABLA
-            if ($result -> num_rows>0){
-                while($row = $result -> fetch_assoc()){
-                    echo("
-                        <tr>
-                            <td>".$row["Nombre"]."</td>
-                            <td>".$row["Precio"]. "</td>
-                            <td>".$row["Color"]. "</td>
-                            <td>".$row["Horma"]."</td>
-                            <td>".$row["Copa"]."</td>
-                            <td>".$row["Tam_Copa"]."</td>
-                            <td>".$row["Tam_ala"]."</td>
-                            <td>".$row["Material"]."</td>
-                            <td>
-                                <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
-                                    <span class='material-symbols-outlined'>edit</span>
-                                </button>
-                                <button class='btn btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
-                                    <span class='material-symbols-outlined'>delete</span>
-                                </button>
-                            </td>
-                        </tr>"
-                    );
-                }
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo("
+                    <tr>
+                        <td>".$row["Nombre"]."</td>
+                        <td>".$row["Precio"]."</td>
+                        <td>".$row["Nombre_Color"]."</td>   
+                        <td>".$row["Nombre_Copa"]."</td>    
+                        <td>".$row["Nombre_Horma"]."</td>   
+                        <td>".$row["Tam_Copa"]."</td>
+                        <td>".$row["Tam_ala"]."</td>
+                        
+                        <td>".$row["Nombre_Material"]."</td> <td>
+                            <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
+                                <span class='material-symbols-outlined'>edit</span>
+                            </button>
+                            <button class='btn btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
+                                <span class='material-symbols-outlined'>delete</span>
+                            </button>
+                        </td>
+                    </tr>"
+                );
             }
+        }
 
             else{
                 echo("
@@ -74,23 +89,6 @@
             }
 
         ?>
-
-        <!--</tbody>
-            <tr>
-                <td>1</td>
-                <td>Sombrero Bangora Natural Ventilado</td>
-                <td>$800.00 mxn</td>
-                <td>Blanco</td>
-                <td>Chihuahua</td>
-                <td>Malboro</td>
-                <td>21 cm</td>
-                <td>Bangora</td>
-                <td>
-                    <button class="btn btn-editar">Editar</button>
-                    <button class="btn btn-eliminar">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>-->
 
         </table>
         <?php 

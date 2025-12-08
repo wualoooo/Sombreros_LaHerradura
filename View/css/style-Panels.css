@@ -52,6 +52,9 @@
             margin-right: 5px;
         }
         .btn-agregar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         padding: 20px;
         font-size: 1.5rem;
         margin: 0 0 2rem 2rem;
@@ -254,4 +257,9 @@
             border-radius: 7px;
             padding: 10px 5px;
             font-size: 1.25rem;
+        }
+
+        #IconAdd{
+            margin-right: 0.5rem;
+            font-size: 2rem;
         }
