@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-AggExtras.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-Agregar.css">
 
 <div class="modal-AggExtras" id="modal-AggHorma">
     <div class="modal-content-AggExtra">
@@ -13,7 +13,7 @@
                     <br>
                 </div>
                 <div id="divButton">
-                    <input class="ButtonGuardarExtras" type="submit" id="btnGuardarAggHorma" value="Guardar">
+                    <input class="ButtonGuardar" type="submit" id="btnGuardarAggHorma" value="Guardar">
                 </div>
             </form>
         </div>

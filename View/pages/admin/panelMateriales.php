@@ -21,21 +21,21 @@
         <h2 class="titleGestion">Gestión de Materiales</h2>
         <button class="btn btn-agregar" id="btnAgg-Material">Agregar nueva Material</button>
         <table>
-            <th>ID</th>
-            <th>Nombre</th>
+            <th>Producto</th>
+            <th>Nombre material</th>
             <th>Acciones</th>
         <tbody id="tabla-copas-body">   
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
 
-            $sql = "SELECT id_material, Nombre FROM materiales ORDER BY id_material";
+            $sql = "SELECT id_material, Nombre, Producto FROM materiales ORDER BY Producto";
             $result = $conn -> query($sql);
 
             if ($result -> num_rows>0){
                 while($row = $result -> fetch_assoc()){
                     echo("
                         <tr>
-                            <td>".$row["id_material"]."</td>
+                            <td>".$row["Producto"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>
                                 <button class='btn btn-editarCinturon' data-id='".$row["id_material"]."'>Editar</button>
@@ -60,7 +60,7 @@
         </table>
         <?php 
         /*include(ROOT_PATH.'modals/modal-EditarCinturon.php');*/
-        include(ROOT_PATH.'View/modals/modal-AggMaterial.php')
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggMaterial.php')
         ?>
     </main>
 

@@ -59,8 +59,7 @@
 
         </table>
         <?php 
-        /*include(ROOT_PATH.'modals/modal-EditarCinturon.php');*/
-        include(ROOT_PATH.'View/modals/modal-AggCopa.php')
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggCopa.php')
         ?>
     </main>
 

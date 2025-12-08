@@ -60,7 +60,7 @@
         </table>
         <?php 
         /*include(ROOT_PATH.'modals/modal-EditarCinturon.php');*/
-        include(ROOT_PATH.'View/modals/modal-AggHorma.php')
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggHorma.php')
         ?>
     </main>
 

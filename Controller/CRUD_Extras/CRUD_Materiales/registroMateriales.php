@@ -5,7 +5,6 @@ ini_set('display_errors', 1); // <--- CAMBIADO A 1 PARA VER EL ERROR SI FALLA
 header('Content-Type: application/json');
 
 // 2. CORRECCIÓN DE RUTA (3 Niveles hacia atrás)
-// Verifica si tu archivo conexion.php está realmente en Model/conexion.php desde la raíz
 $ruta_conexion = '../../../Model/conexion.php';
 
 if (!file_exists($ruta_conexion)) {
@@ -28,6 +27,7 @@ try {
     }
 
     $nombre = trim($_POST['NombreMaterial']);
+    $producto = trim($_POST['ProductoMaterial']);
 
     // Validación de solo letras y espacios
     if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre)) {
@@ -39,14 +39,14 @@ try {
     }
 
     // Insertar
-    $sql = "INSERT INTO materiales (Nombre) VALUES (?)";
+    $sql = "INSERT INTO materiales (Nombre, Producto) VALUES (?,?)";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {
         throw new Exception("Error SQL: " . $conn->error);
     }
 
-    $stmt->bind_param("s", $nombre);
+    $stmt->bind_param("ss", $nombre, $producto);
 
     if ($stmt->execute()) {
         $response['success'] = true;
