@@ -1,24 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     
+    // Asegúrate que tu <form> en el HTML tenga este ID exacto
     const formulario = document.getElementById('form-AggSom');
 
     if (!formulario) return;
 
     formulario.addEventListener('submit', function(e) {
-        e.preventDefault(); // Detenemos el envío siempre para validar
+        e.preventDefault(); // Detenemos el envío para validar
+
+        // --- A) LIMPIEZA VISUAL PREVIA ---
+        const limpiarEstilos = () => {
+            formulario.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formulario.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
+        };
+        limpiarEstilos();
 
         let errores = [];
         let primerElementoError = null;
-
-        // --- HELPERS ---
-        const limpiarErrores = () => {
-            // Buscamos clases de error SOLO dentro de este formulario
-            formulario.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-            formulario.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
-            
-            const msgBox = document.getElementById('mensaje-error-js');
-            if(msgBox) msgBox.style.display = 'none';
-        };
 
         const marcarError = (elemento, mensaje) => {
             if (elemento) {
@@ -28,31 +26,23 @@ document.addEventListener('DOMContentLoaded', function() {
             errores.push(mensaje);
         };
 
-        limpiarErrores();
+        // --- B) VALIDACIONES ROBUSTAS ---
 
-        // --- VALIDACIÓN ROBUSTA (Busca por name, no por ID) ---
-
-        // 1. Textos (Nombre, Color, Material)
-        const camposTexto = ['NombreSombrero',];
+        // 1. Textos
+        const camposTexto = ['NombreSombrero'];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
-            const nombreCampo = name.replace('Sombrero', ''); // Para que el mensaje diga "Nombre" y no "NombreSombrero"
+            const nombreCampo = name.replace('Sombrero', ''); 
             
             if (!input) return;
-
             const valor = input.value.trim();
 
-            // REGLA 1: No puede estar vacío
             if (valor === "") {
                 marcarError(input, `El campo ${nombreCampo} es obligatorio.`);
-            } 
-            // REGLA 2: No puede ser SOLO números (Regex: inicio a fin son dígitos)
-            else if (/^\d+$/.test(valor)) {
-                marcarError(input, `El ${nombreCampo} no puede ser solo números (ej: "${valor}").`);
-            }
-            // REGLA 3: Longitud mínima (para evitar "a", "b", etc.)
-            else if (valor.length < 3) {
-                marcarError(input, `El ${nombreCampo} es muy corto, sé más específico.`);
+            } else if (/^\d+$/.test(valor)) {
+                marcarError(input, `El ${nombreCampo} no puede ser solo números.`);
+            } else if (valor.length < 3) {
+                marcarError(input, `El ${nombreCampo} es muy corto.`);
             }
         });
 
@@ -60,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const selects = ['HormaSombrero', 'CopaSombrero', 'ColorSombrero', 'MaterialSombrero'];
         selects.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
-            if (!input || input.value === "Null") {
+            if (!input || input.value === "Null" || input.value === "") {
                 marcarError(input, `Selecciona una opción para ${name.replace('Sombrero', '')}.`);
             }
         });
@@ -70,113 +60,94 @@ document.addEventListener('DOMContentLoaded', function() {
         numeros.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             if (!input || input.value === "" || isNaN(input.value) || Number(input.value) <= 0) {
-                marcarError(input, `Revisa el valor de ${name.replace('Sombrero', '')}.`);
+                marcarError(input, `Revisa el valor numérico de ${name.replace('Sombrero', '')}.`);
             }
         });
 
-        // 4. Imágenes (Validación de existencia y duplicados)
-        const nombresArchivosVistos = new Set(); // Aquí guardaremos los nombres para detectar clones
-
+        // 4. Imágenes (Validación duplicados)
+        const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
             const inputImg = formulario.querySelector(`[name="imgSombrero${i}"]`);
             
             if (inputImg) {
                 const caja = inputImg.closest('.caja-preview');
 
-                // A) ¿Seleccionó archivo?
                 if (inputImg.files.length === 0) {
                     errores.push(`Falta seleccionar la Imagen ${i}`);
                     if (caja) caja.classList.add('caja-error');
-                } 
-                else {
-                    // B) ¿Es un duplicado?
+                } else {
                     const nombreArchivo = inputImg.files[0].name;
-                    
                     if (nombresArchivosVistos.has(nombreArchivo)) {
-                        // ¡LO ENCONTRAMOS! El usuario trata de subir la misma foto otra vez
-                        errores.push(`La Imagen ${i} es igual a una anterior (${nombreArchivo}). No puedes repetir fotos.`);
+                        errores.push(`La Imagen ${i} está repetida (${nombreArchivo}).`);
                         if (caja) caja.classList.add('caja-error');
                     } else {
-                        // Si es nuevo, lo guardamos en la lista para comparar con los siguientes
                         nombresArchivosVistos.add(nombreArchivo);
                     }
                 }
             }
         }
 
-        // --- RESULTADO ---
+        // --- C) RESULTADO DE VALIDACIÓN ---
 
         if (errores.length > 0) {
-            let msgBox = document.getElementById('mensaje-error-js');
-            if (!msgBox) {
-                msgBox = document.createElement('div');
-                msgBox.id = 'mensaje-error-js';
-                // Agregamos el mensaje al contenedor del modal, no al form, para que flote bien
-                const modalContent = document.querySelector('.modal-content-AggSom');
-                if(modalContent) modalContent.appendChild(msgBox);
-            }
+            // MOSTRAR ERRORES CON SWEETALERT (Lista HTML)
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                html: '<ul style="text-align: left;"><li>' + errores.join('</li><li>') + '</li></ul>',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Corregir'
+            });
 
-            // Mensaje corto para no tapar todo
-            msgBox.innerHTML = `<strong>Hay errores:</strong><br>Revisa los campos marcados en rojo.`;
-            msgBox.style.display = 'block';
-
-            // Ocultar mensaje automáticamente después de 3 segundos
-            setTimeout(() => {
-                msgBox.style.display = 'none';
-            }, 4000);
+            if (primerElementoError) primerElementoError.focus();
 
         } else {
-            // 1. Mostrar indicador de carga (Opcional pero recomendado)
+            // --- D) SI TODO ESTÁ BIEN: ENVIAR FETCH ---
+            
             const btnSubmit = formulario.querySelector('input[type="submit"]');
             const textoOriginal = btnSubmit.value;
             btnSubmit.value = "Guardando...";
             btnSubmit.disabled = true;
 
-            // 2. Preparamos los datos
             const formData = new FormData(formulario);
 
-            // 3. Enviamos con FETCH (Sin recargar pagina)
-            fetch(formulario.action, {
+            fetch(formulario.action, { // Usa la URL del atributo action="" del form
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json()) // Convertimos la respuesta a objeto JS
+            .then(response => response.json())
             .then(data => {
                 
-                // Restaurar botón
                 btnSubmit.value = textoOriginal;
                 btnSubmit.disabled = false;
 
                 if (data.success) {
-                    // ÉXITO
-                    alert("" + data.message); // O usa una librería bonita como SweetAlert
-                    
-                    formulario.reset(); // Limpiamos el formulario
-                    
-                    // Limpiamos las previsualizaciones de imagenes (si tienes esa funcion)
-                    document.querySelectorAll('.preview').forEach(img => img.src = '#');
-                    document.querySelectorAll('.caja-error, .input-error').forEach(el => el.classList.remove('caja-error', 'input-error'));
-                    
-                    // Opcional: Cerrar el modal automáticamente
+                    // ÉXITO: Usamos Alerta.exito
+                    // Cerramos el modal inmediatamente para mejor UX
                     const modal = document.getElementById('modal-AggSombrero');
-                    if(modal) modal.style.display = "none"; 
-                    
-                    // Opcional: Recargar la página para ver el nuevo producto en la tabla
-                    location.reload(); 
+                    if(modal) modal.style.display = "none";
+
+                    Alerta.exito(data.message || 'Sombrero registrado correctamente.')
+                        .then(() => {
+                            formulario.reset(); 
+                            // Limpiar previews
+                            document.querySelectorAll('.preview').forEach(img => {
+                                img.src = '#';
+                                img.style.display = 'none';
+                            });
+                            
+                            // Recargar la página
+                            location.reload(); 
+                        });
 
                 } else {
-                    // ERROR DEL SERVIDOR (PHP)
-                    // Mostramos el error en la misma cajita flotante que creamos antes
-                    let msgBox = document.getElementById('mensaje-error-js');
-                    if (!msgBox) { /* Crear caja si no existe... (mismo código de antes) */ }
-                    
-                    msgBox.innerHTML = `<strong>Error del servidor:</strong><br>${data.message}`;
-                    msgBox.style.display = 'block';
+                    // ERROR DEL PHP
+                    Alerta.error(data.message || "Error desconocido del servidor.");
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert("Hubo un error de conexión con el servidor.");
+                Alerta.error("Hubo un error de conexión con el servidor.");
                 btnSubmit.value = textoOriginal;
                 btnSubmit.disabled = false;
             });
