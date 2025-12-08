@@ -20,13 +20,8 @@
                     <span class="material-symbols-outlined" id="Cart">shopping_cart</span>
             </a></li>
         </ul>
-    
             </div>
-
             <?php 
             include(ROOT_PATH . 'View/modals/modal-login.php')
             ?>
     </nav>
-
-    
-

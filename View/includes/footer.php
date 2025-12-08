@@ -35,5 +35,5 @@
         <div class="space_right"></div>
 
         <script src="/LaHerradura/public/modals.js" defer></script>
-        <script src="/LaHerradura/public/mostrar-password.js"></script>
-        <script src="/LaHerradura/public/iniciosesion.js"></script>
+        <script src="/LaHerradura/public/main.js" defer></script>
+        <script src="/LaHerradura/public/alerts.js" defer></script>

@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 
                     // Rellenamos los detalles (usando los nuevos IDs)
-                    document.getElementById('modal-color').textContent = `Color: ${data.Color}`;
-                    document.getElementById('modal-horma').textContent = `Horma: ${data.Horma}`;
-                    document.getElementById('modal-copa').textContent = `Copa: ${data.Copa}`;
+                    document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color}`;
+                    document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma}`;
+                    document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa}`;
                     document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
                     document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
-                    document.getElementById('modal-material').textContent = `Material: ${data.Material}`;
+                    document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material}`;
 
                     // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
                     
