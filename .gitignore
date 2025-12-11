@@ -1,0 +1,29 @@
+# ---------------------------------------------
+# Reglas para ignorar archivos de imágenes
+# ---------------------------------------------
+
+# Ignorar todos los archivos PNG
+*.png
+
+# Ignorar todos los archivos JPEG/JPG
+*.jpg
+*.jpeg
+
+# Ignorar todos los archivos HEIF
+*.heif
+
+# Ignorar todos los archivos AVIF
+*.avif
+
+# Ignorar otros tipos comunes de imágenes por si acaso
+*.gif
+*.bmp
+*.ico
+*.svg
+*.webp
+
+# ---------------------------------------------
+# NOTA: Para ignorar una carpeta completa de imágenes:
+# Por ejemplo, para ignorar la carpeta 'images' en la raíz:
+# images/
+# ---------------------------------------------
