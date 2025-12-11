@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 
                     // Rellenamos los detalles (usando los nuevos IDs)
-                    document.getElementById('modal-Talla').textContent = `Material: ${data.Talla}`;
-                    document.getElementById('modal-Material').textContent = `Adorno: ${data.Material}`;
-                    document.getElementById('modal-Suela').textContent = `Tamaño: ${data.Suela}`;
+                    document.getElementById('modal-Talla').textContent = `Talla: ${data.Talla}`;
+                    document.getElementById('modal-Material').textContent = `Material: ${data.Nombre_Material || data.id_material}`;
+                    document.getElementById('modal-Suela').textContent = `Suela: ${data.Nombre_Suela || data.id_suela}`;
                     // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
                     
                     // En lugar de una sola imagen, generamos la galería completa

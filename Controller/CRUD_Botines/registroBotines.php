@@ -1,53 +1,102 @@
 <?php 
+// Desactivar salida de errores HTML para no romper el JSON
+error_reporting(E_ALL);
+ini_set('display_errors', 0); 
+header('Content-Type: application/json'); // Decimos que respondemos JSON
+
 require('../../Model/conexion.php');
 
-function subirImagen($clave_archivo, $carpeta_destino) {
-    if (isset($_FILES[$clave_archivo]) && $_FILES[$clave_archivo]['error'] == 0) {
-        
-        $archivo_temporal = $_FILES[$clave_archivo]['tmp_name'];
-        $nombre_original = $_FILES[$clave_archivo]['name'];
+$response = ['success' => false, 'message' => 'Error desconocido'];
+$imagenes_subidas = [];
 
-        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
-        $nuevo_nombre = uniqid('ImgBotin_') . '.' . $extension;
+try {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        throw new Exception("Acceso no permitido.");
+    }
+
+    // 1. VALIDACIONES BÁSICAS
+    if (empty($_POST['NombreBotin']) || empty($_POST['PrecioBotin'])) {
+        throw new Exception("Faltan datos obligatorios.");
+    }
+
+    $carpeta_destino = "../../uploads/botines/";
+    if (!file_exists($carpeta_destino)) {
+        mkdir($carpeta_destino, 0777, true);
+    }
+
+    // Función interna para manejar la subida y el rastreo
+    function procesarImagen($key, $destino, &$lista_borrado) {
+        if (!isset($_FILES[$key]) || $_FILES[$key]['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("Error al subir la imagen $key.");
+        }
         
-        $ruta_completa = $carpeta_destino . $nuevo_nombre;
-        
-        if (move_uploaded_file($archivo_temporal, $ruta_completa)) {
+        $ext = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'heif', 'AVIF'])) {
+            throw new Exception("Formato inválido en $key.");
+        }
+
+        $nuevo_nombre = uniqid('ImgBotin_') . '.' . $ext;
+        $ruta = $destino . $nuevo_nombre;
+
+        if (move_uploaded_file($_FILES[$key]['tmp_name'], $ruta)) {
+            // AGREGAMOS A LA LISTA DE "COSAS POR BORRAR SI FALLA ALGO"
+            $lista_borrado[] = $ruta; 
             return $nuevo_nombre;
         } else {
-            return null;
+            throw new Exception("No se pudo mover la imagen $key.");
         }
+    }
+
+    // INTENTAR SUBIR LAS IMÁGENES
+    // Si una falla, el catch atrapará el error y no se insertará nada en la BD
+    $img1 = procesarImagen('imgBotin1', $carpeta_destino, $imagenes_subidas);
+    $img2 = procesarImagen('imgBotin2', $carpeta_destino, $imagenes_subidas);
+    $img3 = procesarImagen('imgBotin3', $carpeta_destino, $imagenes_subidas);
+    $img4 = procesarImagen('imgBotin4', $carpeta_destino, $imagenes_subidas);
+
+    // PREPARAR DATOS PARA BD
+    $Nombre = trim($_POST['NombreBotin']);
+    $Talla = ($_POST['TallaBotin']);
+    $Material = trim($_POST['MaterialBotin']);
+    $Suela = $_POST['SuelaBotin'];
+    $Precio = $_POST['PrecioBotin'];
+    
+
+    // INSERTAR EN BD
+    $sql = "INSERT INTO botines (Nombre, Talla, Material, Suela, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("Error en la consulta SQL: " . $conn->error);
+    }
+
+    $stmt->bind_param("sdiidssss", 
+        $Nombre, $Talla, $Material, $Suela, $Precio,
+        $img1, $img2, $img3, $img4
+    );
+
+    if ($stmt->execute()) {
+        $response['success'] = true;
+        $response['message'] = 'Botin registrado correctamente.';
     } else {
-        return null;
+        throw new Exception("Error al guardar en BD: " . $stmt->error);
+    }
+
+    $stmt->close();
+
+} catch (Exception $e) {
+    // SI ALGO FALLÓ (En subida o en BD):
+    $response['message'] = $e->getMessage();
+
+    // *** ROLLBACK DE IMÁGENES ***
+    // Como la BD falló, borramos las imágenes que acabamos de subir para no dejar basura.
+    foreach ($imagenes_subidas as $ruta_borrar) {
+        if (file_exists($ruta_borrar)) {
+            unlink($ruta_borrar);
+        }
     }
 }
 
-$Nombre = $_POST['NombreBotin'];
-$Talla = $_POST['TallaBotin'];
-$Material = $_POST['MaterialBotin'];
-$Suela = $_POST['SuelaBotin'];
-$Precio = $_POST['PrecioBotin'];
-$carpeta_destino = "../../uploads/botines/";
-
-$Img1_nombre_db = subirImagen('imgBotin1', $carpeta_destino);
-$Img2_nombre_db = subirImagen('imgBotin2', $carpeta_destino);
-$Img3_nombre_db = subirImagen('imgBotin3', $carpeta_destino);
-$Img4_nombre_db = subirImagen('imgBotin4', $carpeta_destino);
-
-$sql = "INSERT INTO botines (Nombre, Talla, Material, Suela, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$insert = $conn->prepare($sql);
-
-$insert->bind_param(
-    "sssssssss",
-    $Nombre, $Talla, $Material, $Suela, $Precio, $Img1_nombre_db,  $Img2_nombre_db, $Img3_nombre_db,  $Img4_nombre_db);
-
-if ($insert->execute()) {
-    echo "Los datos se insertaron correctamente";
-} else {
-    echo "Error: " . $insert->error;
-}
-
-$insert->close();
 $conn->close();
-
+echo json_encode($response);
 ?>

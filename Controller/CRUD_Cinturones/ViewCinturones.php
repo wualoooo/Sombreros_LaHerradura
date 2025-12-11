@@ -12,7 +12,23 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $id_cinturon = $_GET['id'];
 
 // 2. Prepara la consulta (¡ASEGÚRATE que tu columna se llama 'id_texana'!)
-$sql = $conn->prepare("SELECT * FROM cinturones WHERE id_cinturon = ?");
+$sql = $conn->prepare("SELECT 
+            c.id_cinturon,
+            c.Nombre,
+            c.Precio,
+            c.Material AS id_material,
+            c.Adorno AS id_adorno,
+            m_principal.Nombre AS Nombre_Material,
+            m_adorno.Nombre AS Nombre_Adorno,
+            c.Tamaño,
+            c.Img1,
+            c.Img2,
+            c.Img3,
+            c.Img4
+            FROM cinturones c
+            INNER JOIN materiales m_principal ON c.Material = m_principal.id_material
+            INNER JOIN materiales m_adorno ON c.Adorno = m_adorno.id_material
+            WHERE c.id_cinturon = ?");
 
 if (!$sql) {
     // Si la preparación falla (ej. error de sintaxis SQL)

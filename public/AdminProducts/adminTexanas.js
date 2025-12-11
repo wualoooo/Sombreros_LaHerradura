@@ -1,176 +1,355 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. SELECCIONAR ELEMENTOS ---
-    // (Usamos los IDs y Clases de tu HTML)
-    
-    // El modal y su formulario
+    // ==========================================
+    // 1. REFERENCIAS AL DOM
+    // ==========================================
     const modalEditar = document.getElementById('modal-EditTexana');
     const formEditar = document.getElementById('form-EditTexana');
-    
-    // (Asegúrate de que tu botón de cerrar tenga la clase 'close')
-    const btnCerrar = modalEditar.querySelector('.close');
+    const tablaBody = document.getElementById('tabla-texanas-body'); 
+    const btnCerrar = modalEditar ? modalEditar.querySelector('.close') : null;
 
-    // (Asegúrate de que tu <tbody> de la tabla tenga este ID)
-    const tablaBody = document.getElementById('tabla-texana-body'); 
-
-    if (!tablaBody) {
-        console.error("No se encontró el <tbody> con ID 'tabla-texana-body'.");
+    if (!modalEditar || !formEditar || !tablaBody) {
+        console.error("ERROR CRÍTICO: No se encontraron elementos del modal o la tabla.");
         return;
     }
 
-    // --- 2. CERRAR EL MODAL ---
-    btnCerrar.onclick = () => {
-        modalEditar.style.display = 'none';
-    }
-    // Opcional: Cerrar si se hace clic fuera
-    window.onclick = (event) => {
-        if (event.target == modalEditar) {
-            modalEditar.style.display = 'none';
+    // ==========================================
+    // 2. FUNCIONES AUXILIARES
+    // ==========================================
+
+    const limpiarModalEditar = () => {
+        formEditar.reset();
+        const inputsArchivo = formEditar.querySelectorAll('input[type="file"]');
+        inputsArchivo.forEach(input => input.value = '');
+        const previews = formEditar.querySelectorAll('.preview');
+        previews.forEach(img => {
+            img.src = '#';
+            img.style.display = 'none';
+        });
+        document.querySelectorAll('.input-error, .caja-error').forEach(el => {
+            el.classList.remove('input-error', 'caja-error');
+        });
+    };
+
+    const cargarPreviewDesdeBD = (nombreArchivo, idImgPreview) => {
+        const rutaBase = '/LaHerradura/uploads/texanas/'; 
+        const img = document.getElementById(idImgPreview);
+        
+        if (img) {
+            if (nombreArchivo && nombreArchivo.trim() !== "") {
+                img.src = rutaBase + nombreArchivo;
+                img.style.display = 'block';
+            } else {
+                img.src = '#';
+                img.style.display = 'none';
+            }
         }
+    };
+
+    // ==========================================
+    // 3. EVENTOS (LOGICA PRINCIPAL)
+    // ==========================================
+
+    if(btnCerrar) {
+        btnCerrar.onclick = () => modalEditar.style.display = 'none';
+    }
+    window.onclick = (event) => {
+        if (event.target == modalEditar) modalEditar.style.display = 'none';
     }
 
-    // --- 3. MANEJO DE CLICS EN LA TABLA (Delegación de eventos) ---
-    // Escuchamos clics en TODO el <tbody>, es más eficiente
+    // CLIC EN LA TABLA
     tablaBody.addEventListener('click', (e) => {
         
-        // --- LÓGICA DE "EDITAR" ---
+        // --- A) BOTÓN EDITAR ---
         if (e.target.classList.contains('btn-editarTexana')) {
-            const id = e.target.dataset.id; //
-            
-            // Usamos tu script de "ver texana" para obtener los datos
+            limpiarModalEditar();
+            const id = e.target.dataset.id;
+            console.log("Editando ID:", id);
+
             fetch(`/LaHerradura/Controller/CRUD_Texanas/ViewTexanas.php?id=${id}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error("Error de red");
+                    return response.json();
+                })
                 .then(data => {
-                    // Rellenamos el formulario con los datos recibidos
-                    // (Usamos los 'id' de tus inputs)
+                    if(data.error){
+                        Alerta.error("Error del servidor: " + data.error); // CAMBIO: Alerta visual
+                        return;
+                    }
+
+                    // Rellenar formulario (sin cambios)
+                    document.getElementById('edit-id-texana').value = data.id_texana; 
+                    document.getElementById('edit-NombreTexana').value = data.Nombre;
+                    document.getElementById('edit-ColorTexana').value = data.id_color;
+                    document.getElementById('edit-MaterialTexana').value = data.id_material;
+                    document.getElementById('edit-PrecioTexana').value = data.Precio;
+                    document.getElementById('edit-HormaTexana').value = data.id_horma;
+                    document.getElementById('edit-CopaTexana').value = data.id_copa;
+                    document.getElementById('edit-TamañoCopaTexana').value = data.Tam_Copa;
+                    document.getElementById('edit-TamañoAlaTexana').value = data.Tam_ala;
                     
-                    // ¡EL MÁS IMPORTANTE! Rellenamos el ID oculto
-                    document.getElementById('edit-id-Texana').value = data.id_texana; 
-                    document.getElementById('NombreTexana').value = data.Nombre;
-                    document.getElementById('ColorTexana').value = data.Color;
-                    document.getElementById('HormaTexana').value = data.Horma;
-                    document.getElementById('CopaTexana').value = data.Copa;
-                    document.getElementById('TamañoCopaTexana').value = data.Tam_Copa;
-                    document.getElementById('MaterialTexana').value = data.Material;
-                    document.getElementById('PrecioTexana').value = data.Precio;
+                    cargarPreviewDesdeBD(data.Img1, 'previewEditTexana1');
+                    cargarPreviewDesdeBD(data.Img2, 'previewEditTexana2');
+                    cargarPreviewDesdeBD(data.Img3, 'previewEditTexana3');
+                    cargarPreviewDesdeBD(data.Img4, 'previewEditTexana4');
                     
-                    // Rellenamos las vistas previas de imágenes
-                    const rutaBase = '/LaHerradura/uploads/texanas/';
-                    const placeholder = '#'; // O una imagen placeholder
-
-                    // Imagen 1
-                    const img1 = document.getElementById('previewEditTexana1');
-                    if (data.Img1) {
-                        img1.src = rutaBase + data.Img1;
-                        img1.style.display = 'block';
-                    } else {
-                        img1.src = placeholder;
-                        img1.style.display = 'none'; // O 'block' si usas placeholder
-                    }
-
-                    // Imagen 2
-                    const img2 = document.getElementById('previewEditTexana2');
-                    if (data.Img2) {
-                        img2.src = rutaBase + data.Img2;
-                        img2.style.display = 'block';
-                    } else {
-                        img2.src = placeholder;
-                        img2.style.display = 'none';
-                    }
-
-                    // Imagen 3
-                    const img3 = document.getElementById('previewEditTexana3');
-                    if (data.Img3) {
-                        img3.src = rutaBase + data.Img3;
-                        img3.style.display = 'block';
-                    } else {
-                        img3.src = placeholder;
-                        img3.style.display = 'none';
-                    }
-
-                    // Imagen 4
-                    const img4 = document.getElementById('previewEditTexana4');
-                    if (data.Img4) {
-                        img4.src = rutaBase + data.Img4;
-                        img4.style.display = 'block';
-                    } else {
-                        img4.src = placeholder;
-                        img4.style.display = 'none';
-                    }
-                    
-                    // --- FIN DE LA SECCIÓN ---
-
-                    // Mostramos el modal
                     modalEditar.style.display = 'block';
                 })
-                .catch(error => console.error('Error al cargar datos:', error));
+                .catch(error => {
+                    console.error('Error al cargar datos:', error);
+                    Alerta.error("No se pudieron cargar los datos."); // CAMBIO
+                });
         }
 
-        // --- LÓGICA DE "ELIMINAR" ---
+        // --- B) BOTÓN ELIMINAR (GRAN CAMBIO AQUÍ) ---
         if (e.target.classList.contains('btn-eliminarTexana')) {
             const id = e.target.dataset.id;
 
-            if (confirm(`¿Estás seguro de que quieres eliminar el producto ID ${id}?`)) {
-                
-                const formData = new FormData();
-                formData.append('id', id);
+            // Usamos Alerta.confirmar en lugar de confirm()
+            Alerta.confirmar(`¿Estás seguro de eliminar la texana ID ${id}?`, 'Sí, eliminar')
+                .then((result) => {
+                    // Solo si el usuario dio click en "Sí, eliminar"
+                    if (result.isConfirmed) {
+                        const formData = new FormData();
+                        formData.append('id', id);
 
-                fetch('/LaHerradura/Controller/CRUD_Texanas/eliminarTexana.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Eliminamos la fila de la tabla sin recargar la página
-                        e.target.closest('tr').remove();
-                        alert('Producto eliminado');
-                    } else {
-                        alert('Error al eliminar: ' + data.error);
+                        fetch('/LaHerradura/Controller/CRUD_Texanas/eliminarTexana.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                e.target.closest('tr').remove();
+                                Alerta.toast('Producto eliminado correctamente', 'success'); // CAMBIO: Toast elegante
+                            } else {
+                                Alerta.error('Error al eliminar: ' + data.error); // CAMBIO
+                            }
+                        })
+                        .catch(err => console.error(err));
                     }
-                })
-                .catch(error => console.error('Error:', error));
-            }
+                });
         }
+
+        // --- C) LÓGICA DE "VER DETALLES" (EL OJITO) ---
+    if (e.target.closest('.btn-verTexana')) {
+        const btn = e.target.closest('.btn-verTexana');
+        const id = btn.dataset.id;
+        
+        // Seleccionamos el modal de VISTA (no el de editar)
+        const modalVer = document.getElementById('modal-ViewProducts');
+        
+        // Fetch para obtener los datos (reutilizamos tu controlador existente)
+        fetch(`/LaHerradura/Controller/CRUD_Texanas/ViewTexanas.php?id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                // 1. Llenar textos
+                document.getElementById('name-sombrero-vp').textContent = data.Nombre;
+                document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
+
+                // Notas: Asegúrate que tu PHP devuelva los nombres (Nombre_Color) gracias a los INNER JOIN que hicimos
+                document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color || data.Color}`;
+                document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma || data.Horma}`;
+                document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa || data.Copa}`;
+                document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
+                document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
+                document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.Material}`;
+
+                // 2. Generar Galería de Imágenes (Tu lógica mejorada)
+                const imgCont = document.getElementById('img-sombrero');
+                
+                let galeriaHtml = `
+                    <div id="vista-foto">
+                        <img id="main-image-modal" src="/LaHerradura/uploads/texanas/${data.Img1}" alt="${data.Nombre}">
+                    </div>
+                    <div id="vista-miniaturas">
+                `;
+
+                const imagenes = [];
+                if (data.Img1) imagenes.push(data.Img1);
+                if (data.Img2) imagenes.push(data.Img2);
+                if (data.Img3) imagenes.push(data.Img3);
+                if (data.Img4) imagenes.push(data.Img4);
+
+                imagenes.forEach(imgSrc => {
+                    const rutaCompleta = `/LaHerradura/uploads/texanas/${imgSrc}`;
+                    galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
+                });
+
+                galeriaHtml += `</div>`;
+                imgCont.innerHTML = galeriaHtml;
+
+                // 3. Activar listeners de las miniaturas
+                const mainImage = document.getElementById('main-image-modal'); 
+                const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
+                thumbnails.forEach(thumbnail => {
+                    thumbnail.addEventListener('click', () => {
+                        mainImage.src = thumbnail.src;
+                    });
+                });
+
+                // 4. Mostrar el modal
+                modalVer.style.display = 'block';
+                
+                // Lógica para cerrar ESTE modal específico
+                const spanClose = modalVer.querySelector('.close');
+                if(spanClose) {
+                    spanClose.onclick = () => {
+                        modalVer.style.display = 'none';
+                        imgCont.innerHTML = ""; // Limpiar galería
+                    }
+                }
+                
+                // Cerrar al dar clic fuera
+                window.addEventListener('click', (event) => {
+                    if (event.target == modalVer) {
+                        modalVer.style.display = "none";
+                    }
+                });
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
     });
 
-    // --- 4. MANEJAR EL ENVÍO DEL FORMULARIO DE EDICIÓN ---
+    // ==========================================
+    // 4. ENVIAR FORMULARIO DE EDICIÓN
+    // ==========================================
     formEditar.addEventListener('submit', (e) => {
-        e.preventDefault(); // Evitamos que la página se recargue
+        e.preventDefault(); 
 
-        // Obtenemos todos los datos del formulario (incluyendo el ID oculto)
+        const limpiarEstilosError = () => {
+            formEditar.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formEditar.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
+        };
+        limpiarEstilosError();
+
+        let errores = [];
+        let primerError = null;
+
+        const marcarError = (id, mensaje) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('input-error');
+                if (!primerError) primerError = el;
+            }
+            errores.push(mensaje);
+        };
+
+        // --- Validaciones (Igual que antes) ---
+        const textos = ['edit-NombreTexana'];
+        textos.forEach(id => {
+            const input = document.getElementById(id);
+            const valor = input.value.trim();
+            const nombreCampo = id.replace('edit-', '').replace('Texana', '');
+
+            if (valor === "") marcarError(id, `El campo ${nombreCampo} no puede estar vacío.`);
+            else if (/^\d+$/.test(valor)) marcarError(id, `El ${nombreCampo} no puede ser solo números.`);
+            else if (valor.length < 3) marcarError(id, `El ${nombreCampo} es muy corto.`);
+        });
+
+        const selects = ['edit-HormaTexana', 'edit-CopaTexana', 'edit-ColorTexana', 'edit-MaterialTexana'];
+        selects.forEach(id => {
+            const input = document.getElementById(id);
+            if (input.value === "Null") marcarError(id, `Selecciona una opción válida.`);
+        });
+
+        const numeros = ['edit-PrecioTexana', 'edit-TamañoCopaTexana', 'edit-TamañoAlaTexana'];
+        numeros.forEach(id => {
+            const input = document.getElementById(id);
+            if (input.value === "" || isNaN(input.value) || Number(input.value) <= 0) {
+                marcarError(id, `Revisa el valor numérico.`);
+            }
+        });
+
+        const archivosNuevos = new Set();
+        for (let i = 1; i <= 4; i++) {
+            const idInput = `imgEditTexana${i}`; 
+            const input = document.getElementById(idInput);
+            if (input && input.files.length > 0) {
+                const nombreArchivo = input.files[0].name;
+                const caja = input.closest('.caja-preview');
+                if (archivosNuevos.has(nombreArchivo)) {
+                    errores.push(`La imagen "${nombreArchivo}" está repetida.`);
+                    if (caja) caja.classList.add('caja-error');
+                } else {
+                    archivosNuevos.add(nombreArchivo);
+                }
+            }
+        }
+
+        // --- D) MOSTRAR ERRORES CON SWEETALERT ---
+        if (errores.length > 0) {
+            // Unimos los errores con saltos de línea HTML (<br>)
+            const mensajeHTML = errores.join("<br>");
+            
+            // CAMBIO: Alerta visual con HTML activado
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                html: mensajeHTML, // Usamos 'html' en vez de 'text' para que lea los <br>
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Corregir'
+            });
+            
+            if (primerError) primerError.focus();
+            return;
+        }
+
+        // --- E) FETCH DE GUARDADO ---
+        const btnSubmit = formEditar.querySelector('input[type="submit"]');
+        const textoOriginal = btnSubmit.value;
+        btnSubmit.value = "Guardando...";
+        btnSubmit.disabled = true;
+
         const formData = new FormData(formEditar);
 
-        // Enviamos los datos al script PHP
-        fetch(formEditar.action, { // La 'action' de tu <form>
+        fetch(formEditar.action, { 
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
+            btnSubmit.value = textoOriginal;
+            btnSubmit.disabled = false;
+
             if (data.success) {
-                // Si todo salió bien
                 modalEditar.style.display = 'none';
-                alert('¡Texana actualizado con éxito!');
-                location.reload(); // Recargamos la página para ver los cambios
+                
+                // CAMBIO: Esperamos a que el usuario presione OK para recargar
+                Alerta.exito('Texana actualizado correctamente.')
+                    .then(() => {
+                        location.reload(); 
+                    });
             } else {
-                // Si el PHP devolvió un error
-                alert('Error al actualizar: ' + data.error);
+                let mensaje = "Error del servidor:<br>";
+                if(data.error) mensaje += data.error + "<br>";
+                if(data.warnings) mensaje += data.warnings.join("<br>");
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un problema',
+                    html: mensaje
+                });
             }
         })
-        .catch(error => console.error('Error al enviar el formulario:', error));
+        .catch(error => {
+            console.error('Error update:', error);
+            Alerta.error('Error de conexión con el servidor.');
+            btnSubmit.value = textoOriginal;
+            btnSubmit.disabled = false;
+        });
     });
 
-    // Para el modal de AGREGAR Texana
-    setupImagePreview('imgTexana1', 'previewTexana1', 'fileNameAgg1');
-    setupImagePreview('imgTexana2', 'previewTexana2', 'fileNameAgg2');
-    setupImagePreview('imgTexana3', 'previewTexana3', 'fileNameAgg3');
-    setupImagePreview('imgTexana4', 'previewTexana4', 'fileNameAgg4');
-
-    // Para el modal de EDITAR Texana
-    setupImagePreview('imgEditTexana1', 'previewEditTexana1', 'fileNameEdit1');
-    setupImagePreview('imgEditTexana2', 'previewEditTexana2', 'fileNameEdit2');
-    setupImagePreview('imgEditTexana3', 'previewEditTexana3', 'fileNameEdit3');
-    setupImagePreview('imgEditTexana4', 'previewEditTexana4', 'fileNameEdit4');
-
+    // 5. ACTIVAR PREVIEWS (Sin cambios)
+    if (typeof setupImagePreview === 'function') {
+        setupImagePreview('imgEditTexana1', 'previewEditTexana1');
+        setupImagePreview('imgEditTexana2', 'previewEditTexana2');
+        setupImagePreview('imgEditTexana3', 'previewEditTexana3');
+        setupImagePreview('imgEditTexana4', 'previewEditTexana4');
+        setupImagePreview('imgTexana1', 'previewTexana1');
+        setupImagePreview('imgTexana2', 'previewTexana2');
+        setupImagePreview('imgTexana3', 'previewTexana3');
+        setupImagePreview('imgTexana4', 'previewTexana4');
+    }
 });

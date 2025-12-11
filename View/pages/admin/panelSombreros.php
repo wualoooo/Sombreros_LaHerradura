@@ -48,11 +48,11 @@
             s.Tam_Copa,
             s.Tam_ala,
             m.Nombre AS Nombre_Material  -- Renombramos
-        FROM sombreros s
-        INNER JOIN colores c ON s.Color = c.id_color
-        INNER JOIN hormas h ON s.Horma = h.id_horma
-        INNER JOIN copas cp ON s.Copa = cp.id_copa
-        INNER JOIN materiales m ON s.Material = m.id_material";
+            FROM sombreros s
+            INNER JOIN colores c ON s.Color = c.id_color
+            INNER JOIN hormas h ON s.Horma = h.id_horma
+            INNER JOIN copas cp ON s.Copa = cp.id_copa
+            INNER JOIN materiales m ON s.Material = m.id_material";
             $result = $conn -> query($sql);
 
             // MOSTRAR LOS DATOS EN UNA TABLA
@@ -69,11 +69,14 @@
                         <td>".$row["Tam_ala"]."</td>
                         
                         <td>".$row["Nombre_Material"]."</td> <td>
-                            <button class='btn btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
+                            <button class='btn-editar btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
                                 <span class='material-symbols-outlined'>edit</span>
                             </button>
-                            <button class='btn btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
+                            <button class='btn-eliminar btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
                                 <span class='material-symbols-outlined'>delete</span>
+                            </button>
+                            <button class='btn-ver btn-verSombrero' data-id='".$row["id_sombrero"]."'>
+                                <span class='material-symbols-outlined'>visibility</span>
                             </button>
                         </td>
                     </tr>"
@@ -94,7 +97,8 @@
         </table>
         <?php 
         include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarSombrero.php');
-        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggSombrero.php')
+        include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggSombrero.php');
+        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php');
         ?>
     </main>
 

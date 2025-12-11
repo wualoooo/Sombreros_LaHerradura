@@ -1,23 +1,23 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-Agregar.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalAgregar.css">
 
-<div class="modal-AggSom" id="modal-AggSombrero">
-    <div class="modal-content-AggSom">
+<div class="modal-Agregar" id="modal-AggSombrero">
+    <div class="modal-content-Agregar">
         <span class="close">&times;</span>
-        <h2 id="AggSom-text">Agregar sombrero</h2>
-        <div class="cont-form-AggSom">
-            <form class="AggSom" id="form-AggSom" action="/LaHerradura/Controller/CRUD_Sombreros/registroSombreros.php" method="POST" enctype="multipart/form-data">
+        <h2 class="Agregar-text">Agregar sombrero</h2>
+        <div class="cont-form-Agregar">
+            <form class="formAgregar" id="form-AggSombrero" action="/LaHerradura/Controller/CRUD_Sombreros/registroSombreros.php" method="POST" enctype="multipart/form-data">
                 
-                <div id="div-AggSomb">
-                    <div id="AggSom-left">
+                <div class="div-Agregar">
+                    <div class="Agregar-left">
 
-                        <label class="lbl-AggSom" for="NombreSombrero">Nombre</label>
+                        <label class="lbl-Agregar" for="NombreSombrero">Nombre</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="NombreSombrero" id="NombreSombrero" placeholder="Ingresa el nombre completo" required>
+                        <input class="input-Agregar" type="text" name="NombreSombrero" id="NombreSombrero" placeholder="Ingresa el nombre completo" required>
                         <br>
 
-                        <label class="lbl-AggSom" for="Color">Color</label>
+                        <label class="lbl-Agregar" for="Color">Color</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="ColorSombrero" id="ColorSombrero">
+                        <select class="input-Agregar Selects-Agg" name="ColorSombrero" id="ColorSombrero">
                             <option value="Null" selected disabled hidden>Selecciona una opcion</option>
                             <?php 
                                 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
@@ -35,9 +35,9 @@
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom" for="Horma">Horma</label>
+                        <label class="lbl-Agregar" for="Horma">Horma</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="HormaSombrero" id="HormaSombrero">
+                        <select class="input-Agregar Selects-Agregar" name="HormaSombrero" id="HormaSombrero">
                             <option value="Null" selected disabled hidden>Selecciona una opcion</option>
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
@@ -54,9 +54,9 @@
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom" for="">Copa</label>
+                        <label class="lbl-Agregar" for="">Copa</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="CopaSombrero" id="CopaSombrero">
+                        <select class="input-Agregar Selects-Agregar" name="CopaSombrero" id="CopaSombrero">
                             <option value="Null" selected disabled hidden>Selecciona una opcion</option>
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
@@ -75,18 +75,18 @@
 
                         <div class="inputsTamaños">
                             <div class="inputsTamañosCopa">
-                                <label class="lbl-AggSom" for="">Tamaño copa</label> <br>
-                                <input class="input-AggSom" type="number" name="TamañoCopaSombrero" id="TamañoCopaSombrero" step="0.5" min="8">   
+                                <label class="lbl-Agregar" for="">Tamaño copa</label> <br>
+                                <input class="input-Agregar" type="number" name="TamañoCopaSombrero" id="TamañoCopaSombrero" step="0.5" min="8">   
                             </div>
                             <div class="inputsTamañosAla">
-                                <label class="lbl-AggSom" for="">Tamaño ala</label> <br>
-                                <input class="input-AggSom" type="number" name="TamañoAlaSombrero" id="TamañoAlaSombrero" step="0.5" min="8" >
+                                <label class="lbl-Agregar" for="">Tamaño ala</label> <br>
+                                <input class="input-Agregar" type="number" name="TamañoAlaSombrero" id="TamañoAlaSombrero" step="0.5" min="8" >
                             </div>
                         </div>
 
-                        <label class="lbl-AggSom"  for="">Material</label>
+                        <label class="lbl-Agregar"  for="">Material</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="MaterialSombrero" id="MaterialSombrero">
+                        <select class="input-Agregar Selects-Agregar" name="MaterialSombrero" id="MaterialSombrero">
                             <option value="Null" selected disabled hidden>Selecciona una opcion</option>
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
@@ -103,12 +103,12 @@
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom"for="">Precio</label>
+                        <label class="lbl-Agregar"for="">Precio</label>
                         <br>
-                        <input class="input-AggSom" type="number" name="PrecioSombrero" id="PrecioSombrero" placeholder="Ingresa el precio" step="10" required min="0">
+                        <input class="input-Agregar" type="number" name="PrecioSombrero" id="PrecioSombrero" placeholder="Ingresa el precio" step="10" required min="0">
                     </div>
 
-                    <div id="AggSom-right">
+                    <div class="Agregar-right">
                         <div class="contenedor-preview">
             
                             <div class="caja-preview">
@@ -145,7 +145,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="divButton">
+                <div class="divButton">
                     <input type="submit" class="ButtonGuardar" id="btnGuardarAggSombrero" value="Guardar">
                 </div>
             </form>

@@ -1,4 +1,4 @@
-.modal-EditSom {
+.modal-Edit {
     display: none;
     position: fixed;
     z-index: 999;
@@ -10,13 +10,13 @@
     z-index: 1000;
 }
 
-.modal-content-EditSom {
+.modal-content-Edit {
     background: #fff;
     margin: 2.5% auto;
     padding: 15px;
     border-radius: 10px;
     width: 70vw;
-    height: 86vh;
+    height: auto;
     color: black;
 }
 
@@ -31,13 +31,13 @@
     box-shadow: -2px 2px 3px 1px rgba(0, 0, 0, 0.555);
 }
 
-#EditSom-text{ 
+.Edit-text{ 
     margin: 1rem 0 2rem 0;
     text-align: center;
     font-size: 5vh;
 }
 
-.lbl-EditSom{
+.lbl-Edit{
     font-size: 1.65rem;
 }
 
@@ -46,7 +46,7 @@ form{
     width: 100%;
 }
 
-#div-EditSomb, 
+.div-Edit, 
 #div-EditCinturon{
     width: 100%;
     height: auto;
@@ -55,7 +55,7 @@ form{
     justify-content: space-around;
 }
 
-#EditSom-left,
+.Edit-left,
 #EditCinturon-left{
     border-radius: 20px;
     box-sizing:border-box;
@@ -75,14 +75,14 @@ form{
     padding-right: 4rem;
 }
 
-#EditSom-right{
+.Edit-right{
     border-radius: 20px;
     width: 40%;
     height: auto;
     background-color: #f3f3f3;
 }
 
-.input-EditSom{
+.input-Edit{
     width: 100%;
     background-color: #d1d1d1;
     padding-left: 0.7rem;
@@ -97,21 +97,18 @@ form{
     padding: 0 1.4rem;
 }
 
-.cont-form-EditSom{
+.cont-form-Edit{
     padding: 0 3rem;
 }
 
-#divButton{
+.divButton{
     margin-top: 1rem;
     display: flex;
     width: 100%;
     justify-content: center;
 }
 
-#btnGuardarEditSombreros, 
-#btnGuardarEditTexanas,
-#btnGuardarEditCinturon,
-#btnGuardarEditBotin {
+.ButtonGuardarEdit {
     padding: 15px 20px;
     font-size: 2.5vh;
     border-radius: 10px;
@@ -128,10 +125,7 @@ form{
     font-weight: 500;
 }
 
-#btnGuardarEditSombreros:hover,
-#btnGuardarEditTexanas:hover,
-#btnGuardarEditCinturon:hover,
-#btnGuardarEditBotin:hover {
+.ButtonGuardarEdit:hover{
     transform: translateY(-2px);
     box-shadow: 
         0 6px 12px rgba(0, 0, 0, 0.15),
@@ -139,10 +133,7 @@ form{
     background: linear-gradient(135deg, #3a6b34 0%, #2d5528 100%);
 }
 
-#btnGuardarEditSombreros:active,
-#btnGuardarEditTexanas:active,
-#btnGuardarEditCinturon:active,
-#btnGuardarEditBotin:active {
+.ButtonGuardarEdit:active {
     transform: translateY(0);
     box-shadow: 
         0 2px 4px rgba(0, 0, 0, 0.1),
@@ -150,10 +141,7 @@ form{
     background: linear-gradient(135deg, #2d5528 0%, #22431f 100%);
 }
 
-#btnGuardarEditSombreros::before,
-#btnGuardarEditTexanas::before,
-#btnGuardarEditCinturon::before,
-#btnGuardarEditBotin::before {
+.ButtonGuardarEdit::before{
     content: '';
     position: absolute;
     top: 0;
@@ -167,10 +155,7 @@ form{
     transition: left 0.5s;
 }
 
-#btnGuardarEditSombreros:hover::before,
-#btnGuardarEditTexanas:hover::before,
-#btnGuardarEditCinturon:hover::before,
-#btnGuardarEditBotin:hover::before {
+.ButtonGuardarEdit:hover::before {
     left: 100%;
 }
 .contenedor-preview {

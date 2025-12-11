@@ -106,11 +106,7 @@
         left: 100%;
         }
 
-        .btn-editar, 
-        .btn-editarSombrero, 
-        .btn-editarTexana,
-        .btn-editarCinturon, 
-        .btn-editarBotin {
+        .btn-editar{
             color: #333;
             border-radius: 8px;
             font-size: 1rem;
@@ -128,11 +124,7 @@
             margin: 5px;
         }
 
-        .btn-editar:hover,
-        .btn-editarSombrero:hover,
-        .btn-editarTexana:hover,
-        .btn-editarCinturon:hover,
-        .btn-editarBotin:hover {
+        .btn-editar:hover {
             transform: translateY(-2px);
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.15),
@@ -142,11 +134,8 @@
             color: #1a1a1a;
         }
 
-        .btn-editar:active,
-        .btn-editarSombrero:active,
-        .btn-editarTexana:active,
-        .btn-editarCinturon:active,
-        .btn-editarBotin:active {
+        .btn-editar:active
+        {
             transform: translateY(0);
             box-shadow: 
                 0 2px 4px rgba(0, 0, 0, 0.1),
@@ -154,11 +143,7 @@
             background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
         }
 
-        .btn-editar::before,
-        .btn-editarSombrero::before,
-        .btn-editarTexana::before,
-        .btn-editarCinturon::before,
-        .btn-editarBotin::before {
+        .btn-editar::before{
             content: '';
             position: absolute;
             top: 0;
@@ -172,19 +157,11 @@
             transition: left 0.5s;
         }
 
-        .btn-editar:hover::before,
-        .btn-editarSombrero:hover::before,
-        .btn-editarTexana:hover::before,
-        .btn-editarCinturon:hover::before,
-        .btn-editarBotin:hover::before {
+        .btn-editar:hover::before {
             left: 100%;
         }
 
-        .btn-eliminar, 
-        .btn-eliminarSombrero, 
-        .btn-eliminarTexana,
-        .btn-eliminarCinturon, 
-        .btn-eliminarBotin {
+        .btn-eliminar {
             color: #fff;
             border-radius: 8px;
             font-size: 1rem;
@@ -202,11 +179,7 @@
             margin: 5px;
         }
 
-        .btn-eliminar:hover,
-        .btn-eliminarSombrero:hover,
-        .btn-eliminarTexana:hover,
-        .btn-eliminarCinturon:hover,
-        .btn-eliminarBotin:hover {
+        .btn-eliminar:hover {
             transform: translateY(-2px);
             box-shadow: 
                 0 6px 12px rgba(0, 0, 0, 0.15),
@@ -214,11 +187,7 @@
             background: linear-gradient(135deg, #c82333 0%, #6a0f0f 100%);
         }
 
-        .btn-eliminar:active,
-        .btn-eliminarSombrero:active,
-        .btn-eliminarTexana:active,
-        .btn-eliminarCinturon:active,
-        .btn-eliminarBotin:active {
+        .btn-eliminar:active {
             transform: translateY(0);
             box-shadow: 
                 0 2px 4px rgba(0, 0, 0, 0.1),
@@ -226,11 +195,7 @@
             background: linear-gradient(135deg, #a71e2a 0%, #5a0c0c 100%);
         }
 
-        .btn-eliminar::before,
-        .btn-eliminarSombrero::before,
-        .btn-eliminarTexana::before,
-        .btn-eliminarCinturon::before,
-        .btn-eliminarBotin::before {
+        .btn-eliminar::before {
             content: '';
             position: absolute;
             top: 0;
@@ -244,11 +209,57 @@
             transition: left 0.5s;
         }
 
-        .btn-eliminar:hover::before,
-        .btn-eliminarSombrero:hover::before,
-        .btn-eliminarTexana:hover::before,
-        .btn-eliminarCinturon:hover::before,
-        .btn-eliminarBotin:hover::before {
+        .btn-ver {
+            color: #fff;
+            border-radius: 8px;
+            font-size: 1rem;
+            padding: 12px 20px;
+            border: none;
+            background: linear-gradient(135deg, #0084ff 0%, #00208b 100%);
+            cursor: pointer;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            margin: 5px;
+        }
+
+        .btn-ver:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.15),
+                0 4px 8px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #00b7ff 0%, #002ec5 100%);
+        }
+
+        .btn-ver:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.1),
+                0 1px 2px rgba(0, 0, 0, 0.08);
+            background: linear-gradient(135deg, #0084ff 0%, #00208b 100%);
+        }
+
+        .btn-ver::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.5s;
+        }
+
+
+
+        .btn-ver:hover::before {
             left: 100%;
         }
 

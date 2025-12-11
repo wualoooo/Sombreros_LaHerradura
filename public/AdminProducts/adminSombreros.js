@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. REFERENCIAS AL DOM
     // ==========================================
     const modalEditar = document.getElementById('modal-EditSombrero');
-    const formEditar = document.getElementById('form-EditSom');
+    const formEditar = document.getElementById('form-EditSombrero');
     const tablaBody = document.getElementById('tabla-sombreros-body'); 
     const btnCerrar = modalEditar ? modalEditar.querySelector('.close') : null;
 
@@ -130,6 +130,86 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
         }
+
+        // --- C) LÓGICA DE "VER DETALLES" (EL OJITO) ---
+    if (e.target.closest('.btn-verSombrero')) {
+        const btn = e.target.closest('.btn-verSombrero');
+        const id = btn.dataset.id;
+        
+        // Seleccionamos el modal de VISTA (no el de editar)
+        const modalVer = document.getElementById('modal-ViewProducts');
+        
+        // Fetch para obtener los datos (reutilizamos tu controlador existente)
+        fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+            .then(response => response.json())
+            .then(data => {
+                // 1. Llenar textos
+                document.getElementById('name-sombrero-vp').textContent = data.Nombre;
+                document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
+
+                // Notas: Asegúrate que tu PHP devuelva los nombres (Nombre_Color) gracias a los INNER JOIN que hicimos
+                document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color || data.Color}`;
+                document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma || data.Horma}`;
+                document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa || data.Copa}`;
+                document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
+                document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
+                document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.Material}`;
+
+                // 2. Generar Galería de Imágenes (Tu lógica mejorada)
+                const imgCont = document.getElementById('img-sombrero');
+                
+                let galeriaHtml = `
+                    <div id="vista-foto">
+                        <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
+                    </div>
+                    <div id="vista-miniaturas">
+                `;
+
+                const imagenes = [];
+                if (data.Img1) imagenes.push(data.Img1);
+                if (data.Img2) imagenes.push(data.Img2);
+                if (data.Img3) imagenes.push(data.Img3);
+                if (data.Img4) imagenes.push(data.Img4);
+
+                imagenes.forEach(imgSrc => {
+                    const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
+                    galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
+                });
+
+                galeriaHtml += `</div>`;
+                imgCont.innerHTML = galeriaHtml;
+
+                // 3. Activar listeners de las miniaturas
+                const mainImage = document.getElementById('main-image-modal'); 
+                const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
+                thumbnails.forEach(thumbnail => {
+                    thumbnail.addEventListener('click', () => {
+                        mainImage.src = thumbnail.src;
+                    });
+                });
+
+                // 4. Mostrar el modal
+                modalVer.style.display = 'block';
+                
+                // Lógica para cerrar ESTE modal específico
+                const spanClose = modalVer.querySelector('.close');
+                if(spanClose) {
+                    spanClose.onclick = () => {
+                        modalVer.style.display = 'none';
+                        imgCont.innerHTML = ""; // Limpiar galería
+                    }
+                }
+                
+                // Cerrar al dar clic fuera
+                window.addEventListener('click', (event) => {
+                    if (event.target == modalVer) {
+                        modalVer.style.display = "none";
+                    }
+                });
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
     });
 
     // ==========================================

@@ -27,7 +27,7 @@
                 <?php 
                 include (ROOT_PATH . 'Model/conexion.php');
 
-                    $sql = "SELECT id_texana, Img1, Nombre, Precio FROM texana";
+                    $sql = "SELECT id_texana, Img1, Nombre, Precio FROM texanas";
                     $result = $conn->query($sql);
                     while ($row = $result -> fetch_assoc()){
                         echo("

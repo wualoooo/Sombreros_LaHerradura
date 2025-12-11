@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-Agregar.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalAgregar.css">
 
 <div class="modal-AggExtras" id="modal-AggMaterial">
     <div class="modal-content-AggExtra" id="AgregarMaterial">
@@ -6,6 +6,7 @@
         <h2 class="AggExtra-text">Agregar Material</h2>
         <div class="cont-form-AggExtra">
             <form class="AggExtra" id="form-AggMaterial" action="/LaHerradura/Controller/CRUD_Extras/CRUD_Materiales/registroMateriales.php" method="POST">
+
                 <div class="div-AggExtra">
                     <label class="lbl-AggExtra" for="NombreMaterial">Nombre</label>
                     <br>

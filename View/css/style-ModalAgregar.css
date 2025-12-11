@@ -1,4 +1,4 @@
-.modal-AggSom {
+.modal-Agregar {
     display: none;
     position: fixed;
     z-index: 999;
@@ -10,15 +10,13 @@
     z-index: 1000;
 }
 
-
-
-.modal-content-AggSom {
+.modal-content-Agregar {
     background: #f4f4f7;
     margin: 2.5% auto;
     padding: 15px;
     border-radius: 10px;
     width: 70vw;
-    height: 86vh;
+    height: auto;
     color: black;
 }
 
@@ -74,13 +72,13 @@
     left: 100%;
 }
 
-#AggSom-text{ 
+.Agregar-text{ 
     margin: 1rem 0 2rem 0;
     text-align: center;
     font-size: 5vh;
 }
 
-.lbl-AggSom{
+.lbl-Agregar{
     font-size: 1.65rem;
 }
 
@@ -89,7 +87,7 @@ form{
     width: 100%;
 }
 
-#div-AggSomb, #div-AggCinturon{
+.div-Agregar, .div-AggCinturon{
     width: 100%;
     height: auto;
     display: flex;
@@ -97,11 +95,11 @@ form{
     justify-content: space-around;
 }
 
-#div-AggCinturon{
+.div-AggCinturon{
     height: 78%;
 }
 
-#AggSom-left, #AggSCinturon-left{
+.Agregar-left, .AggCinturon-left{
     border-radius: 20px;
     box-sizing:border-box;  
     padding: 1rem 5rem 1rem 5rem;
@@ -110,13 +108,13 @@ form{
     box-shadow: 0 0 10px 2px #0000006b;
 }
 
-#AggSCinturon-left{
+.AggCinturon-left{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
-#AggSom-right{
+.Agregar-right{
     border-radius: 20px;
     width: 40%;
     height: auto;
@@ -124,7 +122,7 @@ form{
     box-shadow: 0 0 10px 2px #0000006b;
 }
 
-.input-AggSom{
+.input-Agregar{
     width: 100%;
     background-color: #efeaea;
     padding-left: 0.7rem;
@@ -135,15 +133,15 @@ form{
     font-size: 2.5vh;
 }
 
-.Selects-Agg{
+.Selects-Agregar{
     padding: 0 1.4rem;
 }
 
-.cont-form-AggSom{
+.cont-form-Agregar{
     padding: 0 3rem;
 }
 
-#divButton{
+.divButton{
     margin-top: 1rem;
     display: flex;
     width: 100%;
@@ -247,13 +245,6 @@ form{
 }
 .label-boton:hover {
     background-color: #e6e6e6;
-}
-
-/* 3. Estilo para el nombre del archivo (cuando aparezca) */
-.file-name {
-    margin-left: 10px;
-    font-size: 0.9em;
-    color: #333;
 }
 
 .inputsTamaños{

@@ -1,55 +1,72 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-Modal-Edit-Som-Tex.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalEdit.css">
 
-<div class="modal-EditSom" id="modal-EditBotin">
-    <div class="modal-content-EditSom">
+<div class="modal-Edit" id="modal-EditBotin">
+    <div class="modal-content-Edit">
         <span class="close">&times;</span>
-        <h2 id="EditSom-text">Editar Botin</h2> <div class="cont-form-EditSom">
-            
-            <form class="EditSom" id="form-EditBotin" action="/LaHerradura/Controller/CRUD_Botines/ActualizarBotin.php" method="POST" enctype="multipart/form-data">
+        <h2 class="Edit-text">Editar Botin</h2> 
+
+        <div class="cont-form-Edit">
+            <form class="Edit" id="form-EditBotin" action="/LaHerradura/Controller/CRUD_Botines/ActualizarBotin.php" method="POST" enctype="multipart/form-data">
                 
-                <div id="div-EditCinturon">
-                    <div id="EditCinturon-left">
+                <div class="div-Edit div-EditCinturon">
+                    <div class="Edit-left EditCinturon-left">
                         
                         <input type="hidden" id="edit-id-botin" name="id_botin">
 
-                        <label class="lbl-EditSom" for="NombreBotin">Nombre</label>
+                        <label class="lbl-Edit" for="NombreBotin">Nombre</label>
                         <br>
-                        <input class="input-EditSom" type="text" name="NombreBotin" id="NombreBotin" placeholder="Ingresa el nombre completo">
+                        <input class="input-Edit" type="text" name="NombreBotin" id="edit-NombreBotin" placeholder="Ingresa el nombre completo">
                         <br>
 
-                        <label class="lbl-EditSom" for="">Talla</label> <br>
-                        <input class="input-EditSom" type="text" name="TallaBotin" id="TallaBotin" placeholder="(Numeros)">
+                        <label class="lbl-Edit" for="">Talla</label> <br>
+                        <input class="input-Edit" type="text" name="TallaBotin" id="edit-TallaBotin" placeholder="(Numeros)">
 
-                        <label class="lbl-EditSom"  for="">Material</label>
+                        <label class="lbl-Edit"  for="">Material</label>
                         <br>
-                        <select class="input-EditSom Selects-Edit" name="MaterialBotin" id="MaterialBotin">
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Piel">Piel</option>
-                            <option value="Gamuza">Gamuza</option>
+                        <select class="input-Edit Selects-Edit" name="MaterialBotin" id="edit-MaterialBotin">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Botines'";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
 
-                        <label class="lbl-EditSom" for="Suela">Suela</label>
+                        <label class="lbl-Edit" for="Suela">Suela</label>
                         <br>
-                        <select class="input-EditSom Selects-Edit" name="SuelaBotin" id="SuelaBotin">
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Hule con cerco">Hule con cerco</option>
-                            <option value="Hule sin cerco">Hule sin cerco</option>
-                            <option value="Piel">Piel</option>
-                            <option value="Doble suela">Doble suela</option>
-                            <option value="Cuadros">Cuadros</option>
-                            <option value="Tractor">Tractor</option>
+                        <select class="input-Edit Selects-Edit" name="SuelaBotin" id="edit-SuelaBotin">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Suelas'";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
                         
-                        <label class="lbl-EditSom"for="">Precio</label>
+                        <label class="lbl-Edit"for="">Precio</label>
                         <br>
-                        <input class="input-EditSom" type="text" name="PrecioBotin" id="PrecioBotin" placeholder="Solo numeros     Ej: 500">
+                        <input class="input-Edit" type="text" name="PrecioBotin" id="edit-PrecioBotin" placeholder="Solo numeros     Ej: 500">
                         <br>
 
                     </div>
 
-                    <div id="EditSom-right">
+                    <div class="Edit-right">
                         <div class="contenedor-preview">
             
                             <div class="caja-preview">
@@ -86,8 +103,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="divButton">
-                    <input type="submit" id="btnGuardarEditBotin" value="Guardar">
+                <div class="divButton">
+                    <input type="submit" class="ButtonGuardarEdit" id="btnGuardarEditBotin" value="Guardar">
                 </div>
             </form>
         </div>

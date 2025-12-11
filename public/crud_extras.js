@@ -1,5 +1,5 @@
 /**
- * Función Mágica Reutilizable para Formularios Simples
+ * Función Mágica Reutilizable para Formularios Simples (Con SweetAlert2)
  * @param {string} idFormulario - El ID del <form> en tu HTML
  * @param {string} urlBackend - La ruta al archivo PHP (ej: controller/registroHormas.php)
  * @param {string} nombreEntidad - El nombre para las alertas (ej: "Horma", "Material")
@@ -38,24 +38,29 @@ function configurarFormularioExtra(idFormulario, urlBackend, nombreEntidad) {
             }
 
             if (data.success) {
-                // ÉXITO
-                alert(`${nombreEntidad} registrada correctamente.`);
-                
-                formulario.reset(); // Limpiar campos
-                
-                // Opcional: Cerrar modal si está dentro de uno
-                const modal = formulario.closest('.modal'); // Busca el modal padre
-                if(modal) modal.style.display = 'none';
+                // --- ÉXITO CON SWEETALERT ---
+                // Usamos el nombreEntidad para que el mensaje sea dinámico (ej: "Color registrado...")
+                Alerta.exito(`${nombreEntidad} registrado correctamente.`)
+                    .then(() => {
+                        formulario.reset(); // Limpiar campos
+                        
+                        // Opcional: Cerrar modal si está dentro de uno
+                        const modal = formulario.closest('.modal') || formulario.closest('.modal-AggExtras');
+                        if(modal) modal.style.display = 'none';
 
-                location.reload(); // Recargar para ver cambios en tabla
+                        location.reload(); // Recargar para ver cambios en tabla
+                    });
+
             } else {
-                // ERROR (Viene del PHP que arreglamos antes)
-                alert(`Error al guardar ${nombreEntidad}:\n${data.message}`);
+                // --- ERROR CON SWEETALERT ---
+                Alerta.error(`Error al guardar ${nombreEntidad}:<br>${data.message}`);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Error de conexión con el servidor.");
+            // --- ERROR DE CONEXIÓN CON SWEETALERT ---
+            Alerta.error("Error de conexión con el servidor.");
+            
             if(btnSubmit) {
                 btnSubmit.value = textoOriginal;
                 btnSubmit.disabled = false;

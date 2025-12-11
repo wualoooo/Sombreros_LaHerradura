@@ -1,48 +1,68 @@
-<link rel="stylesheet" href="../../css/style-AggSombrero.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalAgregar.css">
 
-<div class="modal-AggSom" id="modal-AggCinturon">
-    <div class="modal-content-AggSom">
+<div class="modal-Agregar" id="modal-AggCinturon">
+    <div class="modal-content-Agregar">
         <span class="close">&times;</span>
-        <h2 id="AggSom-text">Agregar Cinturon</h2>
-        <div class="cont-form-AggSom">
-            <form class="AggSom" id="form-AggSom" action="../../../Controller/CRUD_Cinturones/registroCinturones.php" method="POST" enctype="multipart/form-data">
+        <h2 class="Agregar-text">Agregar Cinturon</h2>
+        <div class="cont-form-Agregar">
+            <form class="formAgregar" id="form-AggCinturon" action="/LaHerradura/Controller/CRUD_Cinturones/registroCinturones.php" method="POST" enctype="multipart/form-data">
                 
-                <div id="div-AggCinturon">
-                    <div id="AggSCinturon-left">
+                <div class="div-Agregar div-AggCinturon">
+                    <div class="Agregar-left AggCinturon-left">
                         
-                        <label class="lbl-AggSom" for="NombreTexana">Nombre</label>
+                        <label class="lbl-Agregar" for="NombreCinturon">Nombre</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="NombreCinturon" id="NombreCinturon" placeholder="Ingresa el nombre completo">
-                        <br>
-
-                        <label class="lbl-AggSom"for="">Precio</label>
-                        <br>
-                        <input class="input-AggSom" type="text" name="PrecioCinturon" id="PrecioCinturon" placeholder="Solo numeros     Ej: 500">
-
-                        <label class="lbl-AggSom"  for="">Material</label>
-                        <br>
-                        <input class="input-AggSom" type="text" name="MaterialCinturon" id="MaterialCinturon" placeholder="Ingresa el material">
+                        <input class="input-Agregar" type="text" name="NombreCinturon" id="NombreCinturon" placeholder="Ingresa el nombre completo">
                         <br>
 
-                        <label class="lbl-AggSom" for="Adorno">Adorno:</label>
+                        <label class="lbl-Agregar"for="">Precio</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="AdornoCinturon" id="AdornoCinturon">
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Hilo">Hilo</option>
-                            <option value="Pita">Pita</option>
-                            <option value="Plata">Plata</option>
-                            <option value="Cincelado">Cincelado</option>
-                            <option value="Herraje">Herraje</option>
-                            <option value="Laser">Laser</option>
+                        <input class="input-Agregar" type="number" name="PrecioCinturon" id="PrecioCinturon" placeholder="Ingresa el precio" min="0" step="10" max="2000">
+
+                        <label class="lbl-Agregar"  for="">Material</label>
+                        <br>
+                        <select class="input-Agregar Selects-Agregar" name="MaterialCinturon" id="MaterialCinturon" placeholder="Ingresa el material">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Cinturones'";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom" for="">Tamaño</label> <br>
-                        <input class="input-AggSom" type="text" name="TamañoCinturon" id="TamañoCinturon" placeholder="(Numeros)">   
+                        <label class="lbl-Agregar" for="Adorno">Adorno:</label>
+                        <br>
+                        <select class="input-Agregar Selects-Agregar" name="AdornoCinturon" id="AdornoCinturon">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Adornos'";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
+                        </select>
+                        <br>
+
+                        <label class="lbl-Agregar" for="">Tamaño</label> <br>
+                        <input class="input-Agregar" type="number" name="TamañoCinturon" id="TamañoCinturon" placeholder="Ingresa el tamaño" min="30" step="0.5" max="120">   
 
                     </div>
 
-                    <div id="AggSom-right">
+                    <div class="Agregar-right">
                         <div class="contenedor-preview">
             
                             <div class="caja-preview">
@@ -79,8 +99,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="divButton">
-                    <input type="submit" id="btnGuardarAggCinturon" value="Guardar">
+                <div class="divButton">
+                    <input type="submit" class="ButtonGuardar" id="btnGuardarAggCinturon" value="Guardar">
                 </div>
             </form>
         </div>

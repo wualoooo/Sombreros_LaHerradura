@@ -32,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // --- 4. ACTUALIZAR DATOS DE TEXTO ---
     // Preparamos la consulta SQL para ACTUALIZAR
-    // Usamos '?' para prevenir inyección SQL
     $sql = "UPDATE cinturones SET 
                 Nombre = ?, 
                 Precio = ?, 
@@ -43,8 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
     $stmt = $conn->prepare($sql);
     
-    // 's' = string, 'd' = double (para precio), 'i' = integer (para id)
-    $stmt->bind_param("sissii", 
+    $stmt->bind_param("sdiidi", 
         $Nombre, 
         $Precio, 
         $Material,
@@ -55,52 +53,81 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Ejecutamos la actualización de los datos
     if (!$stmt->execute()) {
-        $response['error'] = 'Error al actualizar los datos: ' . $stmt->error;
+        $response['error'] = 'Error SQL: ' . $stmt->error;
         echo json_encode($response);
-        $stmt->close();
-        $conn->close();
         exit;
     }
+
+    // --- NUEVA VALIDACIÓN ---
+    if ($stmt->affected_rows === 0) {
+        // Esto pasa si el ID no existe O si enviaste los mismos datos que ya tenía
+        $response['warning'] = 'No se realizaron cambios (los datos eran iguales o el ID no existe).';
+    }
     $stmt->close(); // Cerramos la primera consulta
-/*
-    // --- 5. MANEJO DE IMÁGENES ---
-    // (Esta parte es opcional pero muy recomendada)
-    // Revisa si se subió una NUEVA imagen para reemplazar alguna de las existentes
     
-    $imagenes_form = ['imgCinturon1', 'imgCinturon2', 'imgCinturon3', 'imgCinturon4'];
-    $columnas_db = ['Img1', 'Img2', 'Img3', 'Img4'];
+    $inputs_html = ['imgCinturon1', 'imgCinturon2', 'imgCinturon3', 'imgCinturon4'];
+    $cols_db     = ['Img1', 'Img2', 'Img3', 'Img4'];
     
-    // La ruta donde guardas tus imágenes (¡debe tener permisos de escritura!)
-    $ruta_subida = "../../uploads/texanas/"; 
+    // IMPORTANTE: Ajusta la ruta a la carpeta de tus cinturones
+    $directorio_destino = "../../uploads/cinturones/";
 
-    for ($i = 0; $i < count($imagenes_form); $i++) {
+    // Verificamos si la carpeta existe, si no, intentamos crearla (opcional)
+    if (!is_dir($directorio_destino)) {
+        mkdir($directorio_destino, 0777, true);
+    }
+
+    for ($i = 0; $i < count($inputs_html); $i++) {
         
-        $nombre_input_file = $imagenes_form[$i]; // ej: 'imgCinturon1'
-        
-        // Verificamos si se subió un archivo para este input
-        if (isset($_FILES[$nombre_input_file]) && $_FILES[$nombre_input_file]['error'] == 0) {
+        $nombre_input = $inputs_html[$i]; // Ej: 'imgCinturon1'
+        $columna      = $cols_db[$i];     // Ej: 'Img1'
+
+        // Verificar si el usuario subió un archivo en este input
+        if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
             
-            // (Opcional: Borrar la imagen antigua del servidor aquí)
+            // PASO A: BUSCAR LA IMAGEN VIEJA PARA BORRARLA
+            // Hacemos una consulta rápida para saber qué archivo hay actualmente
+            $sql_old = "SELECT $columna FROM cinturones WHERE id_cinturon = ?";
+            $stmt_old = $conn->prepare($sql_old);
+            $stmt_old->bind_param("i", $id);
+            $stmt_old->execute();
+            $stmt_old->bind_result($imagen_anterior);
+            $stmt_old->fetch();
+            $stmt_old->close();
 
-            // Creamos un nombre único para la nueva imagen
-            $nombre_archivo_nuevo = uniqid() . '-' . basename($_FILES[$nombre_input_file]['name']);
-            $ruta_completa = $ruta_subida . $nombre_archivo_nuevo;
+            // PASO B: BORRAR EL ARCHIVO DEL SERVIDOR
+            if (!empty($imagen_anterior)) {
+                $ruta_archivo_anterior = $directorio_destino . $imagen_anterior;
+                // Verificamos si el archivo realmente existe antes de intentar borrarlo
+                if (file_exists($ruta_archivo_anterior)) {
+                    unlink($ruta_archivo_anterior); // <--- ESTO BORRA LA FOTO
+                }
+            }
 
-            // Movemos el archivo
-            if (move_uploaded_file($_FILES[$nombre_input_file]['tmp_name'], $ruta_completa)) {
+            // PASO C: SUBIR LA NUEVA IMAGEN
+            $ext = pathinfo($_FILES[$nombre_input]['name'], PATHINFO_EXTENSION);
+            // Generamos nombre único: id_cinturon + timestamp + indice . jpg
+            $nombre_nuevo = 'Cinturon'.$id . '_' . time() . "_img$i." . $ext;
+            $ruta_completa_nueva = $directorio_destino . $nombre_nuevo;
+
+            if (move_uploaded_file($_FILES[$nombre_input]['tmp_name'], $ruta_completa_nueva)) {
                 
-                // Si se movió bien, actualizamos la BD con el nuevo nombre
-                $columna_db = $columnas_db[$i]; // ej: 'Img1'
-                $sql_img = "UPDATE productos SET $columna_db = ? WHERE ID_Producto = ?";
-                $stmt_img = $conn->prepare($sql_img);
-                $stmt_img->bind_param("si", $nombre_archivo_nuevo, $id);
-                $stmt_img->execute();
+                // PASO D: ACTUALIZAR EL NOMBRE EN LA BASE DE DATOS
+                $sql_update_img = "UPDATE cinturones SET $columna = ? WHERE id_cinturon = ?";
+                $stmt_img = $conn->prepare($sql_update_img);
+                $stmt_img->bind_param("si", $nombre_nuevo, $id);
+                
+                if ($stmt_img->execute()) {
+                    // Opcional: Agregar mensaje de éxito
+                } else {
+                    $response['warnings'][] = "Error al actualizar BD para $columna";
+                }
                 $stmt_img->close();
+
             } else {
-                $response['warnings'][] = "Error al mover el archivo $nombre_input_file.";
+                $response['warnings'][] = "No se pudo mover el archivo subido en $nombre_input";
             }
         }
-    }*/
+    }
 
     // --- 6. ÉXITO ---
     // Si todo salió bien, marcamos como exitoso

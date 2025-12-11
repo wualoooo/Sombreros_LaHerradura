@@ -1,26 +1,26 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-Modal-Edit-Som-Tex.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalEdit.css">
 
-<div class="modal-EditSom" id="modal-EditSombrero">
-    <div class="modal-content-EditSom">
+<div class="modal-Edit" id="modal-EditSombrero">
+    <div class="modal-content-Edit">
         <span class="close">&times;</span>
-        <h2 id="EditSom-text">Editar Sombrero</h2> 
+        <h2 class="Edit-text">Editar Sombrero</h2> 
         
-        <div class="cont-form-EditSom">
-            <form class="EditSom" id="form-EditSom" action="/LaHerradura/Controller/CRUD_Sombreros/ActualizarSombrero.php" method="POST" enctype="multipart/form-data">
+        <div class="cont-form-Edit">
+            <form class="EditSom" id="form-EditSombrero" action="/LaHerradura/Controller/CRUD_Sombreros/ActualizarSombrero.php" method="POST" enctype="multipart/form-data">
                 
-                <div id="div-EditSomb">
-                    <div id="EditSom-left">
+                <div class="div-Edit">
+                    <div class="Edit-left">
 
                         <input type="hidden" id="edit-id-sombrero" name="id_sombrero">
 
-                        <label class="lbl-EditSom" for="edit-NombreSombrero">Nombre</label>
+                        <label class="lbl-Edit" for="edit-NombreSombrero">Nombre</label>
                         <br>
-                        <input class="input-EditSom" type="text" name="NombreSombrero" id="edit-NombreSombrero" required>
+                        <input class="input-Edit" type="text" name="NombreSombrero" id="edit-NombreSombrero" required>
                         <br>
 
-                        <label class="lbl-EditSom" for="edit-ColorSombrero">Color</label>
+                        <label class="lbl-Edit" for="edit-ColorSombrero">Color</label>
                         <br>
-                        <select class="input-EditSom" name="ColorSombrero" id="edit-ColorSombrero">
+                        <select class="input-Edit" name="ColorSombrero" id="edit-ColorSombrero">
                             <?php 
                                 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
                                 include(ROOT_PATH . 'Model/conexion.php') ;
@@ -37,9 +37,9 @@
                         </select>
                         <br>
 
-                        <label class="lbl-EditSom" for="edit-HormaSombrero">Horma</label>
+                        <label class="lbl-Edit" for="edit-HormaSombrero">Horma</label>
                         <br>
-                        <select class="input-EditSom" name="HormaSombrero" id="edit-HormaSombrero">
+                        <select class="input-Edit" name="HormaSombrero" id="edit-HormaSombrero">
                                 <?php 
                                     include(ROOT_PATH . 'Model/conexion.php') ;
 
@@ -55,8 +55,8 @@
                         </select>
                         <br>
 
-                        <label class="lbl-EditSom" for="edit-CopaSombrero">Copa</label> <br>
-                        <select class="input-EditSom Selects-Edit" name="CopaSombrero" id="edit-CopaSombrero" required>
+                        <label class="lbl-Edit" for="edit-CopaSombrero">Copa</label> <br>
+                        <select class="input-Edit Selects-Edit" name="CopaSombrero" id="edit-CopaSombrero" required>
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
 
@@ -74,17 +74,17 @@
                         
                         <div class="inputsTamaños">
                             <div class="inputsTamañosCopa">
-                                <label class="lbl-EditSom" for="edit-TamañoCopaSombrero">Tamaño copa</label> <br>
-                                <input class="input-EditSom" type="number" step="0.5" name="TamañoCopaSombrero" id="edit-TamañoCopaSombrero" min="8">   
+                                <label class="lbl-Edit" for="edit-TamañoCopaSombrero">Tamaño copa</label> <br>
+                                <input class="input-Edit" type="number" step="0.5" name="TamañoCopaSombrero" id="edit-TamañoCopaSombrero" min="8">   
                             </div>
                             <div class="inputsTamañosAla">
-                                <label class="lbl-EditSom" for="edit-TamañoAlaSombrero">Tamaño ala</label> <br>
-                                <input class="input-EditSom" type="number" step="0.5" name="TamañoAlaSombrero" id="edit-TamañoAlaSombrero" min="8">
+                                <label class="lbl-Edit" for="edit-TamañoAlaSombrero">Tamaño ala</label> <br>
+                                <input class="input-Edit" type="number" step="0.5" name="TamañoAlaSombrero" id="edit-TamañoAlaSombrero" min="8">
                             </div>
                         </div>
 
-                        <label class="lbl-EditSom" for="edit-MaterialSombrero">Material</label> <br>
-                        <select class="input-EditSom" name="MaterialSombrero" id="edit-MaterialSombrero">
+                        <label class="lbl-Edit" for="edit-MaterialSombrero">Material</label> <br>
+                        <select class="input-Edit" name="MaterialSombrero" id="edit-MaterialSombrero">
                             <?php 
                                 include(ROOT_PATH . 'Model/conexion.php') ;
 
@@ -100,11 +100,11 @@
                         </select>
                         <br>
 
-                        <label class="lbl-EditSom" for="edit-PrecioSombrero">Precio</label> <br>
-                        <input class="input-EditSom" type="number" step="10" name="PrecioSombrero" id="edit-PrecioSombrero" min="0" required>
+                        <label class="lbl-Edit" for="edit-PrecioSombrero">Precio</label> <br>
+                        <input class="input-Edit" type="number" step="10" name="PrecioSombrero" id="edit-PrecioSombrero" min="0" required>
                     </div>
 
-                    <div id="EditSom-right">
+                    <div class="Edit-right">
                         <div class="contenedor-preview">
                             
                             <div class="caja-preview">
@@ -133,8 +133,8 @@
                         </div>
                     </div>
                 </div>
-                <div id="divButton">
-                    <input type="submit" id="btnGuardarEditSombreros" value="Guardar Cambios">
+                <div class="divButton">
+                    <input type="submit" class="ButtonGuardarEdit" id="btnGuardarEditSombreros" value="Guardar Cambios">
                 </div>
             </form>
         </div>

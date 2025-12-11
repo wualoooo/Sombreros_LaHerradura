@@ -5,7 +5,7 @@
         <span class="close">&times;</span>
         <h2 id="RegAdmin-text">Agregar Administrador</h2>
         <div class="cont-form-cc">
-            <form class="resgitrer-form" id="form-registroAdmin" action="../../Controller/registroAdmin.php" method="POST">
+            <form class="resgitrer-form" id="form-registroAdmin" action="/LaHerradura/Controller/registroAdmin.php" method="POST">
                 <label for="name">Nombre</label>
                 <br>
                 <input class="input-admin" type="text" name="NombreAdmin" id="NombreAdmin" placeholder="Ingresa tu nombre">

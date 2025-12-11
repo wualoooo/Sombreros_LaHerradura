@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // Asegúrate que tu <form> en el HTML tenga este ID exacto
-    const formulario = document.getElementById('form-AggSom');
+    const formulario = document.getElementById('form-AggSombrero');
 
     if (!formulario) return;
 

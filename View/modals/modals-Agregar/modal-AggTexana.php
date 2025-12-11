@@ -1,73 +1,118 @@
-<link rel="stylesheet" href="../../css/style-AggSombrero.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalAgregar.css">
 
-<div class="modal-AggSom" id="modal-AggTexana">
-    <div class="modal-content-AggSom">
+<div class="modal-Agregar" id="modal-AggTexana">
+    <div class="modal-content-Agregar">
         <span class="close">&times;</span>
-        <h2 id="AggSom-text">Agregar Texana</h2>
-        <div class="cont-form-AggSom">
-            <form class="AggSom" id="form-AggSom" action="/LaHerradura/Controller/CRUD_Texanas/registroTexanas.php" method="POST" enctype="multipart/form-data">
+        <h2 class="Agregar-text">Agregar texana</h2>
+        <div class="cont-form-Agregar">
+            <form class="formAgregar" id="form-AggTexana" action="/LaHerradura/Controller/CRUD_Texanas/registroTexanas.php" method="POST" enctype="multipart/form-data">
                 
-                <div id="div-AggSomb">
-                    <div id="AggSom-left">
+                <div class="div-Agregar">
+                    <div class="Agregar-left">
 
-                        <label class="lbl-AggSom" for="NombreTexana">Nombre</label>
+                        <label class="lbl-Agregar" for="NombreTexana">Nombre</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="NombreTexana" id="NombreTexana" placeholder="Ingresa el nombre completo">
-                        <br>
-
-                        <label class="lbl-AggSom" for="Color">Color</label>
-                        <br>
-                        <input class="input-AggSom" type="text" name="ColorTexana" id="ColorTexana" placeholder="Ingresa el color">
+                        <input class="input-Agregar" type="text" name="NombreTexana" id="NombreTexana" placeholder="Ingresa el nombre completo" required>
                         <br>
 
-                        <label class="lbl-AggSom" for="Horma">Horma</label>
+                        <label class="lbl-Agregar" for="Color">Color</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="HormaTexana" id="HormaTexana">
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="horma1">horma1</option>
-                            <option value="horma2">horma2</option>
-                            <option value="horma3">horma3</option>
-                            <option value="horma4">horma4</option>
+                        <select class="input-Agregar Selects-Agregar" name="ColorTexana" id="ColorTexana">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verColores = "SELECT id_color, Nombre FROM colores WHERE Producto = 'Texanas'";
+                                $resultColores = $conn->query($verColores);
+
+                                    while ($rowColores = $resultColores -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowColores['id_color'].">".$rowColores['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
 
-                        <label class="lbl-AggSom" for="">Copa</label>
+                        <label class="lbl-Agregar" for="Horma">Horma</label>
                         <br>
-                        <select class="input-AggSom Selects-Agg" name="CopaTexana" id="CopaTexana">
-                            <option value="Null">Selecciona una opcion</option>
-                            <option value="Copa1">Copa1</option>
-                            <option value="Copa2">Copa2</option>
-                            <option value="Copa3">Copa3</option>
-                            <option value="Copa4">Copa4</option>
+                        <select class="input-Agregar Selects-Agregar" name="HormaTexana" id="HormaTexana">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verhormas = "SELECT id_horma, Nombre FROM hormas";
+                                $resulthormas = $conn->query($verhormas);
+
+                                    while ($rowhormas = $resulthormas -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowhormas['id_horma'].">".$rowhormas['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
+                        </select>
+                        <br>
+
+                        <label class="lbl-Agregar" for="">Copa</label>
+                        <br>
+                        <select class="input-Agregar Selects-Agregar" name="CopaTexana" id="CopaTexana">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verCopas = "SELECT id_copa, Nombre FROM copas";
+                                $resultcopas = $conn->query($verCopas);
+
+                                    while ($rowcopas = $resultcopas -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowcopas['id_copa'].">".$rowcopas['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
                         </select>
                         <br>
 
                         <div class="inputsTamaños">
                             <div class="inputsTamañosCopa">
-                                <label class="lbl-AggSom" for="">Tamaño copa</label> <br>
-                                <input class="input-AggSom" type="text" name="TamañoCopaTexana" id="TamañoCopaTexana" placeholder="(Numeros)">   
+                                <label class="lbl-Agregar" for="">Tamaño copa</label> <br>
+                                <input class="input-Agregar" type="number" name="TamañoCopaTexana" id="TamañoCopaTexana" step="0.5" min="8">   
                             </div>
                             <div class="inputsTamañosAla">
-                                <label class="lbl-AggSom" for="">Tamaño ala</label> <br>
-                                <input class="input-AggSom" type="text" name="TamañoAlaTexana" id="TamañoAlaTexana" placeholder="(Numeros)">
+                                <label class="lbl-Agregar" for="">Tamaño ala</label> <br>
+                                <input class="input-Agregar" type="number" name="TamañoAlaTexana" id="TamañoAlaTexana" step="0.5" min="8" >
                             </div>
                         </div>
 
-                        <label class="lbl-AggSom"  for="">Material</label>
+                        <label class="lbl-Agregar"  for="">Material</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="MaterialTexana" id="MaterialTexana" placeholder="Ingresa el material">
+                        <select class="input-Agregar Selects-Agregar" name="MaterialTexana" id="MaterialTexana">
+                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                            <?php 
+                                include(ROOT_PATH . 'Model/conexion.php') ;
+
+                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Texanas'";
+                                $resultMateriales = $conn->query($verMateriales);
+
+                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
+                                        echo "
+                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
+                                        ";
+                                    }
+                            ?>
+                        </select>
                         <br>
 
-                        <label class="lbl-AggSom"for="">Precio</label>
+                        <label class="lbl-Agregar"for="">Precio</label>
                         <br>
-                        <input class="input-AggSom" type="text" name="PrecioTexana" id="PrecioTexana" placeholder="Solo numeros     Ej: 500">
+                        <input class="input-Agregar" type="number" name="PrecioTexana" id="PrecioTexana" placeholder="Ingresa el precio" step="10" required min="0">
                     </div>
 
-                    <div id="AggSom-right">
+                    <div class="Agregar-right">
                         <div class="contenedor-preview">
             
                             <div class="caja-preview">
-                                <input type="file" name="imgTexana1" id="imgTexana1" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgTexana1" id="imgTexana1" class="input-img-oculto" accept="image/*" >
                                 <label for="imgTexana1" class="label-boton">
                                     Seleccionar archivo
                                 </label>
@@ -75,7 +120,7 @@
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgTexana2" id="imgTexana2" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgTexana2" id="imgTexana2" class="input-img-oculto" accept="image/*" >
                                 <label for="imgTexana2" class="label-boton">
                                     Seleccionar archivo
                                 </label>
@@ -83,7 +128,7 @@
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgTexana3" id="imgTexana3" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgTexana3" id="imgTexana3" class="input-img-oculto" accept="image/*" >
                                 <label for="imgTexana3" class="label-boton">
                                     Seleccionar archivo
                                 </label>
@@ -91,7 +136,7 @@
                             </div>
 
                             <div class="caja-preview">
-                                <input type="file" name="imgTexana4" id="imgTexana4" class="input-img-oculto" accept="image/*">
+                                <input type="file" name="imgTexana4" id="imgTexana4" class="input-img-oculto" accept="image/*" >
                                 <label for="imgTexana4" class="label-boton">
                                     Seleccionar archivo
                                 </label>
@@ -100,12 +145,10 @@
                         </div>
                     </div>
                 </div>
-                <div id="divButton">
-                    <input type="submit" id="btnGuardarAggTexana" value="Guardar">
+                <div class="divButton">
+                    <input type="submit" class="ButtonGuardar" id="btnGuardarAggTexana" value="Guardar">
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<script src="../../public/viewImages.js"></script>

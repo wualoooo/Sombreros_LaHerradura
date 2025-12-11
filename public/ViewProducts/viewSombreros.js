@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
-    // --- NUEVA FUNCIÓN ---
     // Esta función añade la lógica de clic a las miniaturas del modal
     function activarListenersGaleriaModal() {
         // Seleccionamos la imagen principal DENTRO DEL MODAL

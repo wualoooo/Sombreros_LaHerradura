@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 
                     // Rellenamos los detalles (usando los nuevos IDs)
-                    document.getElementById('modal-material').textContent = `Material: ${data.Material}`;
-                    document.getElementById('modal-adorno').textContent = `Adorno: ${data.Adorno}`;
+                    document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.id_Material}`;
+                    document.getElementById('modal-adorno').textContent = `Adorno: ${data.Nombre_Adorno || data.id_Adorno}`;
                     document.getElementById('modal-tamaño').textContent = `Tamaño: ${data.Tamaño} cm`;
                     // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
                     

@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Hormas</title>
-    <link rel="stylesheet" href="../../css/style-Panels.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-Panels.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -19,12 +21,14 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Hormas</h2>
-        <button class="btn btn-agregar" id="btnAgg-Horma">Agregar nueva Horma</button>
+        <button class="btn btn-agregar" id="btnAgg-Horma">
+            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva Horma</button>
         <table>
+            
             <th>ID</th>
             <th>Nombre</th>
             <th>Acciones</th>
-        <tbody id="tabla-copas-body">   
+        <tbody id="tabla-hormas-body">   
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
 
@@ -38,8 +42,12 @@
                             <td>".$row["id_horma"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>
-                                <button class='btn btn-editarCinturon' data-id='".$row["id_horma"]."'>Editar</button>
-                                <button class='btn btn-eliminarCinturon' data-id='".$row["id_horma"]."'>Eliminar</button>
+                                <button class='btn-editar btn-editarCinturon' data-id='".$row["id_horma"]."'>
+                                    <span class='material-symbols-outlined'>edit</span>
+                                </button>
+                                <button class='btn-eliminar btn-eliminarCinturon' data-id='".$row["id_horma"]."'>
+                                    <span class='material-symbols-outlined'>delete</span>
+                                </button>
                             </td>
                         </tr>"
                     );
@@ -66,6 +74,8 @@
 
     <script src="/LaHerradura/public/crud_extras.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
+    <script src="/LaHerradura/public/alerts.js"></script>
+    <script src="/LaHerradura/public/main.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // --- 4. (NUEVO) OBTENER NOMBRES DE ARCHIVOS ANTES DE BORRAR ---
     // Preparamos un SELECT para saber qué archivos borrar del servidor
-    $sql_select = "SELECT Img1, Img2, Img3, Img4 FROM texana WHERE id_texana = ?";
+    $sql_select = "SELECT Img1, Img2, Img3, Img4 FROM texanas WHERE id_texana = ?";
     $stmt_select = $conn->prepare($sql_select);
     
     if($stmt_select === false) {
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // --- 6. (AHORA ES PASO 6) PREPARAR Y EJECUTAR EL DELETE ---
     // Usamos el nombre de tu tabla "sombreros" y tu columna "id_sombrero"
-    $sql_delete = "DELETE FROM texana WHERE id_texana = ?";
+    $sql_delete = "DELETE FROM texanas WHERE id_texana = ?";
     
     $stmt_delete = $conn->prepare($sql_delete);
 

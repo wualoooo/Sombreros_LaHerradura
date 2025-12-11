@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/LaHerradura/View/css/style-Agregar.css">
+<link rel="stylesheet" href="/LaHerradura/View/css/style-ModalAgregar.css">
 
 <div class="modal-AggExtras" id="modal-AggColor">
     <div class="modal-content-AggExtra">

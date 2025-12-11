@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -19,7 +21,8 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Copas</h2>
-        <button class="btn btn-agregar" id="btnAgg-Copa">Agregar nueva Copa</button>
+        <button class="btn btn-agregar" id="btnAgg-Copa">
+            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva Copa</button>
         <table>
             <th>ID</th>
             <th>Nombre</th>
@@ -38,8 +41,12 @@
                             <td>".$row["id_copa"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>
-                                <button class='btn btn-editarCinturon' data-id='".$row["id_copa"]."'>Editar</button>
-                                <button class='btn btn-eliminarCinturon' data-id='".$row["id_copa"]."'>Eliminar</button>
+                                <button class='btn-editar btn-editarCopa' data-id='".$row["id_copa"]."'>
+                                    <span class='material-symbols-outlined'>edit</span>
+                                </button>
+                                <button class='btn-eliminar btn-eliminarCopa' data-id='".$row["id_copa"]."'>
+                                    <span class='material-symbols-outlined'>delete</span>
+                                </button>
                             </td>
                         </tr>"
                     );
