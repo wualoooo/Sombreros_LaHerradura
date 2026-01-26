@@ -20,7 +20,7 @@
     <main>
         <div class="font-circles">
         <div class="img_fondo_circles">
-            <img src="/LaHerradura/View/simages/Img_Principal.jpg" alt="Imagen Fondo circulos">
+            <img src="/LaHerradura/View/images/Img_Principal.png" alt="Imagen Fondo circulos">
         </div>
         <div class="principal">
             <h2>Sombreros La Herradura: Tradicióny estilo bajo el sol</h2>
@@ -35,13 +35,13 @@
 
     <div class="three-category">
         <div class="category">
-            <img src="asstes/images/Category1.png" alt="">
+            <img src="assets/images/Category1.png" alt="">
         </div>
         <div class="category">
-            <img src="asstes/images/Category2.png" alt="">
+            <img src="assets/images/Category2.png" alt="">
         </div>
         <div class="category">
-            <img src="asstes/images/Category3.png" alt="">
+            <img src="assets/images/Category3.png" alt="">
         </div>
     </div>
 
