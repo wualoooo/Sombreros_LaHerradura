@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/LaHerradura/View/css/style-Inicio.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -18,20 +19,39 @@
     </header>
     
     <main>
-        <div class="font-circles">
-        <div class="img_fondo_circles">
-            <img src="/LaHerradura/View/images/Img_Principal.png" alt="Imagen Fondo circulos">
-        </div>
-        <div class="principal">
-            <h2>Sombreros La Herradura: Tradicióny estilo bajo el sol</h2>
-        </div>
-        <div class="principal">
 
-        </div>
+
+        <!-- === INICIO: Burbuja interactiva (1 burbuja, 6 estados) === -->
+    <section class="hat-bubbles">
+    <div class="font-circles">
+
         <div class="principal">
-            <h2>Sombreros La Herradura: Tradicióny estilo bajo el sol</h2>
+        <h2>Sombreros La Herradura: Tradición y estilo bajo el sol</h2>
         </div>
-</div>
+
+        <div class="hat-bubbles__inner">
+        <!-- Burbuja única (clickeable) -->
+        <div id="hatBubble" class="bubble bubble--single" role="button" tabindex="0"
+            aria-label="Cambiar estado" title="Haz clic para cambiar">
+            <div id="bubbleLeft" class="bubble__side"></div>
+            <div id="bubbleText" class="bubble__text"></div>
+            <div id="bubbleRight" class="bubble__side"></div>
+        </div>
+
+        <!-- Indicador opcional (puntitos) -->
+        <div id="bubbleDots" class="bubble-dots" aria-hidden="true"></div>
+        </div>
+
+        <!-- Aquí metes el segundo título -->
+        <div class="principal">
+        <h2>Encuentra el sombrero vaquero perfecto que cuenta tu historia.</h2>
+        </div>
+
+    </div>
+    </section>
+        <!-- === FIN: Burbuja interactiva === -->
+
+
 
     <div class="three-category">
         <div class="category">
@@ -107,7 +127,7 @@
             Nuestro legado
         </h5>
         <h6 class="legado-Text">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore exercitationem autem eveniet aliquam ex incidunt rerum! Fugiat ipsa explicabo enim mollitia iure officiis facilis, necessitatibus accusamus nesciunt! Nulla, fugit quo! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ea, deleniti! Suscipit ducimus sunt accusantium. Eligendi odio asperiores sapiente rem, iusto voluptates nam ipsum, culpa nesciunt, ex laboriosam quaerat veritatis iste?
+            Herederos de más de 80 años en la fabricación original de botas vaqueras hechas a mano, nos hemos dado a la tarea de innovar para mejorar constantemente, incorporando nuevas técnicas a la fabricación tradicional, sin olvidar que en las artesanías la mano del hombre difícilmente puede sustituirse.
         </h6>
     </div>
 
@@ -129,6 +149,126 @@
         include(ROOT_PATH . 'View/includes/footer.php')
         ?>
     </footer>
+                <script>
+        // =========================
+        // 6 ESTADOS (edita aquí)
+        // =========================
+        const states = [
+            {
+            text: "Tradición con actitud:\nponte el sombrero",
+            left:  ["assets/images/a1.png"],
+            right: ["assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
+            },
+            {
+            text: "Estilo que impone,\nsombrero que responde",
+            left:  ["assets/images/a1.png", "assets/images/a2.png"],
+            right: ["assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
+            },
+            {
+            text: "Tu sombrero,\ntu sello personal",
+            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png"],
+            right: ["assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
+            },
+            {
+            text: "Luce como vaquero,\nvive como leyenda",
+            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png"],
+            right: ["assets/images/a5.png","assets/images/a6.png"]
+            },
+            {
+            text: "Del rancho al asfalto,\nsiempre auténtico",
+            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png"],
+            right: ["assets/images/a6.png"]
+            },
+            {
+            text: "No es moda,\nes identidad vaquera",
+            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"],
+            right: []
+            }
+        ];
+
+        // =========================
+        // Helpers
+        // =========================
+        function buildAvatarStack(urls){
+            const wrap = document.createElement("div");
+            wrap.className = "avatar-stack";
+            urls.forEach(url=>{
+            const img = document.createElement("img");
+            img.className = "avatar";
+            img.src = url;
+            img.alt = "avatar";
+            wrap.appendChild(img);
+            });
+            return wrap;
+        }
+
+        function renderDots(activeIndex){
+            const dotsHost = document.getElementById("bubbleDots");
+            if(!dotsHost) return;
+            dotsHost.innerHTML = "";
+
+            states.forEach((_, idx)=>{
+            const dot = document.createElement("span");
+            dot.className = "bubble-dot" + (idx === activeIndex ? " is-active" : "");
+            dotsHost.appendChild(dot);
+            });
+        }
+
+        function setBubbleState(i){
+            const state = states[i];
+            if(!state) return;
+
+            const leftHost  = document.getElementById("bubbleLeft");
+            const rightHost = document.getElementById("bubbleRight");
+            const textHost  = document.getElementById("bubbleText");
+
+            leftHost.innerHTML = "";
+            rightHost.innerHTML = "";
+            textHost.innerHTML = "";
+
+            leftHost.appendChild(buildAvatarStack(state.left));
+            rightHost.appendChild(buildAvatarStack(state.right));
+            textHost.innerHTML = String(state.text).replace(/\n/g, "<br>");
+
+            renderDots(i);
+        }
+
+        // =========================
+        // Interacción: click en la burbuja = siguiente estado
+        // =========================
+        let current = 0;
+
+        function nextState(){
+            current = (current + 1) % states.length;
+            setBubbleState(current);
+        }
+
+        // Init
+        setBubbleState(current);
+
+        const bubble = document.getElementById("hatBubble");
+        if(bubble){
+            bubble.addEventListener("click", nextState);
+
+            // Accesibilidad: Enter/Espacio también cambian estado
+            bubble.addEventListener("keydown", (e)=>{
+            if(e.key === "Enter" || e.key === " "){
+                e.preventDefault();
+                nextState();
+            }
+            // Opcional: Flechas para atrás/adelante
+            if(e.key === "ArrowRight"){
+                e.preventDefault();
+                nextState();
+            }
+            if(e.key === "ArrowLeft"){
+                e.preventDefault();
+                current = (current - 1 + states.length) % states.length;
+                setBubbleState(current);
+            }
+            });
+        }
+        </script>
 
 </body>
 </html>
