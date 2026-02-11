@@ -21,8 +21,25 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Texanas</h2>
-        <button class="btn btn-agregar" id="btnAgg-Texana">
-            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva texana</button>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Texana">
+                <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva texana</button>
+            </div>
+            <div class="PanelUpSeach">
+                <input type="text" class="TxtBusquedaAdmin" for="BusquedaTexanaAdmin" id="BusquedaTexanaAdmin" placeholder="Buscador"></input>
+                <select name="FiltroBusquedaAdminTexana" class="FiltroBusquedaAdmin" id="FiltroBusquedaAdminTexana">
+                    <option value="Nombre">Nombre</option>
+                    <option value="Precio">Precio</option>
+                    <option value="Color">Color</option>
+                    <option value="Copa">Copa</option>
+                    <option value="Horma">Horma</option>
+                    <option value="Tam_Copa">Tamaño de Copa</option>
+                    <option value="Tam_Ala">Tamaño de Ala</option>
+                    <option value="Material">Material</option>
+                </select>
+            </div> 
+        </div>
         <table>
             <th>Nombre</th>
             <th>Precio</th>
@@ -33,26 +50,28 @@
             <th>Tamaño ala</th>
             <th>Material</th>
             <th>Acciones</th>
+            <th>Estatus</th>
         <tbody id="tabla-texanas-body">
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
 
             
             $sql = "SELECT 
-            s.id_texana,
-            s.Nombre,
-            s.Precio,
+            t.id_texana,
+            t.Nombre,
+            t.Precio,
             c.Nombre AS Nombre_Color,
             h.Nombre AS Nombre_Horma,
             cp.Nombre AS Nombre_Copa,
-            s.Tam_Copa,
-            s.Tam_ala,
+            t.Tam_Copa,
+            t.Tam_ala,
+            t.Estado,
             m.Nombre AS Nombre_Material
-        FROM texanas s
-        INNER JOIN colores c ON s.Color = c.id_color
-        INNER JOIN hormas h ON s.Horma = h.id_horma
-        INNER JOIN copas cp ON s.Copa = cp.id_copa
-        INNER JOIN materiales m ON s.Material = m.id_material";
+        FROM texanas t
+        INNER JOIN colores c ON t.Color = c.id_color
+        INNER JOIN hormas h ON t.Horma = h.id_horma
+        INNER JOIN copas cp ON t.Copa = cp.id_copa
+        INNER JOIN materiales m ON t.Material = m.id_material";
             $result = $conn -> query($sql);
 
             // MOSTRAR LOS DATOS EN UNA TABLA
@@ -78,6 +97,17 @@
                             <button class='btn-ver btn-verTexana' data-id='".$row["id_texana"]."'>
                                 <span class='material-symbols-outlined'>visibility</span>
                             </button>
+                        </td>
+
+                        <td>
+                            <label class='switch'>
+                                <input type='checkbox' class='btn-estado' 
+                                    data-id='".$row['id_texana']."'
+                                    data-tabla='texanas' 
+                                    data-col-id='id_texana'
+                                    ".($row['Estado'] == 1 ? 'checked' : '').">
+                                <span class='slider round'></span>
+                            </label>
                         </td>
                     </tr>"
                 );

@@ -4,44 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios</title>
-    <link rel="stylesheet" href="../../css/style-Panels.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-Panels.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-</head>
+
 <body>
     <header>
         <?php 
-        include('../../includes/header-admin.php')
+        define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+        include(ROOT_PATH.'View/includes/header-admin.php')
         ?>
     </header>
     <main>
         <h2 class="titleGestion">Usuarios registrados</h2>
         <table>
-            <th>ID</th>
             <th>Nombre</th>
-            <th>Apellidos</th>
             <th>Correo</th>
             <th>Direccion de envio</th>
             <th>Telefono</th>
             <th>Pedidos relizados</th>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Osbaldo</td>
-                <td>Martínez Martin</td>
-                <td>osbaldomtz1505@gmail.com</td>
-                <td>Santiago Ixtlahuaca, Tasquillo, <br> Hidalgo CP:42383</td>
-                <td>7721042773</td>
-                <td><ul>
-                        <li>11/06/25</li>
-                        <li>11/06/25</li>
-                        <li>11/06/25</li>
-                    </ul></td>
-            </tr>
-        </tbody>
-        </table>
+
+            <?php 
+            include (ROOT_PATH.'Model/conexion.php');
+
+            $sql = "SELECT id_usuario, Nombre, Apellido_Pat, Apellido_Mat, Correo FROM usuarios";
+            $result = $conn -> query($sql);
+            if ($result -> num_rows>0){
+
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . $row["Nombre"] . " " . $row["Apellido_Pat"] . "</td>
+                            <td>" . $row["Correo"] . "</td>";
+
+                    $idUsuario = $row["id_usuario"];
+                    $sqlDir = "SELECT cp, estado, municipio, colonia, calle, numero, referencia, telefono FROM direcciones WHERE id_usuario = '$idUsuario'";
+                    $resultDir = $conn->query($sqlDir);
+
+                    if ($resultDir && $resultDir->num_rows > 0) {
+                        $rowDir = $resultDir->fetch_assoc();
+                        echo "<td> " . $rowDir["colonia"] . ", " . $rowDir["calle"] . " " . $rowDir["numero"] . " <br> " .$rowDir["municipio"] . ", " . $rowDir["estado"] . "</td>
+                            <td>" . $rowDir["telefono"] . "</td>";
+                    } else {
+                        echo "<td>No hay dirección</td><td>---</td>";
+                    }
+
+                    $sqlPed = "SELECT codigo_rastreo FROM pedidos WHERE id_usuario = '$idUsuario'";
+
+                    $resultPed = $conn->query($sqlPed);
+                    if ($resultPed && $resultPed->num_rows > 0) {
+                        while($rowPed = $resultPed->fetch_assoc()) {
+                            echo "<td> " . $rowPed["codigo_rastreo"] . "</td>";
+                        }
+                    } else {
+                        echo "<td>No hay Pedidos</td>";
+                    }
+
+                    echo "</tr>";
+
+                }
+            }
+
+            else{
+                echo("
+                    <tr>
+                        <td colspan='4'>No hay resultados</td>
+                    </tr>
+                ");
+            }
+
+        ?>
+    </table>
+
     </main>
+
+    <script src="/LaHerradura/public/alerts.js"></script>
+    <script src="/LaHerradura/public/main.js"></script> 
+    
 </body>
 </html>

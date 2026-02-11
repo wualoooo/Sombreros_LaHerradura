@@ -187,3 +187,147 @@ body {
 .nav-links-admin li {
     margin: auto;
 }
+
+/* --- CARRITO LATERAL (OFF-CANVAS) --- */
+
+/* Fondo oscuro detrás del carrito */
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2999; /* Debajo del carrito, encima de todo lo demás */
+    display: none; /* Oculto por defecto */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cart-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* El panel lateral */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -450px; /* Oculto a la derecha */
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 3000; /* Encima de todo */
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación suave */
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.active {
+    right: 0; /* Se desliza hacia adentro */
+}
+
+/* Cabecera del carrito */
+.cart-header-side {
+    padding: 20px;
+    background-color: #8B0000; /* Tu color vino */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-header-side h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-cart {
+    cursor: pointer;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+/* Lista de productos (Scrollable) */
+.cart-items-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Item individual en el carrito */
+.cart-item-side {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.cart-item-side img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.item-details h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.item-price {
+    color: #8B0000;
+    font-weight: bold;
+}
+
+.btn-remove-item {
+    color: #999;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: inline-block;
+}
+.btn-remove-item:hover { color: red; }
+
+/* Footer del carrito (Total y Botón) */
+.cart-footer-side {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
+.cart-total-side {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.btn-checkout-side {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-checkout-side:hover {
+    background-color: #218838;
+}
+
+/* Responsive para celular */
+@media (max-width: 480px) {
+    .cart-sidebar { width: 100%; right: -100%; }
+}

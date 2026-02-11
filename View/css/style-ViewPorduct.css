@@ -247,3 +247,23 @@
     transform: scale(1.05);
     border-color: #007bff;
 }
+
+.talla {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #ccc;
+}
+
+.talla:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.talla.selected {
+    background-color: #8B0000;
+    color: white;
+    border-color: #8B0000;
+    transform: scale(1.1);
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.5);
+}
