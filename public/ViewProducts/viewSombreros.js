@@ -1,5 +1,15 @@
 // Espera a que todo el HTML esté cargado
 document.addEventListener('DOMContentLoaded', () => {
+    const opcionesTalla = document.querySelectorAll('.talla');
+    
+    opcionesTalla.forEach(opcion => {
+        opcion.addEventListener('click', function() {
+            // 1. Quitar la clase 'selected' de todas
+            opcionesTalla.forEach(t => t.classList.remove('selected'));
+            // 2. Agregar la clase 'selected' a la que se dio clic
+            this.classList.add('selected');
+        });
+    });
 
     // Selecciona el modal y sus partes
     const modal = document.getElementById('modal-ViewProducts');
@@ -71,7 +81,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     imgCont.innerHTML = galeriaHtml;
                     
                     // 6. ¡IMPORTANTE! Activamos los listeners para las miniaturas que ACABAMOS de crear
-                    activarListenersGaleriaModal();
+                    // ... (código anterior de la galería) ...
+                    activarListenersGaleriaModal(); // <--- Justo después de esta línea
+                    document.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
+
+                    // --- INICIO LÓGICA AGREGAR CARRITO ---
+                    const btnAgregar = document.getElementById('btn-AggCart');
+                    const inputCantidad = document.getElementById('cant-products');
+
+                    const nuevoBtn = btnAgregar.cloneNode(true);
+                    btnAgregar.parentNode.replaceChild(nuevoBtn, btnAgregar);
+
+                    nuevoBtn.addEventListener('click', () => {
+                        
+                        // 2. VALIDAR TALLA SELECCIONADA
+                        const tallaSeleccionada = document.querySelector('.talla.selected');
+                        
+                        if (!tallaSeleccionada) {
+                            // Usamos tu alerta bonita
+                            if (typeof Alerta !== 'undefined') {
+                                Alerta.error("Por favor, selecciona una talla antes de agregar.");
+                            } else {
+                                alert("Selecciona una talla");
+                            }
+                            return; // ¡DETENER EL PROCESO!
+                        }
+
+                        // 3. OBTENER EL VALOR DE LA TALLA
+                        const valorTalla = tallaSeleccionada.textContent.trim();
+                        const cantidad = parseInt(inputCantidad.value) || 1;
+
+                        const producto = {
+                            id: data.id_sombrero,
+                            nombre: data.Nombre,
+                            precio: data.Precio,
+                            imagen: data.Img1,
+                            tipo: 'Sombrero', 
+                            cantidad: cantidad,
+                            talla: valorTalla // <--- ¡AQUÍ GUARDAMOS LA TALLA!
+                        };
+
+                        // 3. Llamar al carrito (asegurando que exista)
+                        if (typeof Carrito !== 'undefined') {
+                            Carrito.agregar(producto);
+                            // Opcional: Cerrar modal al agregar
+                            document.getElementById('modal-ViewProducts').style.display = 'none';
+                        } else {
+                            console.error("Error: El archivo carrito.js no se ha cargado.");
+                        }
+                    });
+                    // --- FIN CÓDIGO FALTANTE ---
 
                     // --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
 
@@ -81,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(error => console.error('Error al cargar datos:', error));
         }
     });
+    
 
     // Tu código para cerrar el modal
     const spanClose = document.querySelector('.modal-content-vp .close');

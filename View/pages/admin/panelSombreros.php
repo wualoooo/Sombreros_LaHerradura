@@ -21,8 +21,26 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Sombreros</h2>
-        <button class="btn btn-agregar" id="btnAgg-Sombrero">
-            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo sombrero</button>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Sombrero">
+                <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo sombrero</button>
+            </div>
+            <div class="PanelUpSeach">
+                <input type="text" class="TxtBusquedaAdmin" for="BusquedaSombreroAdmin" id="BusquedaSombreroAdmin" placeholder="Buscador"></input>
+                <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="FiltroBusquedaAdminSombrero">
+                    <option value="Nombre">Nombre</option>
+                    <option value="Precio">Precio</option>
+                    <option value="Color">Color</option>
+                    <option value="Copa">Copa</option>
+                    <option value="Horma">Horma</option>
+                    <option value="Tam_Copa">Tamaño de Copa</option>
+                    <option value="Tam_Ala">Tamaño de Ala</option>
+                    <option value="Material">Material</option>
+                </select>
+            </div> 
+        </div>
+
         <table>
             <th>Nombre</th>
             <th>Precio</th>
@@ -33,6 +51,8 @@
             <th>Tamaño ala</th>
             <th>Material</th>
             <th>Acciones</th>
+            <th>Estatus</th>
+
         <tbody id="tabla-sombreros-body">
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
@@ -47,6 +67,7 @@
             cp.Nombre AS Nombre_Copa,    -- Renombramos
             s.Tam_Copa,
             s.Tam_ala,
+            s.Estado,
             m.Nombre AS Nombre_Material  -- Renombramos
             FROM sombreros s
             INNER JOIN colores c ON s.Color = c.id_color
@@ -79,6 +100,17 @@
                                 <span class='material-symbols-outlined'>visibility</span>
                             </button>
                         </td>
+
+                        <td>
+                            <label class='switch'>
+                                <input type='checkbox' class='btn-estado' 
+                                    data-id='".$row['id_sombrero']."'
+                                    data-tabla='sombreros' 
+                                    data-col-id='id_sombrero'
+                                    ".($row['Estado'] == 1 ? 'checked' : '').">
+                                <span class='slider round'></span>
+                            </label>
+                        </td>
                     </tr>"
                 );
             }
@@ -98,7 +130,7 @@
         <?php 
         include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarSombrero.php');
         include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggSombrero.php');
-        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php');
+        include(ROOT_PATH .'View/modals/modals-View/modal-ViewProduct.php');
         ?>
     </main>
 
@@ -108,5 +140,37 @@
     <script src="/LaHerradura/public/Validations/validacionSombreros.js"></script>
     <script src="/LaHerradura/public/alerts.js"></script>
     <script src="/LaHerradura/public/main.js"></script>
+    <script src="/LaHerradura/public/EstadoProductos.js"></script>
+
+    <script>
+        const inputBusqueda = document.getElementById('BusquedaSombreroAdmin');
+        const filtroColumna = document.getElementById('FiltroBusquedaAdminSombrero');
+        const cuerpoTabla = document.getElementById('tabla-sombreros-body');
+
+        function buscarEnBaseDeDatos() {
+            const texto = inputBusqueda.value;
+            const columna = filtroColumna.value;
+
+            // Preparamos los datos para enviar
+            const datos = new FormData();
+            datos.append('busqueda', texto);
+            datos.append('columna', columna);
+
+            // Hacemos la petición al archivo PHP
+            fetch('/LaHerradura/Controller/CRUD_Sombreros/BusquedaSombreros.php', {
+                method: 'POST',
+                body: datos
+            })
+            .then(response => response.text()) // Esperamos texto HTML de vuelta
+            .then(html => {
+                cuerpoTabla.innerHTML = html; // Reemplazamos el contenido de la tabla
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Eventos: buscar al soltar tecla o cambiar filtro
+        inputBusqueda.addEventListener('keyup', buscarEnBaseDeDatos);
+        filtroColumna.addEventListener('change', buscarEnBaseDeDatos);
+    </script>
 </body>
 </html>
