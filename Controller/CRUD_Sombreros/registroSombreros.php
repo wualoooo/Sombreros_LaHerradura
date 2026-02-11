@@ -1,8 +1,7 @@
 <?php 
-// Desactivar salida de errores HTML para no romper el JSON
 error_reporting(E_ALL);
 ini_set('display_errors', 0); 
-header('Content-Type: application/json'); // Decimos que respondemos JSON
+header('Content-Type: application/json');
 
 require('../../Model/conexion.php');
 
@@ -39,7 +38,6 @@ try {
         $ruta = $destino . $nuevo_nombre;
 
         if (move_uploaded_file($_FILES[$key]['tmp_name'], $ruta)) {
-            // AGREGAMOS A LA LISTA DE "COSAS POR BORRAR SI FALLA ALGO"
             $lista_borrado[] = $ruta; 
             return $nuevo_nombre;
         } else {
@@ -48,7 +46,6 @@ try {
     }
 
     // INTENTAR SUBIR LAS IMÁGENES
-    // Si una falla, el catch atrapará el error y no se insertará nada en la BD
     $img1 = procesarImagen('imgSombrero1', $carpeta_destino, $imagenes_subidas);
     $img2 = procesarImagen('imgSombrero2', $carpeta_destino, $imagenes_subidas);
     $img3 = procesarImagen('imgSombrero3', $carpeta_destino, $imagenes_subidas);
@@ -91,7 +88,6 @@ try {
     $response['message'] = $e->getMessage();
 
     // *** ROLLBACK DE IMÁGENES ***
-    // Como la BD falló, borramos las imágenes que acabamos de subir para no dejar basura.
     foreach ($imagenes_subidas as $ruta_borrar) {
         if (file_exists($ruta_borrar)) {
             unlink($ruta_borrar);
