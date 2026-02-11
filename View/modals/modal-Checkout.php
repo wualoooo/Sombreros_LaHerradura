@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="/LaHerradura/View/css/style-Checkout.css">
+
+<div id="modal-checkout" class="modal-overlay" style="display: none;">
+    <div class="modal-content checkout-container">
+        
+        <div class="modal-header">
+            <h2>Finalizar Compra</h2>
+            <span class="close-modal" onclick="cerrarModalCheckout()">&times;</span>
+        </div>
+
+        <div class="checkout-steps">
+            <div class="step active" id="indicator-1">1. Resumen</div>
+            <div class="step" id="indicator-2">2. Envío</div>
+            <div class="step" id="indicator-3">3. Pago</div>
+        </div>
+
+        <div class="modal-body">
+            
+            <div id="step-view-1" class="step-view">
+                <h3>Resumen de tu Pedido</h3>
+                <div class="table-responsive">
+                    <table class="table-checkout">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Talla</th>
+                                <th>Cant.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkout-lista-productos">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="checkout-total">
+                    Total a Pagar: <span id="checkout-total-monto">$0.00</span>
+                </div>
+                <div class="checkout-actions">
+                    <button class="btn-cancelar" onclick="cerrarModalCheckout()">Seguir Comprando</button>
+                    <button class="btn-siguiente" onclick="cambiarPaso(2)">Siguiente: Envío &rarr;</button>
+                </div>
+            </div>
+
+            <?php
+                // --- LÓGICA PHP (Recuperar Direcciones) ---
+                // 1. Inicializamos variable segura
+                $direcciones = []; 
+
+                // 2. Ejecutamos consulta solo si hay sesión
+                if (isset($_SESSION['id_usuario']) && isset($conn)) {
+                    $id_usuario = $_SESSION['id_usuario'];
+                    $sqlDir = "SELECT * FROM direcciones WHERE id_usuario = ?";
+                    
+                    // Try-catch silencioso (si falla prepare, no rompe)
+                    $stmtD = $conn->prepare($sqlDir);
+                    if ($stmtD) {
+                        $stmtD->bind_param("i", $id_usuario);
+                        if ($stmtD->execute()) {
+                            $resultDir = $stmtD->get_result();
+                            while ($row = $resultDir->fetch_assoc()) {
+                                $direcciones[] = $row;
+                            }
+                        }
+                        $stmtD->close();
+                    }
+                }
+            ?>
+
+            <div id="step-view-2" class="step-view" style="display: none;">
+                <h3>Selecciona una Dirección</h3>
+                <button class="btn-nueva-dir" onclick="toggleNuevaDireccion()">+ Agregar Nueva Dirección</button>
+                
+                <div id="lista-direcciones" class="direcciones-grid">
+                    <label class="card-direccion">
+                        <input type="radio" name="direccion_envio" value="1" checked>
+                        <div class="info-dir">
+                            <strong>Recoger en tienda</strong>
+                            <p>Carretera Ixmiquilpan-Tasquillo km 25
+                                Panales, Ixmiquilpan 42326</p>
+                        </div>
+                    </label>
+                    <?php if (!empty($direcciones)): ?>
+                        <?php foreach($direcciones as $dir): ?>
+                            <label class="card-direccion">
+                                <input type="radio" name="direccion_envio" value="<?php echo $dir['id_direccion']; ?>">
+                                <div class="info-dir">
+                                    <strong><?php echo htmlspecialchars($dir['calle'] ?? 'Calle'); ?> <?php echo htmlspecialchars($dir['numero'] ?? ''); ?></strong>
+                                    <p>
+                                        <?php 
+                                        echo htmlspecialchars(
+                                            ($dir['colonia'] ?? '') . ', ' . 
+                                            ($dir['municipio'] ?? '') . ', ' . 
+                                            ($dir['estado'] ?? '') . ' CP: ' . 
+                                            ($dir['cp'] ?? '')
+                                        ); 
+                                        ?>
+                                        <br>
+                                        <small>Ref: <?php echo htmlspecialchars($dir['referencia'] ?? 'Sin referencia'); ?></small>
+                                    </p>
+                                </div>
+                            </label>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                        <h2>No tienes ninguna dirección registrada. Agrega una nueva dirección para continuar</h2>
+                    <?php endif; ?>
+                        
+                </div>
+
+                <div class="checkout-actions">
+                    <button class="btn-atras" onclick="cambiarPaso(1)">&larr; Atrás</button>
+                    <button class="btn-siguiente" onclick="cambiarPaso(3)">Siguiente: Pago &rarr;</button>
+                </div>
+            </div>
+
+            <div id="step-view-3" class="step-view" style="display: none;">
+                <h3>Método de Pago</h3>
+                
+                <div class="pago-simulado">
+                    <p>Por el momento, el sistema está en modo <strong>Pago Simulado</strong>.</p>
+                    <p>Al hacer clic en "Pagar Ahora", se generará tu orden y código de rastreo automáticamente.</p>
+                    
+                    <div class="resumen-final-pago">
+                        <p>Total a cargar: <strong id="pago-total-final">$0.00</strong></p>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button class="btn-atras" onclick="cambiarPaso(2)">&larr; Atrás</button>
+                    <button class="btn-finalizar" onclick="procesarCompraFinal()">PAGAR AHORA</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

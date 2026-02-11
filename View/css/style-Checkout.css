@@ -1,0 +1,137 @@
+#modal-checkout {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.checkout-container {
+    background-color: #fff;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}s
+
+.checkout-container {
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout-steps {
+    display: flex;
+    background-color: #eee;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    color: #777;
+    font-weight: bold;
+    border-bottom: 3px solid transparent;
+    cursor: default;
+}
+
+.step.active {
+    color: #8B0000; /* Tu color Vino */
+    border-bottom: 3px solid #8B0000;
+    background-color: #fff;
+}
+
+.modal-body {
+    padding: 20px;
+    min-height: 300px;
+}
+
+/* Tabla bonita */
+.table-checkout {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.table-checkout th {
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+    padding: 10px;
+}
+.table-checkout td {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+}
+
+/* Botones de Acción */
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.btn-siguiente, .btn-finalizar {
+    background-color: #8B0000;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-atras, .btn-cancelar {
+    background-color: #ddd;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Tarjetas de Dirección */
+.card-direccion {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card-direccion:hover {
+    border-color: #8B0000;
+    background-color: #fff5f5;
+}
+
+.card-direccion input {
+    margin-right: 15px;
+    transform: scale(1.5);
+}

@@ -7,7 +7,11 @@ const Alerta = {
             text: mensaje,
             icon: 'success',
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Aceptar'
+            confirmButtonText: 'Aceptar',
+            didOpen: () => {
+            const container = Swal.getContainer();
+            if(container) container.style.zIndex = '10000';
+        }
         });
     },
 
@@ -18,7 +22,11 @@ const Alerta = {
             text: mensaje,
             icon: 'error',
             confirmButtonColor: '#d33',
-            confirmButtonText: 'Cerrar'
+            confirmButtonText: 'Cerrar',
+            didOpen: () => {
+            const container = Swal.getContainer();
+            if(container) container.style.zIndex = '10000';
+        }
         });
     },
 
@@ -33,7 +41,11 @@ const Alerta = {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: textoBoton,
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar',
+            didOpen: () => {
+            const container = Swal.getContainer();
+            if(container) container.style.zIndex = '10000';
+        }
         });
     },
 
@@ -48,12 +60,20 @@ const Alerta = {
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
+            },
+            didOpen: () => {
+            const container = Swal.getContainer();
+            if(container) container.style.zIndex = '10000';
+        }
         });
 
         Toast.fire({
             icon: icon,
-            title: mensaje
+            title: mensaje,
+            didOpen: () => {
+            const container = Swal.getContainer();
+            if(container) container.style.zIndex = '10000';
+        }
         });
     }
 };
