@@ -79,11 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 window.location.href = '/LaHerradura/View/pages/admin/pedidos.php'; 
                             });
                     } else {
-                        Alerta.toast('¡Bienvenido de nuevo!');
-                        // Cerrar modal y actualizar UI...
-                        const modalLogin = document.getElementById('modal-Login');
-                        if(modalLogin) modalLogin.style.display = 'none';
-                        loginForm.reset();
+                        if(typeof Alerta !== 'undefined') {
+                            Alerta.exito('¡Bienvenido de nuevo!')
+                                .then(() => {
+                                    location.reload(); // Recargamos para actualizar el header
+                                });
+                        } else {
+                            alert('¡Bienvenido!');
+                            location.reload(); // Recarga obligatoria
+                        }
                     }
                 } else {
                     // --- ERROR DESDE PHP (Contraseña mal, usuario no existe) ---

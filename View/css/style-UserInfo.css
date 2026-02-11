@@ -1,0 +1,122 @@
+.close {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #dc3545 0%, #8b0000 100%);
+    padding: 10px 14px;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.close:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #c82333 0%, #6a0f0f 100%);
+}
+
+.close:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #a23526 0%, #8b291c 100%);
+}
+
+.close::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+    transition: left 0.5s;
+}
+
+.close:hover::before {
+    left: 100%;
+}
+
+/* Contenedor principal de la foto (El círculo) */
+.profile-pic-container {
+    display: block; /* IMPORTANTE: Para que respete el ancho y alto */
+    position: relative;
+    width: 250px;  /* Tamaño fijo */
+    height: 250px; /* Tamaño fijo */
+    margin: 2rem auto; /* Centrado horizontal */
+    border-radius: 50%; /* Lo hace redondo */
+    overflow: hidden; /* CORTA lo que sobresalga del círculo */
+    border: 4px solid #8B0000; /* Borde color vino */
+    background-color: #f0f0f0; /* Color de fondo por si no carga la imagen */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Sombra para que resalte */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.profile-pic-container:hover {
+    transform: scale(1.05); /* Crece un poquito */
+    border-color: #a52a2a;
+}
+
+/* La imagen dentro del círculo */
+.profile-pic-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* CLAVE: Rellena el círculo sin deformar la foto */
+    display: block;
+}
+
+/* El texto "Cambiar foto" que aparece encima */
+.profile-pic-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%; /* Ocupa la parte inferior */
+    background: rgba(0, 0, 0, 0.6); /* Fondo negro semitransparente */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-family: sans-serif;
+    opacity: 0; /* Invisible por defecto */
+    transition: opacity 0.3s ease;
+}
+
+/* Mostrar el texto al pasar el mouse */
+.profile-pic-container:hover .profile-pic-overlay {
+    opacity: 1;
+}
+
+/* Ocultar el input real de archivo */
+#upload-profile-pic {
+    display: none;
+}
+
+a{
+    color: #f0f0f0;
+    text-decoration: none;
+}
+
+.botonesUser{
+    font-size: 2.8vh;
+}
+
+#Logout{
+    font-size: 2.5vh;
+}
