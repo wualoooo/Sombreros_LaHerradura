@@ -35,7 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
         { btn: "btnAgg-Horma", modal: "modal-AggHorma" },
         { btn: "btnAgg-Copa", modal: "modal-AggCopa" },
         { btn: "btnAgg-Material", modal: "modal-AggMaterial" },
-        { btn: "btnAgg-Color", modal: "modal-AggColor" }
+        { btn: "btnAgg-Color", modal: "modal-AggColor" },
+        { btn: "openUserInfo", modal: "modal-UserInfo" },
+        { btn: "AgregarDireccion", modal: "modal-AgregarDirección" }
     ];
 
     conexiones.forEach(item => activarModal(item.btn, item.modal));
