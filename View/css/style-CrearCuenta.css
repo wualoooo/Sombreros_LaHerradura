@@ -1,7 +1,7 @@
 .modal-Cc, .modal-ra {
     display: none;
     position: fixed;
-    z-index: 999;
+    z-index: 3000;
     left: 0;
     top: 0;
     width: 100%;
@@ -15,11 +15,11 @@
 
 .modal-content-cc {
     background: #fff;
-    margin: 2% auto;
+    margin: 2.5% auto;
     padding: 15px;
     border-radius: 10px;
     width: 30vw;
-    height: 90vh;
+    height: auto;
     color: black;
 }
 
@@ -74,6 +74,10 @@
 .close:hover::before {
     left: 100%;
 }
+
+.labelRegistrer{
+    font-size: 1.5rem;
+}
 #CrearCuenta-text{ 
     margin: 2rem;
     text-align: center;
@@ -117,19 +121,11 @@ form{
     position: relative;
 }
 
-.toggle-password {
-    position: absolute;
-    top: 12%;
-    right: 10px;
-    cursor: pointer;
-    user-select: none;
-}
-
 .cont-form-cc{
     padding: 0 3rem;
 }
 
-#divButton{
+.divButton{
     display: flex;
     width: 100%;
     justify-content: center;

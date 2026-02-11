@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +29,6 @@
 
 
                 <?php 
-                include (ROOT_PATH . 'Model/conexion.php');
 
                     $sql = "SELECT id_sombrero, Img1, Nombre, Precio FROM sombreros";
                     $result = $conn->query($sql);

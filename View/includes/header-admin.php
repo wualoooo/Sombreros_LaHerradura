@@ -47,7 +47,7 @@
                 <ul class="desplegable" id="despl-admin">
                     <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelUsuarios.php">Usuarios</a></li>
                     <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelAdministradores.php">Administradores</a></li>
-                    <li><a class="opcionesAdmin" href="#">Cerrar sesión</a></li>
+                    <li><a class="opcionesAdmin" href="/LaHerradura/Controller/Cerrarsesion.php">Cerrar sesión</a></li>
                 </ul>
             </li>
             <li><a id="pedidosLink" href="/LaHerradura/View/pages/admin/pedidos.php">Pedidos</a></li>

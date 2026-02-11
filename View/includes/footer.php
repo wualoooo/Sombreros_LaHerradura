@@ -37,3 +37,7 @@
         <script src="/LaHerradura/public/modals.js" defer></script>
         <script src="/LaHerradura/public/main.js" defer></script>
         <script src="/LaHerradura/public/alerts.js" defer></script>
+        <script src="/LaHerradura/public/Validations/ValidacionRegistro.js" defer></script>
+        <script src="/LaHerradura/public/userProfile.js"></script>
+        <script src="/LaHerradura/public/carrito.js" defer></script>
+        <script src="/LaHerradura/public/Checkout.js" defer></script>

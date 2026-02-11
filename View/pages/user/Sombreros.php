@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,9 +28,8 @@
         <div class="item" id="Productos">
             <div class="container2">
                 <?php 
-                include (ROOT_PATH . 'Model/conexion.php');
 
-                    $sql = "SELECT id_sombrero, Img1, Nombre, Precio FROM sombreros";
+                    $sql = "SELECT id_sombrero, Img1, Nombre, Precio FROM sombreros WHERE Estado = 1";
                     $result = $conn->query($sql);
                     while ($row = $result -> fetch_assoc()){
                         echo("
@@ -51,8 +53,7 @@
         </div>
 
         <?php 
-        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php')
-
+        include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php');
         ?>
 
     <div class="item" id="space">

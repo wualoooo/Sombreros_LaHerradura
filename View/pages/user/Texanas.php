@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +28,6 @@
         <div class="item" id="Productos">
             <div class="container2">
                 <?php 
-                include (ROOT_PATH . 'Model/conexion.php');
 
                     $sql = "SELECT id_texana, Img1, Nombre, Precio FROM texanas";
                     $result = $conn->query($sql);

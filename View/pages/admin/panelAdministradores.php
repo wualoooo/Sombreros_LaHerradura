@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 </head>
 <body>
@@ -72,6 +74,7 @@
         ?>
     </main>
     <script src="/LaHerradura/public/modals.js"></script>
-    <script src="/LaHerradura/public/mostrar-password.js"></script>
+    <script src="/LaHerradura/public/main.js" defer></script>
+    <script src="/LaHerradura/public/alerts.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 .modal {
   display: none;
   position: fixed;
-  z-index: 999;
+  z-index: 2000;
   left: 0;
   top: 0;
   width: 100%;
@@ -36,8 +36,9 @@
   font-size: 6vh;
 }
 
-label{
+.labelLogin{
   font-size: 3vh;
+  margin-bottom: 2rem;
 }
 
 form{
@@ -47,7 +48,6 @@ form{
 .input-login{
   background-color: #F5F5F5;
   padding: 0.6rem 0 0.6rem 1rem;
-  margin: 0.5rem 0 2rem 0;
   border: none;
   border-radius: 8px;
   width: 100%;
@@ -55,16 +55,24 @@ form{
   font-size: 2.5vh;
 }
 
-.campo-password {
-  position: relative;
+.SpaceLogin{
+  margin-bottom: 1.5rem;
 }
 
-.toggle-password {
-  position: absolute;
-  top: 50%;
-  right: 10px;
+.campo-password {
+  display: flex;
+  flex-direction: row;
+}
+
+.ButtonEyePassword{
+  background-color: transparent;
+  border: none;
   cursor: pointer;
-  user-select: none;
+}
+
+#buttonEye{
+  font-size: 30px;
+  color: #333333;
 }
 
 #cont-form-login{
@@ -72,18 +80,19 @@ form{
 }
 
 #olv-contra{
-  margin-top: -1.7rem;
+  /*margin-top: -1.7rem;*/
   color: rgb(16, 0, 240);
   float: right;
 }
 
-#buttons{
+.buttons{
   margin: 1rem 0;
   display: flex;
   justify-content: space-evenly;
 }
 
-#button-iniciar, #buttonCrear{
+#button-iniciar, #buttonCrear,
+.botonesUser{
   padding: 20px 30px;
   font-size: 3vh;
   border-radius: 10px;
@@ -91,7 +100,8 @@ form{
   box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
 }
 
-#button-iniciar {
+#button-iniciar,
+.Botonrojo {
     color: #fff;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -108,7 +118,8 @@ form{
     font-weight: 500;
 }
 
-#button-iniciar:hover {
+#button-iniciar:hover,
+.Botonrojo:hover {
     transform: translateY(-2px);
     box-shadow: 
         0 6px 12px rgba(0, 0, 0, 0.15),
@@ -116,7 +127,8 @@ form{
     background: linear-gradient(135deg, #c82333 0%, #6a0f0f 100%);
 }
 
-#button-iniciar:active {
+#button-iniciar:active,
+.Botonrojo:active {
     transform: translateY(0);
     box-shadow: 
         0 2px 4px rgba(0, 0, 0, 0.1),
@@ -124,7 +136,8 @@ form{
     background: linear-gradient(135deg, #a71e2a 0%, #5a0c0c 100%);
 }
 
-#button-iniciar::before {
+#button-iniciar::before,
+.Botonrojo::before {
     content: '';
     position: absolute;
     top: 0;
@@ -138,11 +151,12 @@ form{
     transition: left 0.5s;
 }
 
-#button-iniciar:hover::before {
+#button-iniciar:hover::before,
+.Botonrojo:hover::before {
     left: 100%;
 }
 
-#buttonCrear {
+#buttonCrear, .Botonverde {
     color: #fff;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -159,7 +173,8 @@ form{
     font-weight: 500;
 }
 
-#buttonCrear:hover {
+#buttonCrear:hover 
+.Botonverde:hover {
     transform: translateY(-2px);
     box-shadow: 
         0 6px 12px rgba(0, 0, 0, 0.15),
@@ -167,7 +182,8 @@ form{
     background: linear-gradient(135deg, #3a6b34 0%, #2d5528 100%);
 }
 
-#buttonCrear:active {
+#buttonCrear:active,
+.Botonverde:active {
     transform: translateY(0);
     box-shadow: 
         0 2px 4px rgba(0, 0, 0, 0.1),
@@ -175,7 +191,8 @@ form{
     background: linear-gradient(135deg, #2d5528 0%, #22431f 100%);
 }
 
-#buttonCrear::before {
+#buttonCrear::before,
+.Botonverde::before {
     content: '';
     position: absolute;
     top: 0;
@@ -189,7 +206,8 @@ form{
     transition: left 0.5s;
 }
 
-#buttonCrear:hover::before {
+#buttonCrear:hover::before, 
+.Botonverde:hover::before {
     left: 100%;
 }
 

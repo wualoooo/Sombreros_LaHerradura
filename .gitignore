@@ -21,9 +21,3 @@
 *.ico
 *.svg
 *.webp
-
-# ---------------------------------------------
-# NOTA: Para ignorar una carpeta completa de imágenes:
-# Por ejemplo, para ignorar la carpeta 'images' en la raíz:
-# images/
-# ---------------------------------------------
