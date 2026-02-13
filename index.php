@@ -6,9 +6,8 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sombreros La Herradura</title>
     <link rel="stylesheet" href="/LaHerradura/View/css/style-Inicio.css">
-    <link rel="stylesheet" href="/LaHerradura/View/css/style-login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -19,39 +18,35 @@ session_start();
         define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
         include(ROOT_PATH . 'View/includes/header.php')
         ?>
-    </header>
+    </header>   
     
     <main>
-
 
         <!-- === INICIO: Burbuja interactiva (1 burbuja, 6 estados) === -->
     <section class="hat-bubbles">
     <div class="font-circles">
+        <div class="principal">
+            <h2>Sombreros La Herradura: Tradición y estilo bajo el sol</h2>
+        </div>
+
+        <div class="hat-bubbles__inner" id="bubbleContainer">
+            
+            <div id="bubblePill" class="bubble-pill"></div>
+            
+            <div id="bubbleTextContainer" class="bubble-text-container">
+                <p id="bubbleTextContent" class="bubble-text-content"></p>
+            </div>
+            
+            <div id="avatarsHtmlContainer"></div>
+
+            <div id="bubbleDots" class="bubble-dots"></div>
+        </div>
 
         <div class="principal">
-        <h2>Sombreros La Herradura: Tradición y estilo bajo el sol</h2>
+            <h2>Encuentra el sombrero vaquero perfecto que cuenta tu historia.</h2>
         </div>
-
-        <div class="hat-bubbles__inner">
-        <!-- Burbuja única (clickeable) -->
-        <div id="hatBubble" class="bubble bubble--single" role="button" tabindex="0"
-            aria-label="Cambiar estado" title="Haz clic para cambiar">
-            <div id="bubbleLeft" class="bubble__side"></div>
-            <div id="bubbleText" class="bubble__text"></div>
-            <div id="bubbleRight" class="bubble__side"></div>
-        </div>
-
-        <!-- Indicador opcional (puntitos) -->
-        <div id="bubbleDots" class="bubble-dots" aria-hidden="true"></div>
-        </div>
-
-        <!-- Aquí metes el segundo título -->
-        <div class="principal">
-        <h2>Encuentra el sombrero vaquero perfecto que cuenta tu historia.</h2>
-        </div>
-
     </div>
-    </section>
+</section>
         <!-- === FIN: Burbuja interactiva === -->
 
 
@@ -152,126 +147,206 @@ session_start();
         include(ROOT_PATH . 'View/includes/footer.php')
         ?>
     </footer>
-                <script>
-        // =========================
-        // 6 ESTADOS (edita aquí)
-        // =========================
-        const states = [
-            {
-            text: "Tradición con actitud:\nponte el sombrero",
-            left:  ["assets/images/a1.png"],
-            right: ["assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
-            },
-            {
-            text: "Estilo que impone,\nsombrero que responde",
-            left:  ["assets/images/a1.png", "assets/images/a2.png"],
-            right: ["assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
-            },
-            {
-            text: "Tu sombrero,\ntu sello personal",
-            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png"],
-            right: ["assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"]
-            },
-            {
-            text: "Luce como vaquero,\nvive como leyenda",
-            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png"],
-            right: ["assets/images/a5.png","assets/images/a6.png"]
-            },
-            {
-            text: "Del rancho al asfalto,\nsiempre auténtico",
-            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png"],
-            right: ["assets/images/a6.png"]
-            },
-            {
-            text: "No es moda,\nes identidad vaquera",
-            left:  ["assets/images/a1.png","assets/images/a2.png","assets/images/a3.png","assets/images/a4.png","assets/images/a5.png","assets/images/a6.png"],
-            right: []
-            }
-        ];
+    
+    <script>
+    const POS = {
+        introPositions: [20, 32, 44, 56, 68, 80], // Posiciones iniciales separadas
+        
+        active: {
+            anchor: 20,        // La burbuja activa siempre tratará de ir al 20% de la izquierda
+            textGap: 42,       // Espacio que empuja a las burbujas de la derecha (para el texto)
+            stackStep: 5,      // Qué tan encimadas quedan las burbujas inactivas (5%)
+            
+            // TAMAÑOS
+            sizeMain: 250,     // Tamaño Activa
+            sizeStack: 200     // Tamaño Inactivas
+        },
+        
+        mobile: {
+            anchor: 50,        // En celular, la activa va al centro
+            stackStep: 12,     // Separación en celular
+            sizeMain: 130,
+            sizeStack: 50,
+            mainTop: '35%',
+            stackTop: '80%'
+        }
+    };
 
-        // =========================
-        // Helpers
-        // =========================
-        function buildAvatarStack(urls){
-            const wrap = document.createElement("div");
-            wrap.className = "avatar-stack";
-            urls.forEach(url=>{
-            const img = document.createElement("img");
-            img.className = "avatar";
-            img.src = url;
-            img.alt = "avatar";
-            wrap.appendChild(img);
+    // DATOS
+    const statesData = [
+        { text: "Tradición con actitud:<br>ponte el sombrero", img: "assets/images/a1.png" },
+        { text: "Estilo que impone,<br>sombrero que responde", img: "assets/images/a2.png" },
+        { text: "Tu sombrero,<br>tu sello personal", img: "assets/images/a3.png" },
+        { text: "Luce como vaquero,<br>vive como leyenda", img: "assets/images/a4.png" },
+        { text: "Del rancho al asfalto,<br>siempre auténtico", img: "assets/images/a5.png" },
+        { text: "No es moda,<br>es identidad vaquera", img: "assets/images/a6.png" }
+    ];
+
+    let currentIndex = -1; 
+    let isMobile = window.innerWidth <= 850;
+
+    const avatarsContainer = document.getElementById('avatarsHtmlContainer');
+    const pillEl = document.getElementById('bubblePill');
+    const textContainerEl = document.getElementById('bubbleTextContainer');
+    const textContentEl = document.getElementById('bubbleTextContent');
+    const dotsEl = document.getElementById('bubbleDots');
+    let avatarsElements = []; 
+
+    function init() {
+        statesData.forEach((state, index) => {
+            const img = document.createElement('img');
+            img.src = state.img;
+            img.className = 'avatar-anim';
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleBubbleClick(index);
             });
-            return wrap;
+            avatarsContainer.appendChild(img);
+            avatarsElements.push(img);
+
+            const dot = document.createElement('span');
+            dot.className = 'bubble-dot';
+            dotsEl.appendChild(dot);
+        });
+
+        updateView();
+        window.addEventListener('resize', () => {
+            isMobile = window.innerWidth <= 850;
+            updateView();
+        });
+    }
+
+    function handleBubbleClick(clickedIndex) {
+        if (clickedIndex === currentIndex) {
+            currentIndex = -1; // Cerrar si clickeas la misma
+        } else {
+            currentIndex = clickedIndex;
         }
+        updateView();
+    }
 
-        function renderDots(activeIndex){
-            const dotsHost = document.getElementById("bubbleDots");
-            if(!dotsHost) return;
-            dotsHost.innerHTML = "";
+    // LÓGICA MAESTRA DE POSICIONAMIENTO
+    function updateView() {
+        const dots = document.querySelectorAll('.bubble-dot');
 
-            states.forEach((_, idx)=>{
-            const dot = document.createElement("span");
-            dot.className = "bubble-dot" + (idx === activeIndex ? " is-active" : "");
-            dotsHost.appendChild(dot);
+        // --- MODO: INTRO (Todo cerrado) ---
+        if (currentIndex === -1) {
+            pillEl.classList.remove('is-open');
+            pillEl.style.width = '0px';
+            pillEl.style.opacity = '0';
+            
+            textContainerEl.classList.remove('is-visible');
+            
+            avatarsElements.forEach((img, idx) => {
+                img.style.left = POS.introPositions[idx] + '%';
+                img.style.top = '50%';
+                img.style.width = (isMobile ? POS.mobile.sizeStack : POS.active.sizeStack) + 'px';
+                img.style.height = (isMobile ? POS.mobile.sizeStack : POS.active.sizeStack) + 'px';
+                img.style.zIndex = 10;
+                img.style.borderWidth = '4px';
             });
+            dots.forEach(d => d.classList.remove('is-active'));
+            return;
         }
 
-        function setBubbleState(i){
-            const state = states[i];
-            if(!state) return;
+        // --- MODO: ACTIVO (Acordeón) ---
+        
+        // 1. Texto
+        textContainerEl.classList.remove('is-visible');
+        setTimeout(() => {
+            textContentEl.innerHTML = statesData[currentIndex].text;
+            textContainerEl.classList.add('is-visible');
+        }, 150);
 
-            const leftHost  = document.getElementById("bubbleLeft");
-            const rightHost = document.getElementById("bubbleRight");
-            const textHost  = document.getElementById("bubbleText");
+        const anchor = isMobile ? POS.mobile.anchor : POS.active.anchor;
+        const step = isMobile ? POS.mobile.stackStep : POS.active.stackStep;
+        
+        avatarsElements.forEach((img, idx) => {
+            let finalLeft;
+            let zIndex;
+            let size;
+            let topPos = '50%';
+            let borderW = '3px';
 
-            leftHost.innerHTML = "";
-            rightHost.innerHTML = "";
-            textHost.innerHTML = "";
+            // A. ES LA ACTIVA
+            if (idx === currentIndex) {
+                finalLeft = anchor; // Se va al ancla (20%)
+                zIndex = 50;        // Al frente de todo
+                size = isMobile ? POS.mobile.sizeMain : POS.active.sizeMain;
+                topPos = isMobile ? POS.mobile.mainTop : '50%';
+                borderW = '0px'; // Sin borde la activa
 
-            leftHost.appendChild(buildAvatarStack(state.left));
-            rightHost.appendChild(buildAvatarStack(state.right));
-            textHost.innerHTML = String(state.text).replace(/\n/g, "<br>");
+                // Mover la Pastilla Blanca detrás de la activa
+                // Calculamos: Posicion activa - mitad de su ancho (para centrar el inicio)
+                if(!isMobile){
+                    pillEl.style.left = (anchor) + '%'; 
+                    pillEl.style.width = (POS.active.textGap + 13) + '%'; // Largo dinámico
+                    pillEl.style.opacity = '1';
+                    
+                    // El texto se mueve para estar a la derecha de esta burbuja
+                    textContainerEl.style.left = (anchor + 12) + '%';
+                }
+            } 
+            
+            // B. ESTÁ A LA IZQUIERDA (Anteriores)
+            else if (idx < currentIndex) {
+                // Se apilan hacia atrás desde el ancla
+                // Ejemplo: Si activa está en 20, la anterior va al 15, la tras-anterior al 10...
+                const distance = currentIndex - idx;
+                finalLeft = anchor - (distance * step);
+                
+                zIndex = 40 - distance; // Las más lejanas al fondo
+                size = isMobile ? POS.mobile.sizeStack : POS.active.sizeStack;
+                topPos = isMobile ? POS.mobile.stackTop : '50%';
+                
+                // En móvil las anteriores se van a la izquierda
+                if(isMobile) finalLeft = 50 - (distance * step) - 15; 
+            } 
+            
+            // C. ESTÁ A LA DERECHA (Siguientes)
+            else {
+                // Se apilan DESPUÉS del hueco del texto
+                // Posición = Ancla + HuecoTexto + (distancia * step)
+                const distance = idx - currentIndex;
+                
+                if (isMobile) {
+                    finalLeft = 50 + (distance * step) + 15;
+                    topPos = POS.mobile.stackTop;
+                } else {
+                    // Aquí está la magia del deslizamiento:
+                    // Sumamos el 'textGap' para empujarlas a la derecha
+                    finalLeft = anchor + POS.active.textGap + (distance * step); 
+                }
 
-            renderDots(i);
-        }
-
-        // =========================
-        // Interacción: click en la burbuja = siguiente estado
-        // =========================
-        let current = 0;
-
-        function nextState(){
-            current = (current + 1) % states.length;
-            setBubbleState(current);
-        }
-
-        // Init
-        setBubbleState(current);
-
-        const bubble = document.getElementById("hatBubble");
-        if(bubble){
-            bubble.addEventListener("click", nextState);
-
-            // Accesibilidad: Enter/Espacio también cambian estado
-            bubble.addEventListener("keydown", (e)=>{
-            if(e.key === "Enter" || e.key === " "){
-                e.preventDefault();
-                nextState();
+                zIndex = 40 - distance;
+                size = isMobile ? POS.mobile.sizeStack : POS.active.sizeStack;
             }
-            // Opcional: Flechas para atrás/adelante
-            if(e.key === "ArrowRight"){
-                e.preventDefault();
-                nextState();
-            }
-            if(e.key === "ArrowLeft"){
-                e.preventDefault();
-                current = (current - 1 + states.length) % states.length;
-                setBubbleState(current);
-            }
-            });
-        }
-        </script>
 
+            // Aplicar estilos
+            img.style.left = finalLeft + '%';
+            img.style.top = topPos;
+            img.style.width = size + 'px';
+            img.style.height = size + 'px';
+            img.style.zIndex = zIndex;
+            img.style.borderWidth = borderW;
+        });
+
+        // Manejo especial de pastilla en móvil
+        if (isMobile) {
+            pillEl.style.left = '50%';
+            pillEl.style.width = '90%';
+            pillEl.style.opacity = '1';
+            textContainerEl.style.left = '50%'; // Centrado
+            // Ajustar transform para centrar texto en movil
+            textContainerEl.style.transform = 'translate(-50%, -50%)'; 
+        } else {
+            textContainerEl.style.transform = 'translateY(-50%)'; // Reset desktop
+        }
+
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === currentIndex));
+    }
+
+    init();
+</script>
 </body>
 </html>

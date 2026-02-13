@@ -7,6 +7,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+require(ROOT_PATH . 'Model/conexion.php');
 
 $id_usuario = $_SESSION['id_usuario'];
 
@@ -20,7 +21,11 @@ $stmt->close();
 
 
 // --- CONSULTA 2: PEDIDOS ---
-$sqlPedidos = "SELECT * FROM pedidos WHERE id_usuario = ? ORDER BY fecha DESC";
+$sqlPedidos = "SELECT p.*, e.status
+                FROM pedidos as p
+                JOIN estatus e ON e.id_status = p.estado_envio
+                WHERE p.id_usuario = ? 
+                ORDER BY fecha DESC";
 $stmtP = $conn->prepare($sqlPedidos);
 $stmtP->bind_param("i", $id_usuario);
 $stmtP->execute();
@@ -134,17 +139,13 @@ $stmtD->close();
                         </thead>
                         <tbody>
                             <?php foreach($pedidos as $p): 
-                                $estadoClass = match($p['estado']) {
-                                    'Enviado' => 'bg-enviado',
-                                    'Entregado' => 'bg-entregado',
-                                    default => 'bg-pendiente'
-                                };
+                                
                             ?>
                             <tr>
                                 <td>#<?php echo $p['id_pedido']; ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($p['fecha'])); ?></td>
                                 <td>$<?php echo number_format($p['total'], 2); ?></td>
-                                <td><span class="badge <?php echo $estadoClass; ?>"><?php echo $p['estado']; ?></span></td>
+                                <td><span class=""><?php echo $p['status']; ?></span></td>
                                 <td><button class="btn-ver">Ver</button></td>
                             </tr>
                             <?php endforeach; ?>

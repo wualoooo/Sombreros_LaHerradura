@@ -83,6 +83,6 @@ if ($result && $result->num_rows > 0) {
     }
 } else {
     // Si no hay resultados, mostramos un mensaje bonito
-    echo "<tr><td colspan='9' style='text-align:center;'>No se encontraron sombreros con ese criterio.</td></tr>";
+    echo "<tr><td colspan='10' style='text-align:center;'>No se encontraron sombreros con ese criterio.</td></tr>";
 }
 ?>

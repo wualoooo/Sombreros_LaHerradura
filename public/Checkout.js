@@ -39,7 +39,7 @@ function cambiarPaso(paso) {
 // Llenar la tabla del Paso 1 con lo que hay en LocalStorage
 function cargarResumenCarrito() {
     // Asumiendo que guardas el carrito así en LocalStorage
-    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    let carrito = JSON.parse(localStorage.getItem('laherradura_carrito')) || [];
     const tbody = document.getElementById('checkout-lista-productos');
     const totalSpan = document.getElementById('checkout-total-monto');
     const totalFinalSpan = document.getElementById('pago-total-final');
@@ -75,7 +75,7 @@ function toggleNuevaDireccion() {
 function procesarCompraFinal() {
     
     // 1. Recolectar Datos
-    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const carrito = JSON.parse(localStorage.getItem('laherradura_carrito')) || [];
     // Buscar qué radio button de dirección está seleccionado
     const direccionSeleccionada = document.querySelector('input[name="direccion_envio"]:checked');
     
@@ -95,7 +95,7 @@ function procesarCompraFinal() {
     };
 
     // 2. Enviar a PHP (AJAX)
-    fetch('Controller/finalizarCompra.php', {
+    fetch('/LaHerradura/Controller/FinalizarCompra.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -107,14 +107,22 @@ function procesarCompraFinal() {
         if (data.success) {
             // ¡ÉXITO!
             // 1. Limpiar carrito
-            localStorage.removeItem('carrito');
+            localStorage.removeItem('laherradura_carrito');
             
-            // 2. Mostrar alerta bonita (SweetAlert si tienes)
-            alert(`¡Compra Exitosa!\nTu código de rastreo es: ${data.codigo_rastreo}`);
-            
-            // 3. Cerrar modal y recargar o redirigir
-            cerrarModalCheckout();
-            window.location.reload(); 
+            Swal.fire({
+                title: '¡Compra Exitosa!',
+                html: `Tu pedido ha sido procesado.<br><br>Tu código de rastreo es: <strong>${data.codigo_rastreo}</strong>`,
+                icon: 'success',
+                confirmButtonColor: '#8B0000', // Tu color vino de La Herradura
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false // Evita que lo cierren dando clic afuera
+            }).then((result) => {
+                // Esto se ejecuta SOLAMENTE cuando el usuario le da a "Aceptar"
+                if (result.isConfirmed) {
+                    cerrarModalCheckout();
+                    window.location.reload();
+                }
+            });
         } else {
             alert("Error: " + data.message);
         }

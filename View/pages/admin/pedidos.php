@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de pedidos</title>
-    <link rel="stylesheet" href="../../css/style-Panels.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-Panels.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-</head>
+
 <body>
     <header>
         <?php 
-        include('../../includes/header-admin.php')
+        define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+        include(ROOT_PATH.'View/includes/header-admin.php')
         ?>
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Pedidos</h2>
         <table>
-            <th>ID</th>
             <th>Nombre usuario</th>
-            <th>Teléfono</th>
-            <th>Productos</th>
-            <th>Cantidad</th>
-            <th>Método de pago</th>
             <th>Dirección de envío</th>
+            <th>Teléfono</th>
+            <th>Código de rastreo</th>
+            <th>Productos</th>
+            <th>Total</th>
             <th>Fecha</th>
             <th>Estado del pedido</th>
-        <tbody>
-            <tr>
+        <tbody id="tabla-pedidos-body">
+            <!--<tr>
                 <td>1</td>
                 <td>Osbaldo Martínez Martin</td>
                 <td>7721042773</td>
@@ -52,6 +54,27 @@
                         <option value="">Completado</option>
                     </Select>
                 </td>
+            </tr>-->
+            <tr>
+                <?php 
+                include (ROOT_PATH.'Model/conexion.php');
+                $sqlSELECT = "SELECT 
+                                u.Nombre,
+                                u.Apellido_Pat,
+                                u.Apellido_Mat,
+                                d.cp,
+                                d.estado,
+                                d.municipio,
+                                d.colonia,
+                                d.calle,
+                                d.numero,
+                                d.referencia,
+                                u.Telefono,
+                                p.codigo_rastreo,
+                                dp.
+                                "
+
+                ?>
             </tr>
         </tbody>
         </table>

@@ -60,11 +60,11 @@
             // RECOLECTAR LOS DATOS DE LA BASE DE DATOS
             $sql = "SELECT 
             s.id_sombrero,
-            s.Nombre,              -- Este es el nombre del Sombrero
+            s.Nombre,  
             s.Precio,
-            c.Nombre AS Nombre_Color,    -- Renombramos para que no choque
-            h.Nombre AS Nombre_Horma,    -- Renombramos
-            cp.Nombre AS Nombre_Copa,    -- Renombramos
+            c.Nombre AS Nombre_Color, 
+            h.Nombre AS Nombre_Horma, 
+            cp.Nombre AS Nombre_Copa, 
             s.Tam_Copa,
             s.Tam_ala,
             s.Estado,
@@ -119,7 +119,7 @@
             else{
                 echo("
                     <tr>
-                        <td colspan='4'>No hay resultados</td>
+                        <td colspan='10'>No hay resultados</td>
                     </tr>
                 ");
             }

@@ -3,27 +3,24 @@ require('../Model/conexion.php');
 session_start();
 header('Content-Type: application/json');
 
-// 1. Verificar sesión
 if (!isset($_SESSION['id_usuario'])) {
     echo json_encode(['success' => false, 'message' => 'Usuario no logueado']);
     exit;
 }
 
-// 2. Recibir datos del Frontend (JSON)
 $input = json_decode(file_get_contents('php://input'), true);
 
 $id_usuario = $_SESSION['id_usuario'];
 $id_direccion = $input['id_direccion'] ?? null;
-$carrito = $input['carrito'] ?? []; // Array de productos
+$carrito = $input['carrito'] ?? [];
 $total = $input['total'] ?? 0;
 
-// Validaciones básicas
-if (!$id_direccion || empty($carrito)) {
+if (!isset($id_direccion) || empty($carrito)) {
     echo json_encode(['success' => false, 'message' => 'Faltan datos (dirección o carrito vacío)']);
     exit;
 }
 
-// 3. FUNCIÓN PARA GENERAR CÓDIGO ÚNICO (10 DÍGITOS)
+// FUNCIÓN PARA GENERAR CÓDIGO ÚNICO (10 DÍGITOS)
 function generarCodigoRastreo($conn) {
     $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $codigo = '';
@@ -43,24 +40,19 @@ function generarCodigoRastreo($conn) {
     return $codigo;
 }
 
-// --- INICIO DE LA TRANSACCIÓN ---
-// Esto asegura que si algo falla, no se guarde nada a medias
 $conn->begin_transaction();
 
 try {
-    // A. Generar el código
     $codigoRastreo = generarCodigoRastreo($conn);
 
-    // B. Insertar el Pedido (Cabecera)
-    $sqlPedido = "INSERT INTO pedidos (id_usuario, id_direccion, total, codigo_rastreo, estado_pago) 
-                VALUES (?, ?, ?, ?, 'Aprobado')";
+    $sqlPedido = "INSERT INTO pedidos (id_usuario, id_direccion, total, estado_pago, estado_envio, codigo_rastreo ) 
+                VALUES (?, ?, ?, '5', '1', ?)";
     $stmt = $conn->prepare($sqlPedido);
     $stmt->bind_param("iids", $id_usuario, $id_direccion, $total, $codigoRastreo);
     $stmt->execute();
-    $id_pedido = $conn->insert_id; // Obtenemos el ID generado
+    $id_pedido = $conn->insert_id;
     $stmt->close();
 
-    // C. Insertar los Detalles (Productos)
     $sqlDetalle = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, talla) 
                 VALUES (?, ?, ?, ?, ?)";
     $stmtDetalle = $conn->prepare($sqlDetalle);
@@ -71,16 +63,12 @@ try {
             $prod['id'], 
             $prod['cantidad'], 
             $prod['precio'], 
-            $prod['talla'] // ¡Aquí guardamos la talla que hicimos antes!
+            $prod['talla']
         );
         $stmtDetalle->execute();
-        
-        // OPCIONAL: Aquí podrías restar el stock de la tabla productos
-        // $conn->query("UPDATE sombreros SET Stock = Stock - {$prod['cantidad']} WHERE id_sombrero = {$prod['id']}");
     }
     $stmtDetalle->close();
 
-    // D. Confirmar todo (Commit)
     $conn->commit();
 
     echo json_encode([

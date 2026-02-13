@@ -42,8 +42,7 @@
             </div>
 
             <?php
-                // --- LÓGICA PHP (Recuperar Direcciones) ---
-                // 1. Inicializamos variable segura
+                //Recuperar Direcciones
                 $direcciones = []; 
 
                 // 2. Ejecutamos consulta solo si hay sesión
@@ -72,7 +71,7 @@
                 
                 <div id="lista-direcciones" class="direcciones-grid">
                     <label class="card-direccion">
-                        <input type="radio" name="direccion_envio" value="1" checked>
+                        <input type="radio" name="direccion_envio" value="0" checked>
                         <div class="info-dir">
                             <strong>Recoger en tienda</strong>
                             <p>Carretera Ixmiquilpan-Tasquillo km 25
@@ -116,8 +115,7 @@
                 <h3>Método de Pago</h3>
                 
                 <div class="pago-simulado">
-                    <p>Por el momento, el sistema está en modo <strong>Pago Simulado</strong>.</p>
-                    <p>Al hacer clic en "Pagar Ahora", se generará tu orden y código de rastreo automáticamente.</p>
+                    <p>Aqui se planea integrar el API de pago</p>
                     
                     <div class="resumen-final-pago">
                         <p>Total a cargar: <strong id="pago-total-final">$0.00</strong></p>

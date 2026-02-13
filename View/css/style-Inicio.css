@@ -28,95 +28,142 @@
 }
 
 
-/* ====== Contenedor ====== */
-.hat-bubbles{
-  background:transparent;
-  padding:18px 0 26px;
-}
-.hat-bubbles__inner{
-  width:min(1100px, 92vw);
-  margin:0 auto;
-}
-
-/* ====== Avatares apilados ====== */
-.avatar-stack{
-  display:flex;
-  align-items:center;
-  flex-wrap:nowrap;
-}
-.avatar{
-  width:150px;
-  height:150px;
-  border-radius:999px;
-  border:4px solid #fff;
-  object-fit:cover;
-  background:#ddd;
-  box-shadow:0 2px 10px rgba(0,0,0,.12);
-}
-.avatar-stack .avatar{ margin-left:-18px; }
-.avatar-stack .avatar:first-child{ margin-left:0; }
-
-/* ====== Burbuja única clickeable ====== */
-.bubble--single{
-  background:transparent;
-  border-radius:999px;
-  padding:10px 14px;
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  gap:10px;
-  min-height:92px;
-  overflow:hidden;
-  cursor:pointer;
-  user-select:none;
-  transition:transform .08s ease, box-shadow .15s ease;
+/* ====== CONTENEDOR PRINCIPAL ====== */
+.hat-bubbles__inner {
+    position: relative;
+    /* Ancho máximo contenido para que no se desparrame en pantallas gigantes */
+    width: min(1200px, 95vw); 
+    height: 250px; /* AUMENTADO: Altura suficiente para los elementos grandes */
+    margin: 20px auto; /* Un poco de aire arriba y abajo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* overflow: hidden; Útil durante desarrollo, quitar si corta sombras */
 }
 
-.bubble--single:active{
-  transform:scale(0.995);
-}
-.bubble--single:focus{
-  outline:2px solid #cfcfcf;
-  outline-offset:3px;
-}
-
-.bubble__side{ display:flex; align-items:center; }
-.bubble__text{
-  text-align:center;
-  color:#111;
-  font-weight:700;
-  font-size:15px;
-  line-height:1.15;
-  padding:6px 10px;
-  background:#fff;        /* Fondo blanco solo detrás del texto */
-  border-radius:6px;      /* Opcional: esquinas redondeadas */
-  display:inline-block;   /* Para que el fondo se ajuste al texto */
-}
-
-/* ====== Indicador de estado (puntitos) ====== */
-.bubble-dots{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-  padding-top:10px;
-}
-.bubble-dot{
-  width:8px;
-  height:8px;
-  border-radius:999px;
-  background:#d3d3d3;
-}
-.bubble-dot.is-active{
-  background:#6b6b6b;
+/* ====== EL FONDO BLANCO (La Pastilla) ====== */
+.bubble-pill {
+    position: absolute;
+    top: 50%;
+    /* Inicialmente centrado, pero se moverá con JS */
+    left: 50%; 
+    transform: translateY(-50%);
+    height: 190px; /* AUMENTADO: Altura de la pastilla */
+    background: #fff;
+    border-radius: 100px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    
+    /* Animación de anchura y posición */
+    transition: 
+        width 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+        left 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.3s ease;
+    
+    z-index: 0;
+    
+    /* Estado INICIAL (Cerrado) */
+    width: 0px; 
+    opacity: 0;
+    pointer-events: none;
 }
 
-/* Responsive */
-@media (max-width:520px){
-  .avatar{ width:54px; height:54px; }
-  .avatar-stack .avatar{ margin-left:-16px; }
-  .bubble--single{ min-height:84px; padding:10px 10px; }
-  .bubble__text{ font-size:14px; }
+/* Estado ACTIVO (Abierto) */
+.bubble-pill.is-open {
+    /* El ancho se calcula en el CSS para que llegue hasta el final del contenedor */
+    /* Nota: El 'left' lo pondrá el JS para que coincida con la burbuja activa */
+    width: 70%; /* Ocupa gran parte del ancho */
+    opacity: 1;
 }
+
+/* ====== TEXTO ====== */
+.bubble-text-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 30%; /* Posición relativa a la pastilla blanca */
+    width: 35%; /* Espacio para el texto */
+    text-align: left;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+}
+
+.bubble-text-container.is-visible {
+    opacity: 1;
+    transition-delay: 0.2s; /* Que aparezca después de que se abra la pastilla */
+}
+
+.bubble-text-content {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 25px; 
+    font-weight: 700;
+    color: #111;
+    line-height: 1.2;
+}
+
+/* ====== IMÁGENES (Burbujas) ====== */
+.avatar-anim {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Centrado perfecto en su punto */
+    border-radius: 50%;
+    border: 4px solid #fff;
+    background: #f0f0f0;
+    object-fit: cover;
+    /* Animación suave tipo "rebote" al moverse */
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.avatar-anim:hover {
+    transform: translate(-50%, -50%) scale(1.05); /* Pequeño zoom al pasar el mouse */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ====== Puntos indicadores ====== */
+.bubble-dots {
+    position: absolute;
+    bottom: -40px;
+    left: 0; 
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.bubble-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.3s, transform 0.3s;
+}
+.bubble-dot.is-active {
+    background: #333;
+    transform: scale(1.2);
+}
+
+/* ====== RESPONSIVE (Celular) ====== */
+@media (max-width: 850px) {
+    .hat-bubbles__inner { height: 450px; } /* Más alto en celular para apilar */
+    
+    .bubble-pill { 
+        height: auto; min-height: 250px;
+        border-radius: 30px; 
+        top: 60%; /* Bajar la pastilla */
+    }
+    .bubble-pill.is-open { 
+        width: 90%; left: 50% !important; transform: translate(-50%, -50%);
+    }
+    
+    .bubble-text-container {
+        left: 10%; width: 80%; top: 60%;
+        text-align: center;
+    }
+    .bubble-text-content { font-size: 20px; }
+}   
 
 
 .img_fondo_circles{
@@ -263,3 +310,4 @@
     padding: 0;
     font-size: 2.5rem;
 }
+

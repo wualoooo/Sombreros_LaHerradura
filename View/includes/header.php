@@ -1,5 +1,4 @@
 <?php
-// ¡IMPORTANTE! Iniciar sesión al principio para poder leer $_SESSION
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -44,23 +43,19 @@ if (session_status() === PHP_SESSION_NONE) {
 </nav>
 
 <?php
-// 1. Iniciar sesión
+//Iniciar sesión
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// 2. Definir ROOT_PATH si no existe
+//Definir la ruta
 if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
 }
-
-// 3. ¡IMPORTANTE! Cargar la conexión AQUÍ, antes de llamar a los modales
+//Conectar con la BD para toda la parte de user
 require_once(ROOT_PATH . 'Model/conexion.php'); 
 ?>
 
 <?php 
-// Como ya cargamos conexion.php arriba, ahora modal-Checkout 
-// SÍ reconocerá la variable $conn
 include(ROOT_PATH . 'View/modals/modal-Checkout.php');
 
 if (isset($_SESSION['user_email'])) {
@@ -89,3 +84,4 @@ if (isset($_SESSION['user_email'])) {
         <button id="btn-pagar-side" class="btn-checkout-side">Pagar Ahora</button>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

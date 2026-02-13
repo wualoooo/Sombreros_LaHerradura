@@ -59,11 +59,11 @@
 }
 .tabla-perfil th { background-color: #f8f8f8; color: #333; }
 
-/* Badges de estado */
-.badge { padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; color: white; }
+/* Badges de estado 
+.badge { padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; color: rgb(0, 0, 0); }
 .bg-pendiente { background-color: #ffc107; color: #333; }
 .bg-enviado { background-color: #17a2b8; }
-.bg-entregado { background-color: #28a745; }
+.bg-entregado { background-color: #28a745; }*/
 /* Tarjetas de dirección */
 .grid-direcciones {
     display: grid;

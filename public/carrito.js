@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Carrito.actualizarContador();
 
     // 1. Botón del Header para abrir
-    const btnOpen = document.getElementById('btn-open-cart'); // OJO: Ponle este ID a tu ícono en el header
+    const btnOpen = document.getElementById('btn-open-cart'); 
     if (btnOpen) {
         btnOpen.addEventListener('click', (e) => {
             e.preventDefault();
@@ -146,21 +146,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. Botón Pagar (Lógica corregida)
-    const btnPagar = document.getElementById('btn-pagar-side');
-    if (btnPagar) {
-        btnPagar.addEventListener('click', () => {
-            
-            // PASO 1: Cerrar el carrito lateral para que no estorbe
-            Carrito.cerrar();
+const btnPagar = document.getElementById('btn-pagar-side');
 
-            // PASO 2: Verificar si existe la función del checkout y abrirla
-            if (typeof abrirCheckout === 'function') {
-                abrirCheckout(); 
-            } else {
-                console.error("Error: No encuentro la función abrirCheckout(). ¿Incluiste el archivo checkout.js?");
-                // Solo si falla, redirigir como plan B (opcional)
-                // window.location.href = '/LaHerradura/View/pages/user/carrito.php';
-            }
-        });
-    }
+if (btnPagar) {
+    btnPagar.addEventListener('click', (e) => {
+        e.preventDefault(); // Evitar comportamientos raros
+
+        // 1. Preguntar al servidor si el usuario está logueado
+        fetch('/LaHerradura/Controller/VerificarSesion.php')
+            .then(res => res.json())
+            .then(data => {
+                
+                if (data.logueado) {
+                    // CASO A: SI ESTÁ LOGUEADO
+                    // Cerramos carrito lateral y abrimos el Modal de Checkout
+                    if (typeof Carrito !== 'undefined') Carrito.cerrar();
+                    if (typeof abrirCheckout === 'function') abrirCheckout();
+
+                } else {
+                    // CASO B: NO ESTÁ LOGUEADO -> LO MANDAMOS A REGISTRARSE
+                    // Usamos SweetAlert para que se vea bonito, o un alert simple
+                    Swal.fire({
+                        title: '¡Necesitas una cuenta!',
+                        text: "Para procesar tu compra, necesitas iniciar sesión o registrarte.",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#8B0000', // Tu color vino
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ir a Login / Registro',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (typeof Carrito !== 'undefined') Carrito.cerrar();
+                            const modal = document.getElementById('modal-Login');
+                            modal.style.display = 'flex';
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error verificando sesión:', error);
+            });
+    });
+}
 });
