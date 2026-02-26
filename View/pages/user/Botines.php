@@ -28,7 +28,7 @@ session_start();
             <div class="container2">
                 <?php 
 
-                    $sql = "SELECT id_botin, Img1, Nombre, Precio FROM botines";
+                    $sql = "SELECT id_botin, Img1, Nombre, Precio FROM botines WHERE Estado = 1";
                     $result = $conn->query($sql);
                     while ($row = $result -> fetch_assoc()){
                         echo("

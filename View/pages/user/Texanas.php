@@ -29,7 +29,7 @@ session_start();
             <div class="container2">
                 <?php 
 
-                    $sql = "SELECT id_texana, Img1, Nombre, Precio FROM texanas";
+                    $sql = "SELECT id_texana, Img1, Nombre, Precio FROM texanas WHERE Estado = 1";
                     $result = $conn->query($sql);
                     while ($row = $result -> fetch_assoc()){
                         echo("
