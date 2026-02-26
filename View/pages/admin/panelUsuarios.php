@@ -52,13 +52,15 @@
                         echo "<td>No hay dirección</td><td>---</td>";
                     }
 
-                    $sqlPed = "SELECT fecha FROM pedidos WHERE id_usuario = '$idUsuario'";
+                    $sqlPed = "SELECT codigo_rastreo FROM pedidos WHERE id_usuario = '$idUsuario'";
 
                     $resultPed = $conn->query($sqlPed);
                     if ($resultPed && $resultPed->num_rows > 0) {
+                        echo "<td>";
                         while($rowPed = $resultPed->fetch_assoc()) {
-                            echo "<td> * " . $rowPed["fecha"] . "</td>";
+                            echo "* " . $rowPed["codigo_rastreo"] . "<br>";
                         }
+                        echo "</td>";
                     } else {
                         echo "<td>No hay Pedidos</td>";
                     }

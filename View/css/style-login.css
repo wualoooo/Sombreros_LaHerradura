@@ -10,13 +10,19 @@
 }
 
 .modal-content-login {
-  background: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 35vw;
-  height: 58vh;
-  color: black;
+    padding: 20px;
+    border-radius: 10px;
+    width: 30vw;
+    height: auto;
+    color: black;
+    background: #f4f4f7;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 95vh;
+    overflow-y: auto;
+    transition: all 0.3s ease-in-out;
 }
 
 /*.close {        parece que lo esta jalando el otro css
@@ -30,10 +36,12 @@
   box-shadow: -2px 2px 3px 1px rgba(0, 0, 0, 0.555);
 }*/
 
-#login-text{
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 6vh;
+#login-image {
+  display: block;           
+  margin: 1rem auto 2rem auto; 
+  max-width: 300px; 
+  width: 100%;              
+  height: auto;            
 }
 
 .labelLogin{
@@ -86,18 +94,30 @@ form{
 }
 
 .buttons{
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  gap: 15px;
 }
 
 #button-iniciar, #buttonCrear,
 .botonesUser{
-  padding: 20px 30px;
-  font-size: 3vh;
-  border-radius: 10px;
-  border: none;
-  box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;       
+    padding: 12px;   
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);padding: 20px 30px;
+    font-size: 3vh;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 4px 3px 2px rgba(0, 0, 0, 0.644);
 }
 
 #button-iniciar,
@@ -211,7 +231,73 @@ form{
     left: 100%;
 }
 
+/* SEPARADOR DEL LOGIN */
+.divisor {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0 15px 0;
+    color: #525252;
+    font-size: 0.9rem;
+}
 
+.divisor::before, .divisor::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.divisor span {
+    padding: 0 15px;
+}
+
+/* BOTONES DE REDES SOCIALES */
+.redes-sociales {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.BotonGoogle, .BotonFacebook {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Estilo específico para Google */
+.BotonGoogle {
+    background-color: #ffffff;
+    color: #3c4043;
+    border: 1px solid #dadce0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.BotonGoogle:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+/* Estilo específico para Facebook */
+.BotonFacebook {
+    background-color: #1877f2;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(24, 119, 242, 0.3);
+}
+
+.BotonFacebook:hover {
+    background-color: #166fe5;
+    box-shadow: 0 4px 8px rgba(24, 119, 242, 0.4);
+    transform: translateY(-1px);
+}
 
 
 

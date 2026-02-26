@@ -71,6 +71,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     activarListenersGaleriaModal();
 
                     // --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
+                    // ... dentro del fetch de ViewBotines.php ...
+
+const btnAgregar = document.getElementById('btn-AggCart');
+const inputCantidad = document.getElementById('cant-products');
+
+const nuevoBtn = btnAgregar.cloneNode(true);
+btnAgregar.parentNode.replaceChild(nuevoBtn, btnAgregar);
+
+nuevoBtn.addEventListener('click', () => {
+    const cantidad = parseInt(inputCantidad.value) || 1;
+
+    // Ya no buscamos botones seleccionados, tomamos la talla directa de la BD
+    const producto = {
+        id: data.id_botin,
+        sku: data.SKU, // ¡MUY IMPORTANTE AGREGAR EL SKU AQUÍ PARA EL PEDIDO!
+        nombre: data.Nombre,
+        precio: data.Precio,
+        imagen: data.Img1,
+        tipo: 'botines', 
+        cantidad: cantidad,
+        talla: data.Talla // Lo leemos directo de lo que trajo la base de datos
+    };
+
+    if (typeof Carrito !== 'undefined') {
+        Carrito.agregar(producto);
+        modal.style.display = 'none';
+        if (typeof Alerta !== 'undefined') Alerta.toast("Botín agregado al carrito", "success");
+    }
+});
 
                     // 4. Mostramos el modal
                     modal.style.display = 'block';

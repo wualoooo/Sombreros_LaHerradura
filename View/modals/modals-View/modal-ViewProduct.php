@@ -22,16 +22,7 @@
                 <h6 class="details-sombrero" id="modal-tam-ala"></h6>
                 <h6 class="details-sombrero" id="modal-material"></h6>
                 <div id="container-tallas">
-                    <div class="talla">54</div>
-                    <div class="talla">55</div>
-                    <div class="talla">56</div>
-                    <div class="talla">57</div>
-                    <div class="talla">58</div>
-                    <div class="talla">59</div>
-                    <div class="talla">60</div>
-                    <div class="talla">61</div>
-                    <div class="talla">62</div>
-                    <div class="talla">63</div>
+                    
                 </div>
                 <div id="elements-inf-somb">
                     <input type="number" name="cant-products" id="cant-products" min="1" value="1">

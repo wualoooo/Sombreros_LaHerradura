@@ -6,25 +6,25 @@ include '../../Model/conexion.php';
 $busqueda = isset($_POST['busqueda']) ? $conn->real_escape_string($_POST['busqueda']) : '';
 $columna = isset($_POST['columna']) ? $_POST['columna'] : 'nombre';
 
-// 2. La consulta BASE (Copiada exactamente de tu Imagen 1)
+// 2. La consulta BASE (Adaptada para Texanas)
 $sql = "SELECT 
-            s.SKU,
-            s.id_sombrero,
-            s.Nombre,
-            s.Precio,
+            t.SKU,
+            t.id_texana,
+            t.Nombre,
+            t.Precio,
             c.Nombre AS Nombre_Color,
             h.Nombre AS Nombre_Horma,
             cp.Nombre AS Nombre_Copa,
-            s.Tam_Copa,
-            s.Tam_ala,
-            s.Tallas,
-            s.Estado,
+            t.Tam_Copa,
+            t.Tam_ala,
+            t.Tallas,
+            t.Estado,
             m.Nombre AS Nombre_Material
-        FROM sombreros s
-        INNER JOIN colores c ON s.Color = c.id_color
-        INNER JOIN hormas h ON s.Horma = h.id_horma
-        INNER JOIN copas cp ON s.Copa = cp.id_copa
-        INNER JOIN materiales m ON s.Material = m.id_material";
+        FROM texanas t
+        INNER JOIN colores c ON t.Color = c.id_color
+        INNER JOIN hormas h ON t.Horma = h.id_horma
+        INNER JOIN copas cp ON t.Copa = cp.id_copa
+        INNER JOIN materiales m ON t.Material = m.id_material";
 
 // 3. Lógica dinámica del WHERE 
 $where = "";
@@ -32,10 +32,10 @@ $where = "";
 if ($busqueda != "") {
     switch ($columna) {
         case 'SKU':
-            $where = " WHERE s.SKU LIKE '%$busqueda%'"; // <-- Espacio asegurado aquí
+            $where = " WHERE t.SKU LIKE '%$busqueda%'"; // <-- Espacio asegurado aquí
             break;
         case 'Precio':
-            $where = " WHERE s.Precio LIKE '%$busqueda%'";
+            $where = " WHERE t.Precio LIKE '%$busqueda%'";
             break;
         case 'Color':
             $where = " WHERE c.Nombre LIKE '%$busqueda%'";
@@ -50,13 +50,13 @@ if ($busqueda != "") {
             $where = " WHERE m.Nombre LIKE '%$busqueda%'";
             break;
         default:
-            $where = " WHERE s.Nombre LIKE '%$busqueda%'";
+            $where = " WHERE t.Nombre LIKE '%$busqueda%'";
             break;
     }
 }
 
 // Unimos la consulta base con el filtro ¡y arreglamos el espacio antes del ORDER BY!
-$sqlFinal = $sql . $where . " ORDER BY s.id_sombrero DESC";
+$sqlFinal = $sql . $where . " ORDER BY t.id_texana DESC";
 
 // 4. Ejecutar la consulta
 $result = $conn->query($sqlFinal);
@@ -73,22 +73,22 @@ if ($result && $result->num_rows > 0) {
                         <td>".$row["Nombre_Horma"]."</td>   
                         
                         <td>
-                            <button class='btn-editar btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
+                            <button class='btn-editar btn-editarTexana' data-id='".$row["id_texana"]."'>
                                 <span class='material-symbols-outlined'>edit</span>
                             </button>
-                            <button class='btn-eliminar btn-eliminarSombrero' data-id='".$row["id_sombrero"]."'>
+                            <button class='btn-eliminar btn-eliminarTexana' data-id='".$row["id_texana"]."'>
                                 <span class='material-symbols-outlined'>delete</span>
                             </button>
-                            <button class='btn-ver btn-verSombrero' data-id='".$row["id_sombrero"]."'>
+                            <button class='btn-ver btn-verTexana' data-id='".$row["id_texana"]."'>
                                 <span class='material-symbols-outlined'>visibility</span>
                             </button>
                         </td>
                         <td>
                             <label class='switch'>
                                 <input type='checkbox' class='btn-estado' 
-                                    data-id='".$row['id_sombrero']."'
-                                    data-tabla='sombreros' 
-                                    data-col-id='id_sombrero'
+                                    data-id='".$row['id_texana']."'
+                                    data-tabla='texanas' 
+                                    data-col-id='id_texana'
                                     ".($row['Estado'] == 1 ? 'checked' : '').">
                                 <span class='slider round'></span>
                             </label>
@@ -97,7 +97,7 @@ if ($result && $result->num_rows > 0) {
                 );
     }
 } else {
-    // Si no hay resultados, mostramos un mensaje bonito
-    echo "<tr><td colspan='7' style='text-align:center;'>No se encontraron sombreros con ese criterio.</td></tr>";
+    // Si no hay resultados, mostramos un mensaje bonito con colspan=7
+    echo "<tr><td colspan='7' style='text-align:center;'>No se encontraron texanas con ese criterio.</td></tr>";
 }
 ?>

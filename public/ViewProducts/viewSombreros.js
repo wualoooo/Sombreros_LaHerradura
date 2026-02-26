@@ -1,57 +1,72 @@
-// Espera a que todo el HTML esté cargado
 document.addEventListener('DOMContentLoaded', () => {
-    const opcionesTalla = document.querySelectorAll('.talla');
-    
-    opcionesTalla.forEach(opcion => {
-        opcion.addEventListener('click', function() {
-            // 1. Quitar la clase 'selected' de todas
-            opcionesTalla.forEach(t => t.classList.remove('selected'));
-            // 2. Agregar la clase 'selected' a la que se dio clic
-            this.classList.add('selected');
-        });
-    });
 
-    // Selecciona el modal y sus partes
+    // (Eliminé el código de selección de tallas que tenías al principio 
+    // porque ahora lo haremos dinámicamente cada vez que se abre el modal)
+
     const modal = document.getElementById('modal-ViewProducts');
-    // ... (todos tus otros selectores 'modalNombre', 'modalPrecio', etc. están bien)
 
     // Usamos delegación de eventos para más eficiencia
     document.body.addEventListener('click', function(evento) {
         
-        // Vemos si el clic fue en una tarjeta (o en algo dentro de ella)
         const tarjetaClicada = evento.target.closest('.abrir-modal-vp');
         
         if (tarjetaClicada) {
             
-            // 1. Obtenemos el ID del 'data-id'
             const id = tarjetaClicada.dataset.id;
-            
             console.log("Haciendo fetch para el ID:", id);
-            // 2. Llamamos a nuestro PHP usando fetch
+            
             fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
-                .then(response => response.json()) // Convierte la respuesta a JSON
+                .then(response => response.json())
                 .then(data => {
-                    // 3. Rellenamos el modal con los datos recibidos
-                    console.log("Datos recibidos del PHP:", data);
+                    console.log("Datos recibidos:", data);
+
+                    // 1. Llenar Textos Básicos
                     document.getElementById('name-sombrero-vp').textContent = data.Nombre;
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
-
-                    // Rellenamos los detalles (usando los nuevos IDs)
-                    document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color}`;
-                    document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma}`;
-                    document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa}`;
+                    document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color || data.Color}`;
+                    document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma || data.Horma}`;
+                    document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa || data.Copa}`;
                     document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
                     document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
-                    document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material}`;
+                    document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.Material}`;
 
-                    // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
+
+                    // --- LÓGICA DE TALLAS DINÁMICAS (NUEVO) ---
+                    const contenedorTallas = document.getElementById('container-tallas');
                     
-                    // En lugar de una sola imagen, generamos la galería completa
+                    if (contenedorTallas) {
+                        // A) Limpiar tallas anteriores (del producto que viste antes)
+                        contenedorTallas.innerHTML = ''; 
+
+                        // B) Obtener el string de tallas (ej: "54,55,56" o "Unitalla")
+                        let stringTallas = data.Tallas || "Unitalla";
+                        
+                        // C) Convertirlo en un array separando por comas
+                        let arrayTallas = stringTallas.split(',');
+
+                        // D) Crear un botón por cada talla
+                        arrayTallas.forEach(talla => {
+                            let span = document.createElement('span');
+                            span.classList.add('talla'); // Clase para estilos CSS
+                            span.textContent = talla.trim(); // .trim() quita espacios extra
+
+                            // E) Agregar el evento de click AQUÍ MISMO a los nuevos botones
+                            span.addEventListener('click', function() {
+                                // 1. Quitar 'selected' a todos los hermanos
+                                contenedorTallas.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
+                                // 2. Poner 'selected' al actual
+                                this.classList.add('selected');
+                            });
+
+                            // F) Insertar en el HTML
+                            contenedorTallas.appendChild(span);
+                        });
+                    }
+                    // ------------------------------------------
+
+
+                    // --- LÓGICA DE GALERÍA DE IMÁGENES ---
                     const imgCont = document.getElementById('img-sombrero');
-
-                    // 1. Preparamos el HTML para la vista principal y las miniaturas
-                    
-                    // Asignamos un ID único a la imagen principal del modal
                     let galeriaHtml = `
                         <div id="vista-foto">
                             <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
@@ -59,121 +74,93 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div id="vista-miniaturas">
                     `;
 
-                    // 2. Creamos un array solo con las imágenes que existen
                     const imagenes = [];
                     if (data.Img1) imagenes.push(data.Img1);
                     if (data.Img2) imagenes.push(data.Img2);
                     if (data.Img3) imagenes.push(data.Img3);
                     if (data.Img4) imagenes.push(data.Img4);
-                    // (Puedes añadir más si tu BD tiene Img5, Img6, etc.)
 
-                    // 3. Generamos el HTML de cada miniatura
                     imagenes.forEach(imgSrc => {
                         const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
-                        // Usamos una clase única para las miniaturas del modal
                         galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
                     });
 
-                    // 4. Cerramos los divs
-                    galeriaHtml += `</div>`; // Cierra #vista-miniaturas
-
-                    // 5. Inyectamos todo el HTML de la galería en el contenedor
+                    galeriaHtml += `</div>`;
                     imgCont.innerHTML = galeriaHtml;
-                    
-                    // 6. ¡IMPORTANTE! Activamos los listeners para las miniaturas que ACABAMOS de crear
-                    // ... (código anterior de la galería) ...
-                    activarListenersGaleriaModal(); // <--- Justo después de esta línea
-                    document.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
 
-                    // --- INICIO LÓGICA AGREGAR CARRITO ---
+                    // Activar miniaturas
+                    activarListenersGaleriaModal(); 
+
+
+                    // --- LÓGICA DE CARRITO ---
+                    // Reemplazar el botón para limpiar eventos anteriores
                     const btnAgregar = document.getElementById('btn-AggCart');
                     const inputCantidad = document.getElementById('cant-products');
-
                     const nuevoBtn = btnAgregar.cloneNode(true);
                     btnAgregar.parentNode.replaceChild(nuevoBtn, btnAgregar);
 
                     nuevoBtn.addEventListener('click', () => {
                         
-                        // 2. VALIDAR TALLA SELECCIONADA
-                        const tallaSeleccionada = document.querySelector('.talla.selected');
+                        // Validar talla seleccionada (buscamos dentro del contenedor dinámico)
+                        const tallaSeleccionada = contenedorTallas.querySelector('.talla.selected');
                         
                         if (!tallaSeleccionada) {
-                            // Usamos tu alerta bonita
                             if (typeof Alerta !== 'undefined') {
-                                Alerta.error("Por favor, selecciona una talla antes de agregar.");
+                                Alerta.error("Por favor, selecciona una talla.");
                             } else {
                                 alert("Selecciona una talla");
                             }
-                            return; // ¡DETENER EL PROCESO!
+                            return; 
                         }
 
-                        // 3. OBTENER EL VALOR DE LA TALLA
                         const valorTalla = tallaSeleccionada.textContent.trim();
                         const cantidad = parseInt(inputCantidad.value) || 1;
 
                         const producto = {
+                            sku: data.SKU,
                             id: data.id_sombrero,
                             nombre: data.Nombre,
                             precio: data.Precio,
                             imagen: data.Img1,
-                            tipo: 'Sombrero', 
+                            tipo: 'sombreros', 
                             cantidad: cantidad,
-                            talla: valorTalla // <--- ¡AQUÍ GUARDAMOS LA TALLA!
+                            talla: valorTalla 
                         };
 
-                        // 3. Llamar al carrito (asegurando que exista)
                         if (typeof Carrito !== 'undefined') {
                             Carrito.agregar(producto);
-                            // Opcional: Cerrar modal al agregar
-                            document.getElementById('modal-ViewProducts').style.display = 'none';
-                        } else {
-                            console.error("Error: El archivo carrito.js no se ha cargado.");
+                            modal.style.display = 'none';
+                            if (typeof Alerta !== 'undefined') Alerta.toast("Producto agregado al carrito", "success");
                         }
                     });
-                    // --- FIN CÓDIGO FALTANTE ---
 
-                    // --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
-
-                    // 4. Mostramos el modal
+                    // Mostrar modal
                     modal.style.display = 'block';
                 })
                 .catch(error => console.error('Error al cargar datos:', error));
         }
     });
-    
 
-    // Tu código para cerrar el modal
+    // Cerrar modal
     const spanClose = document.querySelector('.modal-content-vp .close');
-    spanClose.onclick = function() {
-        modal.style.display = "none";
-        
-        // --- BUENA PRÁCTICA (Opcional) ---
-        // Limpiamos la galería al cerrar para que no se vea la anterior
-        // si la siguiente carga falla.
-        const imgCont = document.getElementById('img-sombrero');
-        imgCont.innerHTML = ""; // Limpiamos el contenido
+    if (spanClose) {
+        spanClose.onclick = function() {
+            modal.style.display = "none";
+            document.getElementById('img-sombrero').innerHTML = ""; 
+        }
     }
 
-    
-    // Esta función añade la lógica de clic a las miniaturas del modal
+    // Listener para cambiar imagen principal
     function activarListenersGaleriaModal() {
-        // Seleccionamos la imagen principal DENTRO DEL MODAL
         const mainImage = document.getElementById('main-image-modal'); 
-        
-        // Seleccionamos las miniaturas DENTRO DEL MODAL
         const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
 
-        if (!mainImage) {
-            console.error("No se encontró la imagen principal del modal ('main-image-modal')");
-            return;
-        }
-
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                // Al hacer clic, cambiamos el 'src' de la imagen principal
-                mainImage.src = thumbnail.src;
-                mainImage.alt = thumbnail.alt; // También actualizamos el alt
+        if (mainImage) {
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    mainImage.src = thumbnail.src;
+                });
             });
-        });
+        }
     }
 });

@@ -52,6 +52,7 @@ try {
     $img4 = procesarImagen('imgSombrero4', $carpeta_destino, $imagenes_subidas);
 
     // PREPARAR DATOS PARA BD
+    $sku = $_POST['SKUSombrero'];
     $Nombre = trim($_POST['NombreSombrero']);
     $Color = ($_POST['ColorSombrero']);
     $Horma = $_POST['HormaSombrero'];
@@ -61,16 +62,25 @@ try {
     $Material = trim($_POST['MaterialSombrero']);
     $Precio = $_POST['PrecioSombrero'];
 
+    if (isset($_POST['tallas_disponibles']) && !empty($_POST['tallas_disponibles'])) {
+        $arreglo_tallas = $_POST['tallas_disponibles'];
+        $tallas_texto = implode(",", $arreglo_tallas); 
+
+        } 
+        else {
+        $tallas_texto = "Unitalla"; 
+        }
+
     // INSERTAR EN BD
-    $sql = "INSERT INTO sombreros (Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO sombreros (SKU, Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Tallas, Img1, Img2, Img3, Img4, Estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
     
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    $stmt->bind_param("siiiddidssss", 
-        $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, 
+    $stmt->bind_param("ssiiiddidsssss", 
+        $sku, $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, $tallas_texto,
         $img1, $img2, $img3, $img4
     );
 

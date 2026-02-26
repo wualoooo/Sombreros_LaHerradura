@@ -1,147 +1,114 @@
 <?php
+require('../../Model/conexion.php'); 
 
-include '../../Model/conexion.php'; 
-
-// Preparamos una respuesta JSON para que JavaScript la entienda
 header('Content-Type: application/json');
 $response = ['success' => false, 'error' => 'Error desconocido.'];
 
-// --- 2. VERIFICACIÓN ---
-// Solo continuamos si los datos se enviaron por POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception('Método no permitido.');
+    }
 
-    // --- 3. OBTENER DATOS DEL FORMULARIO ---
-    // Usamos los 'name' exactos de tu formulario HTML
+    $id = $_POST['id_cinturon'] ?? '';
 
-    // ¡El ID oculto es el más importante!
-    $id = $_POST['id_cinturon']; 
-
-    // Campos de texto
-    $Nombre = $_POST['NombreCinturon'];
-    $Precio = $_POST['PrecioCinturon'];
-    $Material = $_POST['MaterialCinturon'];
-    $Adorno = $_POST['AdornoCinturon'];
-    $Tamaño = $_POST['TamañoCinturon'];
-
-    // Validar que el ID no esté vacío
     if (empty($id)) {
-        $response['error'] = 'Error: ID de producto no proporcionado.';
-        echo json_encode($response);
-        exit;
+        throw new Exception('Error: ID de cinturón no encontrado.');
     }
 
-    // --- 4. ACTUALIZAR DATOS DE TEXTO ---
-    // Preparamos la consulta SQL para ACTUALIZAR
+    // OBTENER LOS NUEVOS DATOS
+    $sku = trim($_POST['SKUCinturon']);
+    $nombre = trim($_POST['NombreCinturon']);
+    $precio = $_POST['PrecioCinturon'];
+    $material = $_POST['MaterialCinturon'];
+    $adorno = $_POST['AdornoCinturon'];
+    $tamano = !empty($_POST['TamañoCinturon']) ? $_POST['TamañoCinturon'] : 0;
+
+    // PROCESAR TALLAS
+    $tallas_texto = "Unitalla";
+    if (isset($_POST['tallas_disponibles']) && is_array($_POST['tallas_disponibles'])) {
+        $tallas_texto = implode(",", $_POST['tallas_disponibles']); 
+    }
+
+    // ACTUALIZAR DATOS EN BD
     $sql = "UPDATE cinturones SET 
+                SKU = ?,
                 Nombre = ?, 
-                Precio = ?, 
+                Precio = ?,
                 Material = ?, 
-                Adorno = ?, 
-                Tamaño = ?
+                Adorno = ?,
+                Tamaño = ?,
+                Tallas = ?
             WHERE id_cinturon = ?";
-            
+
     $stmt = $conn->prepare($sql);
-    
-    $stmt->bind_param("sdiidi", 
-        $Nombre, 
-        $Precio, 
-        $Material,
-        $Adorno, 
-        $Tamaño,
-        $id
-    );
+    if (!$stmt) {
+        throw new Exception("Error preparando la consulta: " . $conn->error);
+    }
 
-    // Ejecutamos la actualización de los datos
+    // ssdidsi = String, String, Double, Int, Int, Double, String, Int
+    $stmt->bind_param("ssdiidsi", $sku, $nombre, $precio, $material, $adorno, $tamano, $tallas_texto, $id);
+
     if (!$stmt->execute()) {
-        $response['error'] = 'Error SQL: ' . $stmt->error;
-        echo json_encode($response);
-        exit;
+        throw new Exception("Error al actualizar datos: " . $stmt->error);
+    }
+    $stmt->close();
+
+    // ----------------------------------------------------
+    // ACTUALIZACIÓN DE IMÁGENES
+    // ----------------------------------------------------
+    $ruta_subida = "../../uploads/cinturones/";
+    if (!file_exists($ruta_subida)) {
+        mkdir($ruta_subida, 0777, true);
     }
 
-    // --- NUEVA VALIDACIÓN ---
-    if ($stmt->affected_rows === 0) {
-        // Esto pasa si el ID no existe O si enviaste los mismos datos que ya tenía
-        $response['warning'] = 'No se realizaron cambios (los datos eran iguales o el ID no existe).';
-    }
-    $stmt->close(); // Cerramos la primera consulta
-    
-    $inputs_html = ['imgCinturon1', 'imgCinturon2', 'imgCinturon3', 'imgCinturon4'];
-    $cols_db     = ['Img1', 'Img2', 'Img3', 'Img4'];
-    
-    // IMPORTANTE: Ajusta la ruta a la carpeta de tus cinturones
-    $directorio_destino = "../../uploads/cinturones/";
+    $imagenes_keys = [
+        'imgCinturon1' => 'Img1',
+        'imgCinturon2' => 'Img2',
+        'imgCinturon3' => 'Img3',
+        'imgCinturon4' => 'Img4'
+    ];
 
-    // Verificamos si la carpeta existe, si no, intentamos crearla (opcional)
-    if (!is_dir($directorio_destino)) {
-        mkdir($directorio_destino, 0777, true);
-    }
-
-    for ($i = 0; $i < count($inputs_html); $i++) {
-        
-        $nombre_input = $inputs_html[$i]; // Ej: 'imgCinturon1'
-        $columna      = $cols_db[$i];     // Ej: 'Img1'
-
-        // Verificar si el usuario subió un archivo en este input
+    foreach ($imagenes_keys as $nombre_input => $columna_actual) {
         if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
             
-            // PASO A: BUSCAR LA IMAGEN VIEJA PARA BORRARLA
-            // Hacemos una consulta rápida para saber qué archivo hay actualmente
-            $sql_old = "SELECT $columna FROM cinturones WHERE id_cinturon = ?";
-            $stmt_old = $conn->prepare($sql_old);
-            $stmt_old->bind_param("i", $id);
-            $stmt_old->execute();
-            $stmt_old->bind_result($imagen_anterior);
-            $stmt_old->fetch();
-            $stmt_old->close();
+            // Obtener imagen vieja
+            $sql_get_img = "SELECT $columna_actual FROM cinturones WHERE id_cinturon = ?";
+            $stmt_get = $conn->prepare($sql_get_img);
+            $stmt_get->bind_param("i", $id);
+            $stmt_get->execute();
+            $result_img = $stmt_get->get_result();
+            $row_img = $result_img->fetch_assoc();
+            $imagen_vieja = $row_img[$columna_actual] ?? '';
+            $stmt_get->close();
 
-            // PASO B: BORRAR EL ARCHIVO DEL SERVIDOR
-            if (!empty($imagen_anterior)) {
-                $ruta_archivo_anterior = $directorio_destino . $imagen_anterior;
-                // Verificamos si el archivo realmente existe antes de intentar borrarlo
-                if (file_exists($ruta_archivo_anterior)) {
-                    unlink($ruta_archivo_anterior); // <--- ESTO BORRA LA FOTO
-                }
-            }
-
-            // PASO C: SUBIR LA NUEVA IMAGEN
             $ext = pathinfo($_FILES[$nombre_input]['name'], PATHINFO_EXTENSION);
-            // Generamos nombre único: id_cinturon + timestamp + indice . jpg
-            $nombre_nuevo = 'Cinturon'.$id . '_' . time() . "_img$i." . $ext;
-            $ruta_completa_nueva = $directorio_destino . $nombre_nuevo;
+            $nombre_nuevo = uniqid('ImgCinturon_') . '.' . $ext;
+            $ruta_destino = $ruta_subida . $nombre_nuevo;
 
-            if (move_uploaded_file($_FILES[$nombre_input]['tmp_name'], $ruta_completa_nueva)) {
+            if (move_uploaded_file($_FILES[$nombre_input]['tmp_name'], $ruta_destino)) {
                 
-                // PASO D: ACTUALIZAR EL NOMBRE EN LA BASE DE DATOS
-                $sql_update_img = "UPDATE cinturones SET $columna = ? WHERE id_cinturon = ?";
+                if (!empty($imagen_vieja)) {
+                    $ruta_vieja = $ruta_subida . $imagen_vieja;
+                    if (file_exists($ruta_vieja)) {
+                        unlink($ruta_vieja);
+                    }
+                }
+
+                $sql_update_img = "UPDATE cinturones SET $columna_actual = ? WHERE id_cinturon = ?";
                 $stmt_img = $conn->prepare($sql_update_img);
                 $stmt_img->bind_param("si", $nombre_nuevo, $id);
-                
-                if ($stmt_img->execute()) {
-                    // Opcional: Agregar mensaje de éxito
-                } else {
-                    $response['warnings'][] = "Error al actualizar BD para $columna";
-                }
+                $stmt_img->execute();
                 $stmt_img->close();
-
-            } else {
-                $response['warnings'][] = "No se pudo mover el archivo subido en $nombre_input";
             }
         }
     }
 
-    // --- 6. ÉXITO ---
-    // Si todo salió bien, marcamos como exitoso
     $response['success'] = true;
-    $response['error'] = ''; // Limpiamos el error
+    $response['message'] = 'Cinturón actualizado correctamente.';
 
-} else {
-    // Si alguien intenta acceder al script sin POST
-    $response['error'] = 'Método no permitido.';
+} catch (Exception $e) {
+    $response['error'] = $e->getMessage();
 }
 
-// Cerramos la conexión
-$conn->close();
-
-// Devolvemos la respuesta JSON al JavaScript
 echo json_encode($response);
 ?>

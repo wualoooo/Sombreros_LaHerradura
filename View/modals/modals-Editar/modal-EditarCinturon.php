@@ -3,109 +3,140 @@
 <div class="modal-Edit" id="modal-EditCinturon">
     <div class="modal-content-Edit">
         <span class="close">&times;</span>
-        <h2 class="Edit-text">Editar Cinturon</h2> 
+        <h2 class="Edit-text">Editar Cinturón</h2> 
         
+        <div class="indicador-pasos">
+            <span class="paso-dot-edit active">1</span>
+            <span class="paso-dot-edit">2</span>
+            <span class="paso-dot-edit">3</span>
+        </div>
+
         <div class="cont-form-Edit">
             <form class="EditSom" id="form-EditCinturon" action="/LaHerradura/Controller/CRUD_Cinturones/ActualizarCinturon.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="edit-id-cinturon" name="id_cinturon">
                 
-                <div class="div-Edit div-EditCinturon">
-                    <div class="Edit-left EditCinturon-left">
-                        
-                        <input type="hidden" id="edit-id-cinturon" name="id_cinturon">
+                <div class="pasarela-step-edit active" id="step-edit-cinturon-1">
+                    <h3>Paso 1: Información Básica</h3>
 
-                        <label class="lbl-Edit" for="NombreCinturon">Nombre</label>
-                        <br>
-                        <input class="input-Edit" type="text" name="NombreCinturon" id="edit-NombreCinturon" placeholder="Ingresa el nombre completo">
-                        <br>
+                    <label class="lbl-Edit" for="edit-SKUCinturon">Código del Producto (SKU)</label>
+                    <input class="input-Edit" type="text" name="SKUCinturon" id="edit-SKUCinturon" required>
 
-                        <label class="lbl-Edit"for="">Precio</label>
-                        <br>
-                        <input class="input-Edit" type="number" name="PrecioCinturon" id="edit-PrecioCinturon" placeholder="Ingresa el precio" min="0" step="10" max="2000">
+                    <label class="lbl-Edit" for="edit-NombreCinturon">Nombre</label>
+                    <input class="input-Edit" type="text" name="NombreCinturon" id="edit-NombreCinturon" required>
+                    
+                    <label class="lbl-Edit" for="edit-PrecioCinturon">Precio ($)</label>
+                    <input class="input-Edit" type="number" name="PrecioCinturon" id="edit-PrecioCinturon" step="10" required min="0">
+                    
+                    <div class="divButton-pasarela">
+                        <button type="button" class="btn-siguiente" onclick="cambiarPasoEditCinturon(1, 2)">Siguiente</button>
+                    </div>
+                </div>
 
-                        <label class="lbl-Edit"  for="">Material</label>
-                        <br>
-                        <select class="input-Edit Selects-Edit" name="MaterialCinturon" id="edit-MaterialCinturon" placeholder="Ingresa el material">
-                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
-                            <?php 
-                                include(ROOT_PATH . 'Model/conexion.php') ;
+                <div class="pasarela-step-edit" id="step-edit-cinturon-2" style="display: none;">
+                    <h3>Paso 2: Especificaciones y Tallas</h3>
+                    
+                    <label class="lbl-Edit" for="edit-MaterialCinturon">Material</label>
+                    <select class="input-Edit" name="MaterialCinturon" id="edit-MaterialCinturon" required>
+                        <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                        <?php 
+                            $resultMateriales = $conn->query("SELECT id_material, Nombre FROM materiales WHERE Producto = 'Cinturones'");
+                            while ($row = $resultMateriales->fetch_assoc()) echo "<option value='".$row['id_material']."'>".$row['Nombre']."</option>";
+                        ?>
+                    </select>
 
-                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Cinturones'";
-                                $resultMateriales = $conn->query($verMateriales);
+                    <label class="lbl-Edit" for="edit-AdornoCinturon">Adorno</label>
+                    <select class="input-Edit" name="AdornoCinturon" id="edit-AdornoCinturon" required>
+                        <option value="Null" selected disabled hidden>Selecciona una opcion</option>
+                        <?php 
+                            $resultAdornos = $conn->query("SELECT id_material, Nombre FROM materiales WHERE Producto = 'Adornos'");
+                            while ($row = $resultAdornos->fetch_assoc()) echo "<option value='".$row['id_material']."'>".$row['Nombre']."</option>";
+                        ?>
+                    </select>
 
-                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
-                                        echo "
-                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
-                                        ";
-                                    }
-                            ?>
-                        </select>
-                        <br>
+                    <label class="lbl-Edit" for="edit-TamañoCinturon">Ancho/Grosor (Opcional)</label>
+                    <input class="input-Edit" type="number" name="TamañoCinturon" id="edit-TamañoCinturon" placeholder="Ej: 3.5" step="0.5">   
 
-                        <label class="lbl-Edit" for="Adorno">Adorno:</label>
-                        <br>
-                        <select class="input-Edit Selects-Edit" name="AdornoCinturon" id="edit-AdornoCinturon">
-                            <option value="Null" selected disabled hidden>Selecciona una opcion</option>
-                            <?php 
-                                include(ROOT_PATH . 'Model/conexion.php') ;
+                    <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
 
-                                $verMateriales = "SELECT id_material, Nombre FROM materiales WHERE Producto = 'Adornos'";
-                                $resultMateriales = $conn->query($verMateriales);
-
-                                    while ($rowMateriales = $resultMateriales -> fetch_assoc()){
-                                        echo "
-                                        <option value=".$rowMateriales['id_material'].">".$rowMateriales['Nombre']."</option>
-                                        ";
-                                    }
-                            ?>
-                        </select>
-                        <br>
-
-                        <label class="lbl-Edit" for="">Tamaño</label> <br>
-                        <input class="input-Edit" type="number" name="TamañoCinturon" id="edit-TamañoCinturon" placeholder="Ingresa la talla" min="30" step="0.5" max="120">   
-
+                    <label class="lbl-Edit">Tallas Disponibles</label>
+                    <div class="contenedor-tallas">
+                        <?php
+                        // Tallas típicas de cinturones
+                        $tallas_comunes = ['30', '32', '34', '36', '38', '40', '42', '44'];
+                        foreach($tallas_comunes as $talla) {
+                            echo "
+                            <label class='talla-checkbox'>
+                                <input type='checkbox' name='tallas_disponibles[]' value='$talla' class='talla-edit-checkbox'>
+                                <span class='talla-btn'>$talla</span>
+                            </label>";
+                        }
+                        ?>
                     </div>
 
-                    <div id="Edit-right">
-                        <div class="contenedor-preview">
-            
-                            <div class="caja-preview">
-                                <input type="file" name="imgCinturon1" id="imgEditCinturon1" class="input-img-oculto" accept="image/*">
-                                <label for="imgEditCinturon1" class="label-boton">
-                                    Seleccionar archivo
-                                </label>
-                                <img id="previewEditCinturon1" class="preview" src="#" alt="Vista previa 1">
-                            </div>
+                    <div class="divButton-pasarela">
+                        <button type="button" class="btn-anterior" onclick="cambiarPasoEditCinturon(2, 1)">Anterior</button>
+                        <button type="button" class="btn-siguiente" onclick="cambiarPasoEditCinturon(2, 3)">Siguiente</button>
+                    </div>
+                </div>
 
-                            <div class="caja-preview">
-                                <input type="file" name="imgCinturon2" id="imgEditCinturon2" class="input-img-oculto" accept="image/*">
-                                <label for="imgEditCinturon2" class="label-boton">
-                                    Seleccionar archivo
-                                </label>
-                                <img id="previewEditCinturon2" class="preview" src="#" alt="Vista previa 2">
-                            </div>
-
-                            <div class="caja-preview">
-                                <input type="file" name="imgCinturon3" id="imgEditCinturon3" class="input-img-oculto" accept="image/*">
-                                <label for="imgEditCinturon3" class="label-boton">
-                                    Seleccionar archivo
-                                </label>
-                                <img id="previewEditCinturon3" class="preview" src="#" alt="Vista previa 3">
-                            </div>
-
-                            <div class="caja-preview">
-                                <input type="file" name="imgCinturon4" id="imgEditCinturon4" class="input-img-oculto" accept="image/*">
-                                <label for="imgEditCinturon4" class="label-boton">
-                                    Seleccionar archivo
-                                </label>
-                                <img id="previewEditCinturon4" class="preview" src="#" alt="Vista previa 4">
-                            </div>
+                <div class="pasarela-step-edit" id="step-edit-cinturon-3" style="display: none;">
+                    <h3>Paso 3: Fotografías del Producto</h3>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">(Solo sube imágenes si deseas reemplazar las actuales)</p>
+                    <div class="contenedor-preview" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <?php for($i=1; $i<=4; $i++): ?>
+                        <div class="caja-preview">
+                            <input type="file" name="imgCinturon<?php echo $i; ?>" id="imgEditCinturon<?php echo $i; ?>" class="input-img-oculto" accept="image/*">
+                            <label for="imgEditCinturon<?php echo $i; ?>" class="label-boton">Imagen <?php echo $i; ?></label>
+                            <img id="previewEditCinturon<?php echo $i; ?>" class="preview" src="#" alt="Vista previa <?php echo $i; ?>" style="display: block;">
                         </div>
+                        <?php endfor; ?>
+                    </div>
+
+                    <div class="divButton-pasarela">
+                        <button type="button" class="btn-anterior" onclick="cambiarPasoEditCinturon(3, 2)">Anterior</button>
+                        <button type="button" class="ButtonGuardarEdit" id="btnGuardarEditCinturones" onclick="enviarFormularioEditCinturon()">Guardar Cambios</button>
                     </div>
                 </div>
-                <div class="divButton">
-                    <input type="submit" class="ButtonGuardarEdit" id="btnGuardarEditCinturon" value="Guardar cambios">
-                </div>
+
             </form>
         </div>
     </div>
 </div>
+
+<script>
+// Función para navegación de pasos en Cinturones
+window.cambiarPasoEditCinturon = function(pasoActual, pasoSiguiente) {
+    if (pasoSiguiente > pasoActual) {
+        const contenedorPasoActual = document.getElementById(`step-edit-cinturon-${pasoActual}`);
+        const campos = contenedorPasoActual.querySelectorAll('input:not([type="checkbox"]):not([type="file"]), select');
+
+        let pasoEsValido = true;
+        for (let i = 0; i < campos.length; i++) {
+            if (campos[i].tagName.toLowerCase() === 'select' && campos[i].hasAttribute('required') && (campos[i].value === 'Null' || campos[i].value === '')) {
+                pasoEsValido = false;
+                Swal.fire({ icon: 'warning', title: 'Campo requerido', text: 'Por favor, selecciona una opción en todos los menús desplegables.', confirmButtonColor: '#4C8F43' });
+                break;
+            }
+            if (!campos[i].checkValidity()) {
+                pasoEsValido = false;
+                campos[i].reportValidity();
+                break;
+            }
+        }
+        if (!pasoEsValido) return;
+    }
+
+    document.getElementById(`step-edit-cinturon-${pasoActual}`).style.display = 'none';
+    document.getElementById(`step-edit-cinturon-${pasoSiguiente}`).style.display = 'block';
+
+    const dots = document.querySelectorAll('#modal-EditCinturon .paso-dot-edit');
+    dots.forEach((dot, index) => {
+        if (index < pasoSiguiente) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
+};
+
+function enviarFormularioEditCinturon() {
+    document.getElementById('form-EditCinturon').dispatchEvent(new Event('submit', { cancelable: true }));
+}
+</script>

@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ID del formulario de AGREGAR Botines
     const formulario = document.getElementById('form-AggBotin');
-
     if (!formulario) return;
 
     formulario.addEventListener('submit', function(e) {
-        e.preventDefault(); // Detenemos el envío para validar
+        e.preventDefault(); 
 
-        // --- A) LIMPIEZA VISUAL PREVIA ---
         const limpiarEstilos = () => {
             formulario.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
             formulario.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
@@ -26,17 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
             errores.push(mensaje);
         };
 
-        // --- B) VALIDACIONES ROBUSTAS ---
+        // 1. Validar Textos (INCLUYE SKU)
+        const camposTexto = ['SKUBotin', 'NombreBotin'];
+        camposTexto.forEach(name => {
+            const input = document.getElementById(name);
+            if (input) {
+                const valor = input.value.trim();
+                const nombreCampo = name.replace('Botin', '');
+                if (valor === "") marcarError(input, `El ${nombreCampo} es obligatorio.`);
+                else if (name !== 'SKUBotin' && valor.length < 3) marcarError(input, `El ${nombreCampo} es muy corto.`);
+            }
+        });
 
-        // 1. Validar Nombre
-        const inputNombre = document.getElementById('NombreBotin');
-        if (inputNombre) {
-            const valor = inputNombre.value.trim();
-            if (valor === "") marcarError(inputNombre, "El Nombre es obligatorio.");
-            else if (valor.length < 3) marcarError(inputNombre, "El Nombre es muy corto.");
-        }
-
-        // 2. Validar Talla (Número)
+        // 2. Validar Talla
         const inputTalla = document.getElementById('TallaBotin');
         if (inputTalla) {
             if (inputTalla.value === "" || isNaN(inputTalla.value)) {
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // 3. Validar Selects (Material y Suela)
+        // 3. Validar Selects
         const selects = ['MaterialBotin', 'SuelaBotin'];
         selects.forEach(id => {
             const input = document.getElementById(id);
@@ -61,14 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // 5. Validar Imágenes (Existencia y Duplicados)
+        // 5. Validar Imágenes
         const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
-            const inputImg = document.getElementById(`imgBotin${i}`); // Usamos ID directo porque es único en el modal de agregar
-            
+            const inputImg = document.getElementById(`imgBotin${i}`);
             if (inputImg) {
                 const caja = inputImg.closest('.caja-preview');
-
                 if (inputImg.files.length === 0) {
                     errores.push(`Falta seleccionar la Imagen ${i}`);
                     if (caja) caja.classList.add('caja-error');
@@ -84,10 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // --- C) RESULTADO DE VALIDACIÓN ---
-
         if (errores.length > 0) {
-            // Mostrar lista de errores
             Swal.fire({
                 icon: 'warning',
                 title: 'Atención',
@@ -95,14 +89,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Corregir'
             });
-
             if (primerElementoError) primerElementoError.focus();
 
         } else {
-            // --- D) SI TODO ESTÁ BIEN: ENVIAR FETCH ---
             const btnSubmit = document.getElementById('btnGuardarAggBotin');
-            const textoOriginal = btnSubmit.value;
-            btnSubmit.value = "Guardando...";
+            const textoOriginal = btnSubmit.textContent; // Cambio a textContent
+            btnSubmit.textContent = "Guardando...";
             btnSubmit.disabled = true;
 
             const formData = new FormData(formulario);
@@ -113,26 +105,22 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                btnSubmit.value = textoOriginal;
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
 
                 if (data.success) {
-                    // Cerrar modal
                     const modal = document.getElementById('modal-AggBotin');
                     if(modal) modal.style.display = "none";
 
-                    // Alerta de éxito y recarga
                     Alerta.exito(data.message || 'Botín registrado correctamente.')
                         .then(() => {
                             formulario.reset(); 
-                            // Limpiar previews
                             document.querySelectorAll('#form-AggBotin .preview').forEach(img => {
                                 img.src = '#';
                                 img.style.display = 'none';
                             });
                             location.reload(); 
                         });
-
                 } else {
                     Alerta.error(data.message || "Error desconocido del servidor.");
                 }
@@ -140,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 Alerta.error("Hubo un error de conexión con el servidor.");
-                btnSubmit.value = textoOriginal;
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
             });
         }

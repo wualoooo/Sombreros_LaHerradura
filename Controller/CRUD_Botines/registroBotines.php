@@ -1,8 +1,7 @@
 <?php 
-// Desactivar salida de errores HTML para no romper el JSON
 error_reporting(E_ALL);
 ini_set('display_errors', 0); 
-header('Content-Type: application/json'); // Decimos que respondemos JSON
+header('Content-Type: application/json');
 
 require('../../Model/conexion.php');
 
@@ -14,9 +13,8 @@ try {
         throw new Exception("Acceso no permitido.");
     }
 
-    // 1. VALIDACIONES BÁSICAS
-    if (empty($_POST['NombreBotin']) || empty($_POST['PrecioBotin'])) {
-        throw new Exception("Faltan datos obligatorios.");
+    if (empty($_POST['NombreBotin']) || empty($_POST['PrecioBotin']) || empty($_POST['SKUBotin'])) {
+        throw new Exception("Faltan datos obligatorios (SKU, Nombre o Precio).");
     }
 
     $carpeta_destino = "../../uploads/botines/";
@@ -24,22 +22,18 @@ try {
         mkdir($carpeta_destino, 0777, true);
     }
 
-    // Función interna para manejar la subida y el rastreo
     function procesarImagen($key, $destino, &$lista_borrado) {
         if (!isset($_FILES[$key]) || $_FILES[$key]['error'] !== UPLOAD_ERR_OK) {
             throw new Exception("Error al subir la imagen $key.");
         }
-        
         $ext = strtolower(pathinfo($_FILES[$key]['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'heif', 'AVIF'])) {
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'heif', 'avif'])) {
             throw new Exception("Formato inválido en $key.");
         }
-
         $nuevo_nombre = uniqid('ImgBotin_') . '.' . $ext;
         $ruta = $destino . $nuevo_nombre;
 
         if (move_uploaded_file($_FILES[$key]['tmp_name'], $ruta)) {
-            // AGREGAMOS A LA LISTA DE "COSAS POR BORRAR SI FALLA ALGO"
             $lista_borrado[] = $ruta; 
             return $nuevo_nombre;
         } else {
@@ -47,37 +41,36 @@ try {
         }
     }
 
-    // INTENTAR SUBIR LAS IMÁGENES
-    // Si una falla, el catch atrapará el error y no se insertará nada en la BD
     $img1 = procesarImagen('imgBotin1', $carpeta_destino, $imagenes_subidas);
     $img2 = procesarImagen('imgBotin2', $carpeta_destino, $imagenes_subidas);
     $img3 = procesarImagen('imgBotin3', $carpeta_destino, $imagenes_subidas);
     $img4 = procesarImagen('imgBotin4', $carpeta_destino, $imagenes_subidas);
 
-    // PREPARAR DATOS PARA BD
+    $SKU = trim($_POST['SKUBotin']);
     $Nombre = trim($_POST['NombreBotin']);
-    $Talla = ($_POST['TallaBotin']);
+    $Talla = $_POST['TallaBotin'];
     $Material = trim($_POST['MaterialBotin']);
     $Suela = $_POST['SuelaBotin'];
     $Precio = $_POST['PrecioBotin'];
     
-
-    // INSERTAR EN BD
-    $sql = "INSERT INTO botines (Nombre, Talla, Material, Suela, Precio, Img1, Img2, Img3, Img4) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // INSERTAR EN BD (Incluyendo SKU y Estado)
+    $sql = "INSERT INTO botines (SKU, Nombre, Talla, Material, Suela, Precio, Estado, Img1, Img2, Img3, Img4) 
+            VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)";
     
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    $stmt->bind_param("sdiidssss", 
-        $Nombre, $Talla, $Material, $Suela, $Precio,
+    // "ssdiidssss" = 2 String, 1 Double, 2 Int, 1 Double, 4 String
+    $stmt->bind_param("ssdiidssss", 
+        $SKU, $Nombre, $Talla, $Material, $Suela, $Precio,
         $img1, $img2, $img3, $img4
     );
 
     if ($stmt->execute()) {
         $response['success'] = true;
-        $response['message'] = 'Botin registrado correctamente.';
+        $response['message'] = 'Botín registrado correctamente.';
     } else {
         throw new Exception("Error al guardar en BD: " . $stmt->error);
     }
@@ -85,11 +78,7 @@ try {
     $stmt->close();
 
 } catch (Exception $e) {
-    // SI ALGO FALLÓ (En subida o en BD):
     $response['message'] = $e->getMessage();
-
-    // *** ROLLBACK DE IMÁGENES ***
-    // Como la BD falló, borramos las imágenes que acabamos de subir para no dejar basura.
     foreach ($imagenes_subidas as $ruta_borrar) {
         if (file_exists($ruta_borrar)) {
             unlink($ruta_borrar);

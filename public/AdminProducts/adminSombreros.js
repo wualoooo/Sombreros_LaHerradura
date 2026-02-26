@@ -1,24 +1,73 @@
+// ==========================================
+// 1. FUNCIÓN GLOBAL PARA LA PASARELA DE EDICIÓN
+// ==========================================
+window.cambiarPasoEdit = function(pasoActual, pasoSiguiente) {
+    if (pasoSiguiente > pasoActual) {
+        const contenedorPasoActual = document.getElementById(`step-edit-${pasoActual}`);
+        const campos = contenedorPasoActual.querySelectorAll('input:not([type="checkbox"]):not([type="file"]), select');
+
+        let pasoEsValido = true;
+
+        for (let i = 0; i < campos.length; i++) {
+            if (campos[i].tagName.toLowerCase() === 'select' && campos[i].hasAttribute('required') && (campos[i].value === 'Null' || campos[i].value === '')) {
+                pasoEsValido = false;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campo requerido',
+                    text: 'Por favor, selecciona una opción en todos los menús desplegables.',
+                    confirmButtonColor: '#4C8F43'
+                });
+                break;
+            }
+
+            if (!campos[i].checkValidity()) {
+                pasoEsValido = false;
+                campos[i].reportValidity();
+                break;
+            }
+        }
+
+        if (!pasoEsValido) return;
+    }
+
+    document.getElementById(`step-edit-${pasoActual}`).style.display = 'none';
+    const stepSiguiente = document.getElementById(`step-edit-${pasoSiguiente}`);
+    stepSiguiente.style.display = 'block';
+
+    const dots = document.querySelectorAll('.paso-dot-edit');
+    dots.forEach((dot, index) => {
+        if (index < pasoSiguiente) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ==========================================
-    // 1. REFERENCIAS AL DOM
-    // ==========================================
     const modalEditar = document.getElementById('modal-EditSombrero');
     const formEditar = document.getElementById('form-EditSombrero');
-    const tablaBody = document.getElementById('tabla-sombreros-body'); 
     const btnCerrar = modalEditar ? modalEditar.querySelector('.close') : null;
 
-    if (!modalEditar || !formEditar || !tablaBody) {
-        console.error("ERROR CRÍTICO: No se encontraron elementos del modal o la tabla.");
-        return;
-    }
+    if (!modalEditar || !formEditar) return;
 
     // ==========================================
     // 2. FUNCIONES AUXILIARES
     // ==========================================
-
     const limpiarModalEditar = () => {
         formEditar.reset();
+
+        // Resetear la pasarela al paso 1
+        document.querySelectorAll('.pasarela-step-edit').forEach(el => el.style.display = 'none');
+        const paso1 = document.getElementById('step-edit-1');
+        if (paso1) paso1.style.display = 'block';
+
+        document.querySelectorAll('.paso-dot-edit').forEach((dot, index) => {
+            if (index === 0) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+
+        // Limpiar checkboxes de tallas
+        document.querySelectorAll('.talla-edit-checkbox').forEach(cb => cb.checked = false);
+
         const inputsArchivo = formEditar.querySelectorAll('input[type="file"]');
         inputsArchivo.forEach(input => input.value = '');
         const previews = formEditar.querySelectorAll('.preview');
@@ -32,83 +81,82 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const cargarPreviewDesdeBD = (nombreArchivo, idImgPreview) => {
-        const rutaBase = '/LaHerradura/uploads/sombreros/'; 
-        const img = document.getElementById(idImgPreview);
-        
-        if (img) {
-            if (nombreArchivo && nombreArchivo.trim() !== "") {
-                img.src = rutaBase + nombreArchivo;
-                img.style.display = 'block';
-            } else {
-                img.src = '#';
-                img.style.display = 'none';
-            }
+        const rutaBase = '/LaHerradura/uploads/sombreros/';
+        const preview = document.getElementById(idImgPreview);
+        if (nombreArchivo && nombreArchivo !== '') {
+            preview.src = rutaBase + nombreArchivo;
+            preview.style.display = 'block';
+        } else {
+            preview.src = '#';
+            preview.style.display = 'none';
         }
     };
 
-    // ==========================================
-    // 3. EVENTOS (LOGICA PRINCIPAL)
-    // ==========================================
-
-    if(btnCerrar) {
-        btnCerrar.onclick = () => modalEditar.style.display = 'none';
-    }
-    window.onclick = (event) => {
-        if (event.target == modalEditar) modalEditar.style.display = 'none';
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', () => {
+            modalEditar.style.display = 'none';
+        });
     }
 
-    // CLIC EN LA TABLA
-    tablaBody.addEventListener('click', (e) => {
-        
+    // ==========================================
+    // 3. EVENTOS DE LA TABLA (EDITAR, ELIMINAR, VER)
+    // ==========================================
+    document.addEventListener('click', (e) => {
+
         // --- A) BOTÓN EDITAR ---
-        if (e.target.classList.contains('btn-editarSombrero')) {
+        const btnEditar = e.target.closest('.btn-editarSombrero');
+        if (btnEditar) {
+            const id = btnEditar.getAttribute('data-id');
             limpiarModalEditar();
-            const id = e.target.dataset.id;
-            console.log("Editando ID:", id);
 
             fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Error de red");
-                    return response.json();
-                })
+                .then(res => res.json())
                 .then(data => {
-                    if(data.error){
-                        Alerta.error("Error del servidor: " + data.error); // CAMBIO: Alerta visual
+                    if (data.error) {
+                        Swal.fire('Error', data.error, 'error');
                         return;
                     }
 
-                    // Rellenar formulario (sin cambios)
-                    document.getElementById('edit-id-sombrero').value = data.id_sombrero; 
+                    document.getElementById('edit-id-sombrero').value = data.id_sombrero;
+                    document.getElementById('edit-SKUSombrero').value = data.SKU || '';
                     document.getElementById('edit-NombreSombrero').value = data.Nombre;
-                    document.getElementById('edit-ColorSombrero').value = data.id_color;
-                    document.getElementById('edit-MaterialSombrero').value = data.id_material;
                     document.getElementById('edit-PrecioSombrero').value = data.Precio;
-                    document.getElementById('edit-HormaSombrero').value = data.id_horma;
-                    document.getElementById('edit-CopaSombrero').value = data.id_copa;
+
+                    document.getElementById('edit-ColorSombrero').value = data.id_color || "Null";
+                    document.getElementById('edit-HormaSombrero').value = data.id_horma || "Null";
+                    document.getElementById('edit-CopaSombrero').value = data.id_copa || "Null";
+                    document.getElementById('edit-MaterialSombrero').value = data.id_material || "Null";
+
                     document.getElementById('edit-TamañoCopaSombrero').value = data.Tam_Copa;
                     document.getElementById('edit-TamañoAlaSombrero').value = data.Tam_ala;
-                    
+
+                    if (data.Tallas && data.Tallas !== "Unitalla") {
+                        const tallasGuardadas = data.Tallas.split(',');
+                        tallasGuardadas.forEach(talla => {
+                            const cb = document.querySelector(`.talla-edit-checkbox[value="${talla.trim()}"]`);
+                            if (cb) cb.checked = true;
+                        });
+                    }
+
                     cargarPreviewDesdeBD(data.Img1, 'previewEditSombrero1');
                     cargarPreviewDesdeBD(data.Img2, 'previewEditSombrero2');
                     cargarPreviewDesdeBD(data.Img3, 'previewEditSombrero3');
                     cargarPreviewDesdeBD(data.Img4, 'previewEditSombrero4');
-                    
+
                     modalEditar.style.display = 'block';
                 })
-                .catch(error => {
-                    console.error('Error al cargar datos:', error);
-                    Alerta.error("No se pudieron cargar los datos."); // CAMBIO
+                .catch(err => {
+                    console.error('Error fetching data:', err);
+                    Swal.fire('Error', 'No se pudo cargar la información del sombrero.', 'error');
                 });
         }
 
-        // --- B) BOTÓN ELIMINAR (GRAN CAMBIO AQUÍ) ---
-        if (e.target.classList.contains('btn-eliminarSombrero')) {
-            const id = e.target.dataset.id;
-
-            // Usamos Alerta.confirmar en lugar de confirm()
+        // --- B) BOTÓN ELIMINAR ---
+        const btnEliminar = e.target.closest('.btn-eliminarSombrero');
+        if (btnEliminar) {
+            const id = btnEliminar.dataset.id;
             Alerta.confirmar(`¿Estás seguro de eliminar el sombrero ID ${id}?`, 'Sí, eliminar')
                 .then((result) => {
-                    // Solo si el usuario dio click en "Sí, eliminar"
                     if (result.isConfirmed) {
                         const formData = new FormData();
                         formData.append('id', id);
@@ -120,10 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         .then(r => r.json())
                         .then(data => {
                             if (data.success) {
-                                e.target.closest('tr').remove();
-                                Alerta.toast('Producto eliminado correctamente', 'success'); // CAMBIO: Toast elegante
+                                btnEliminar.closest('tr').remove();
+                                Alerta.toast('Producto eliminado correctamente', 'success');
                             } else {
-                                Alerta.error('Error al eliminar: ' + data.error); // CAMBIO
+                                Alerta.error('Error al eliminar: ' + data.error);
                             }
                         })
                         .catch(err => console.error(err));
@@ -131,201 +179,108 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         }
 
-        // --- C) LÓGICA DE "VER DETALLES" (EL OJITO) ---
-    if (e.target.closest('.btn-verSombrero')) {
-        const btn = e.target.closest('.btn-verSombrero');
-        const id = btn.dataset.id;
-        
-        // Seleccionamos el modal de VISTA (no el de editar)
-        const modalVer = document.getElementById('modal-ViewProducts');
-        
-        // Fetch para obtener los datos (reutilizamos tu controlador existente)
-        fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
-            .then(response => response.json())
-            .then(data => {
-                // 1. Llenar textos
-                document.getElementById('name-sombrero-vp').textContent = data.Nombre;
-                document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
+        // --- C) BOTÓN VER DETALLES (EL OJITO) ---
+        const btnVer = e.target.closest('.btn-verSombrero');
+        if (btnVer) {
+            const id = btnVer.dataset.id;
+            
+            // NOTA: Ajusta este ID si tu modal se llama diferente en el HTML
+            const modalVer = document.getElementById('modal-ViewProducts') || document.getElementById('modal-ViewProduct');
 
-                // Notas: Asegúrate que tu PHP devuelva los nombres (Nombre_Color) gracias a los INNER JOIN que hicimos
-                document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color || data.Color}`;
-                document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma || data.Horma}`;
-                document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa || data.Copa}`;
-                document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
-                document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
-                document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.Material}`;
+            if(!modalVer) {
+                console.error("No se encontró el modal de Ver en el HTML.");
+                return;
+            }
 
-                // 2. Generar Galería de Imágenes (Tu lógica mejorada)
-                const imgCont = document.getElementById('img-sombrero');
-                
-                let galeriaHtml = `
-                    <div id="vista-foto">
-                        <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
-                    </div>
-                    <div id="vista-miniaturas">
-                `;
+            fetch(`/LaHerradura/Controller/CRUD_Sombreros/ViewSombreros.php?id=${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('name-sombrero-vp').textContent = data.Nombre;
+                    document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
+                    document.getElementById('modal-color').textContent = `Color: ${data.Nombre_Color || data.Color}`;
+                    document.getElementById('modal-horma').textContent = `Horma: ${data.Nombre_Horma || data.Horma}`;
+                    document.getElementById('modal-copa').textContent = `Copa: ${data.Nombre_Copa || data.Copa}`;
+                    document.getElementById('modal-tam-copa').textContent = `Tamaño copa: ${data.Tam_Copa} cm`;
+                    document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
+                    document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.Material}`;
 
-                const imagenes = [];
-                if (data.Img1) imagenes.push(data.Img1);
-                if (data.Img2) imagenes.push(data.Img2);
-                if (data.Img3) imagenes.push(data.Img3);
-                if (data.Img4) imagenes.push(data.Img4);
+                    const imgCont = document.getElementById('img-sombrero');
+                    let galeriaHtml = `
+                        <div id="vista-foto">
+                            <img id="main-image-modal" src="/LaHerradura/uploads/sombreros/${data.Img1}" alt="${data.Nombre}">
+                        </div>
+                        <div id="vista-miniaturas">
+                    `;
 
-                imagenes.forEach(imgSrc => {
-                    const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
-                    galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
-                });
+                    const imagenes = [];
+                    if (data.Img1) imagenes.push(data.Img1);
+                    if (data.Img2) imagenes.push(data.Img2);
+                    if (data.Img3) imagenes.push(data.Img3);
+                    if (data.Img4) imagenes.push(data.Img4);
 
-                galeriaHtml += `</div>`;
-                imgCont.innerHTML = galeriaHtml;
-
-                // 3. Activar listeners de las miniaturas
-                const mainImage = document.getElementById('main-image-modal'); 
-                const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
-                thumbnails.forEach(thumbnail => {
-                    thumbnail.addEventListener('click', () => {
-                        mainImage.src = thumbnail.src;
+                    imagenes.forEach(imgSrc => {
+                        const rutaCompleta = `/LaHerradura/uploads/sombreros/${imgSrc}`;
+                        galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
                     });
-                });
 
-                // 4. Mostrar el modal
-                modalVer.style.display = 'block';
-                
-                // Lógica para cerrar ESTE modal específico
-                const spanClose = modalVer.querySelector('.close');
-                if(spanClose) {
-                    spanClose.onclick = () => {
-                        modalVer.style.display = 'none';
-                        imgCont.innerHTML = ""; // Limpiar galería
-                    }
-                }
-                
-                // Cerrar al dar clic fuera
-                window.addEventListener('click', (event) => {
-                    if (event.target == modalVer) {
-                        modalVer.style.display = "none";
-                    }
-                });
+                    galeriaHtml += `</div>`;
+                    imgCont.innerHTML = galeriaHtml;
 
-            })
-            .catch(error => console.error('Error:', error));
-    }
+                    const mainImage = document.getElementById('main-image-modal');
+                    const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
+                    thumbnails.forEach(thumbnail => {
+                        thumbnail.addEventListener('click', () => {
+                            mainImage.src = thumbnail.src;
+                        });
+                    });
+
+                    modalVer.style.display = 'block';
+
+                    const spanClose = modalVer.querySelector('.close');
+                    if(spanClose) {
+                        spanClose.onclick = () => {
+                            modalVer.style.display = 'none';
+                            imgCont.innerHTML = "";
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
     });
 
     // ==========================================
-    // 4. ENVIAR FORMULARIO DE EDICIÓN
+    // 4. GUARDAR CAMBIOS DE EDICIÓN
     // ==========================================
-    formEditar.addEventListener('submit', (e) => {
-        e.preventDefault(); 
+    formEditar.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-        const limpiarEstilosError = () => {
-            formEditar.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-            formEditar.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
-        };
-        limpiarEstilosError();
-
-        let errores = [];
-        let primerError = null;
-
-        const marcarError = (id, mensaje) => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.classList.add('input-error');
-                if (!primerError) primerError = el;
-            }
-            errores.push(mensaje);
-        };
-
-        // --- Validaciones (Igual que antes) ---
-        const textos = ['edit-NombreSombrero'];
-        textos.forEach(id => {
-            const input = document.getElementById(id);
-            const valor = input.value.trim();
-            const nombreCampo = id.replace('edit-', '').replace('Sombrero', '');
-
-            if (valor === "") marcarError(id, `El campo ${nombreCampo} no puede estar vacío.`);
-            else if (/^\d+$/.test(valor)) marcarError(id, `El ${nombreCampo} no puede ser solo números.`);
-            else if (valor.length < 3) marcarError(id, `El ${nombreCampo} es muy corto.`);
-        });
-
-        const selects = ['edit-HormaSombrero', 'edit-CopaSombrero', 'edit-ColorSombrero', 'edit-MaterialSombrero'];
-        selects.forEach(id => {
-            const input = document.getElementById(id);
-            if (input.value === "Null") marcarError(id, `Selecciona una opción válida.`);
-        });
-
-        const numeros = ['edit-PrecioSombrero', 'edit-TamañoCopaSombrero', 'edit-TamañoAlaSombrero'];
-        numeros.forEach(id => {
-            const input = document.getElementById(id);
-            if (input.value === "" || isNaN(input.value) || Number(input.value) <= 0) {
-                marcarError(id, `Revisa el valor numérico.`);
-            }
-        });
-
-        const archivosNuevos = new Set();
-        for (let i = 1; i <= 4; i++) {
-            const idInput = `imgEditSombrero${i}`; 
-            const input = document.getElementById(idInput);
-            if (input && input.files.length > 0) {
-                const nombreArchivo = input.files[0].name;
-                const caja = input.closest('.caja-preview');
-                if (archivosNuevos.has(nombreArchivo)) {
-                    errores.push(`La imagen "${nombreArchivo}" está repetida.`);
-                    if (caja) caja.classList.add('caja-error');
-                } else {
-                    archivosNuevos.add(nombreArchivo);
-                }
-            }
-        }
-
-        // --- D) MOSTRAR ERRORES CON SWEETALERT ---
-        if (errores.length > 0) {
-            // Unimos los errores con saltos de línea HTML (<br>)
-            const mensajeHTML = errores.join("<br>");
-            
-            // CAMBIO: Alerta visual con HTML activado
-            Swal.fire({
-                icon: 'warning',
-                title: 'Atención',
-                html: mensajeHTML, // Usamos 'html' en vez de 'text' para que lea los <br>
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Corregir'
-            });
-            
-            if (primerError) primerError.focus();
-            return;
-        }
-
-        // --- E) FETCH DE GUARDADO ---
-        const btnSubmit = formEditar.querySelector('input[type="submit"]');
-        const textoOriginal = btnSubmit.value;
-        btnSubmit.value = "Guardando...";
+        const btnSubmit = document.getElementById('btnGuardarEditSombreros');
+        const textoOriginal = btnSubmit.textContent;
+        btnSubmit.textContent = "Guardando...";
         btnSubmit.disabled = true;
 
-        const formData = new FormData(formEditar);
+        const formData = new FormData(this);
 
-        fetch(formEditar.action, { 
+        fetch(this.action, {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
-            btnSubmit.value = textoOriginal;
+            btnSubmit.textContent = textoOriginal;
             btnSubmit.disabled = false;
 
             if (data.success) {
                 modalEditar.style.display = 'none';
-                
-                // CAMBIO: Esperamos a que el usuario presione OK para recargar
                 Alerta.exito('Sombrero actualizado correctamente.')
                     .then(() => {
-                        location.reload(); 
+                        location.reload();
                     });
             } else {
                 let mensaje = "Error del servidor:<br>";
                 if(data.error) mensaje += data.error + "<br>";
                 if(data.warnings) mensaje += data.warnings.join("<br>");
-                
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un problema',
@@ -336,20 +291,49 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.error('Error update:', error);
             Alerta.error('Error de conexión con el servidor.');
-            btnSubmit.value = textoOriginal;
+            btnSubmit.textContent = textoOriginal;
             btnSubmit.disabled = false;
         });
     });
 
-    // 5. ACTIVAR PREVIEWS (Sin cambios)
+    // ==========================================
+    // 5. ACTIVAR PREVIEWS
+    // ==========================================
     if (typeof setupImagePreview === 'function') {
         setupImagePreview('imgEditSombrero1', 'previewEditSombrero1');
         setupImagePreview('imgEditSombrero2', 'previewEditSombrero2');
         setupImagePreview('imgEditSombrero3', 'previewEditSombrero3');
         setupImagePreview('imgEditSombrero4', 'previewEditSombrero4');
+
         setupImagePreview('imgSombrero1', 'previewSombrero1');
         setupImagePreview('imgSombrero2', 'previewSombrero2');
         setupImagePreview('imgSombrero3', 'previewSombrero3');
         setupImagePreview('imgSombrero4', 'previewSombrero4');
+    }
+
+    // ==========================================
+    // 6. GENERAR SKU AUTOMÁTICO
+    // ==========================================
+    const btnAgregar = document.getElementById('btnAgg-Sombrero');
+    if (btnAgregar) {
+        btnAgregar.addEventListener('click', () => {
+            const inputSKU = document.getElementById('SKUSombrero');
+            const modalAgregar = document.getElementById('modal-AggSombrero');
+            
+            // Generar código: SOM + últimos 6 dígitos de la fecha actual (para que sea único)
+            // Ejemplo resultado: SOM-839210
+            const random = Math.floor(100 + Math.random() * 900); // 3 números aleatorios
+            const fecha = Date.now().toString().slice(-4); // Últimos 4 números del tiempo
+            const skuGenerado = `SOM-${fecha}${random}`;
+            
+            if (inputSKU) {
+                inputSKU.value = skuGenerado;
+                // Opcional: Si quieres que no se pueda borrar, descomenta la siguiente línea:
+                // inputSKU.readOnly = true; 
+            }
+            
+            // Abrir el modal (por si acaso modal.js no lo ha abierto aún)
+            if (modalAgregar) modalAgregar.style.display = 'block';
+        });
     }
 });

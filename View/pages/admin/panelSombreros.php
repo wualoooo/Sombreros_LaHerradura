@@ -30,26 +30,22 @@
                 <input type="text" class="TxtBusquedaAdmin" for="BusquedaSombreroAdmin" id="BusquedaSombreroAdmin" placeholder="Buscador"></input>
                 <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="FiltroBusquedaAdminSombrero">
                     <option value="Nombre">Nombre</option>
+                    <option value="SKU">SKU</option>
                     <option value="Precio">Precio</option>
                     <option value="Color">Color</option>
                     <option value="Copa">Copa</option>
                     <option value="Horma">Horma</option>
-                    <option value="Tam_Copa">Tamaño de Copa</option>
-                    <option value="Tam_Ala">Tamaño de Ala</option>
                     <option value="Material">Material</option>
                 </select>
             </div> 
         </div>
 
         <table>
+            <th>SKU</th>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Color</th>
-            <th>Copa</th>
             <th>Horma</th>
-            <th>Tamaño copa</th>
-            <th>Tamaño ala</th>
-            <th>Material</th>
             <th>Acciones</th>
             <th>Estatus</th>
 
@@ -58,7 +54,8 @@
             include (ROOT_PATH.'Model/conexion.php');
             
             // RECOLECTAR LOS DATOS DE LA BASE DE DATOS
-            $sql = "SELECT 
+            $sql = "SELECT
+            s.SKU,
             s.id_sombrero,
             s.Nombre,  
             s.Precio,
@@ -68,12 +65,14 @@
             s.Tam_Copa,
             s.Tam_ala,
             s.Estado,
-            m.Nombre AS Nombre_Material  -- Renombramos
+            s.Tallas,
+            m.Nombre AS Nombre_Material 
             FROM sombreros s
             INNER JOIN colores c ON s.Color = c.id_color
             INNER JOIN hormas h ON s.Horma = h.id_horma
             INNER JOIN copas cp ON s.Copa = cp.id_copa
-            INNER JOIN materiales m ON s.Material = m.id_material";
+            INNER JOIN materiales m ON s.Material = m.id_material
+            ORDER BY s.id_sombrero DESC";
             $result = $conn -> query($sql);
 
             // MOSTRAR LOS DATOS EN UNA TABLA
@@ -81,15 +80,13 @@
             while($row = $result->fetch_assoc()) {
                 echo("
                     <tr>
+                        <td>".$row["SKU"]."</td>
                         <td>".$row["Nombre"]."</td>
-                        <td>".$row["Precio"]."</td>
-                        <td>".$row["Nombre_Color"]."</td>   
-                        <td>".$row["Nombre_Copa"]."</td>    
+                        <td>$".$row["Precio"]."</td>
+                        <td>".$row["Nombre_Color"]."</td>    
                         <td>".$row["Nombre_Horma"]."</td>   
-                        <td>".$row["Tam_Copa"]."</td>
-                        <td>".$row["Tam_ala"]."</td>
                         
-                        <td>".$row["Nombre_Material"]."</td> <td>
+                        <td>
                             <button class='btn-editar btn-editarSombrero' data-id='".$row["id_sombrero"]."'>
                                 <span class='material-symbols-outlined'>edit</span>
                             </button>
@@ -119,7 +116,7 @@
             else{
                 echo("
                     <tr>
-                        <td colspan='10'>No hay resultados</td>
+                        <td colspan='7'>No hay resultados</td>
                     </tr>
                 ");
             }

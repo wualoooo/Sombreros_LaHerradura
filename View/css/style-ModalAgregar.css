@@ -12,12 +12,18 @@
 
 .modal-content-Agregar {
     background: #f4f4f7;
-    margin: 2.5% auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 15px;
     border-radius: 10px;
-    width: 70vw;
+    width: 40vw;
     height: auto;
+    max-height: 95vh;
+    overflow-y: auto;
     color: black;
+    transition: all 0.3s ease-in-out;
 }
 
 .close {
@@ -351,3 +357,116 @@ form{
     font-size: 2.5vh;
 }
 
+/* --- ESTILOS PASARELA MULTIPASO --- */
+.pasarela-step {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.indicador-pasos {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.paso-dot {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ddd;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.paso-dot.active {
+    background-color: #741616; /* Tu color verde */
+    color: white;
+    box-shadow: 0 0 10px #a31818;
+}
+
+.divButton-pasarela {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.btn-siguiente, .btn-anterior {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-siguiente {
+    background-color: #3b5998;
+    color: white;
+    margin-left: auto; /* Empuja a la derecha si no hay botón anterior */
+}
+
+.btn-anterior {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-siguiente:hover { background-color: #2d4373; }
+.btn-anterior:hover { background-color: #5a6268; }
+
+/* --- ESTILOS PARA SELECTOR DE TALLAS --- */
+.contenedor-tallas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.talla-checkbox {
+    cursor: pointer;
+    user-select: none; /* Evita que el texto se sombree al dar clics rápidos */
+}
+
+/* Ocultamos el checkbox real */
+.talla-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+/* Estilo del "botón" falso */
+.talla-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #555;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto hover */
+.talla-checkbox:hover .talla-btn {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+/* CUANDO ESTÁ SELECCIONADO */
+.talla-checkbox input[type="checkbox"]:checked + .talla-btn {
+    background-color: #4C8F43; /* Tu color verde */
+    border-color: #3a6b34;
+    color: white;
+    box-shadow: 0 4px 8px rgba(76, 143, 67, 0.3);
+    transform: scale(1.05); /* Crece un poquito */
+}

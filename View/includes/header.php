@@ -33,7 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <li><a href="#" id="openLogin">Iniciar Sesion</a></li>
         <?php endif; ?>
 
-        <li><a href="#">Guia de tallas</a></li>
+        <li><a href="/LaHerradura/View/pages/user/rv.php">Guia de tallas</a></li>
         <li><a href="#">Probador virtual</a></li>
         <li><a href="#" id="btn-open-cart" style="position: relative;">    
             <span class="material-symbols-outlined" id="Cart">shopping_cart</span>

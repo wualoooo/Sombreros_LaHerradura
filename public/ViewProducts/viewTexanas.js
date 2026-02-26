@@ -34,7 +34,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('modal-tam-ala').textContent = `Tamaño ala: ${data.Tam_ala} cm`;
                     document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material}`;
 
-                    // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
+                    const contenedorTallas = document.getElementById('container-tallas');
+                    
+                    if (contenedorTallas) {
+                        // A) Limpiar tallas anteriores (del producto que viste antes)
+                        contenedorTallas.innerHTML = ''; 
+
+                        // B) Obtener el string de tallas (ej: "54,55,56" o "Unitalla")
+                        let stringTallas = data.Tallas || "Unitalla";
+                        
+                        // C) Convertirlo en un array separando por comas
+                        let arrayTallas = stringTallas.split(',');
+
+                        // D) Crear un botón por cada talla
+                        arrayTallas.forEach(talla => {
+                            let span = document.createElement('span');
+                            span.classList.add('talla'); // Clase para estilos CSS
+                            span.textContent = talla.trim(); // .trim() quita espacios extra
+
+                            // E) Agregar el evento de click AQUÍ MISMO a los nuevos botones
+                            span.addEventListener('click', function() {
+                                // 1. Quitar 'selected' a todos los hermanos
+                                contenedorTallas.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
+                                // 2. Poner 'selected' al actual
+                                this.classList.add('selected');
+                            });
+
+                            // F) Insertar en el HTML
+                            contenedorTallas.appendChild(span);
+                        });
+                    }
                     
                     // En lugar de una sola imagen, generamos la galería completa
                     const imgCont = document.getElementById('img-sombrero');
@@ -73,7 +102,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 6. ¡IMPORTANTE! Activamos los listeners para las miniaturas que ACABAMOS de crear
                     activarListenersGaleriaModal();
 
-                    // --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
+                    // --- LÓGICA DE CARRITO ---
+                    // Reemplazar el botón para limpiar eventos anteriores
+                    const btnAgregar = document.getElementById('btn-AggCart');
+                    const inputCantidad = document.getElementById('cant-products');
+                    const nuevoBtn = btnAgregar.cloneNode(true);
+                    btnAgregar.parentNode.replaceChild(nuevoBtn, btnAgregar);
+
+                    nuevoBtn.addEventListener('click', () => {
+                        
+                        // Validar talla seleccionada (buscamos dentro del contenedor dinámico)
+                        const tallaSeleccionada = contenedorTallas.querySelector('.talla.selected');
+                        
+                        if (!tallaSeleccionada) {
+                            if (typeof Alerta !== 'undefined') {
+                                Alerta.error("Por favor, selecciona una talla.");
+                            } else {
+                                alert("Selecciona una talla");
+                            }
+                            return; 
+                        }
+
+                        const valorTalla = tallaSeleccionada.textContent.trim();
+                        const cantidad = parseInt(inputCantidad.value) || 1;
+
+                        const producto = 
+                        {
+                            sku: data.SKU,
+                            id: data.id_texana,
+                            nombre: data.Nombre,
+                            precio: data.Precio,
+                            imagen: data.Img1,
+                            tipo: 'texanas', 
+                            cantidad: cantidad,
+                            talla: valorTalla 
+                        };
+
+                        if (typeof Carrito !== 'undefined') {
+                            Carrito.agregar(producto);
+                            modal.style.display = 'none';
+                            if (typeof Alerta !== 'undefined') Alerta.toast("Producto agregado al carrito", "success");
+                        }
+                    });
+// --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
 
                     // 4. Mostramos el modal
                     modal.style.display = 'block';
@@ -101,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mainImage = document.getElementById('main-image-modal'); 
         
         // Seleccionamos las miniaturas DENTRO DEL MODAL
-        const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
+        const thumbnails = document.querySelectorAll('#img-texana .thumbnail-modal');
 
         if (!mainImage) {
             console.error("No se encontró la imagen principal del modal ('main-image-modal')");

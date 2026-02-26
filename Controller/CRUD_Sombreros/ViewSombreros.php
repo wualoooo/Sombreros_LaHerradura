@@ -10,22 +10,23 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id_sombrero = $_GET['id'];
 
-// 2. Preparar la consulta SQL (Texto)
-// ERROR CORREGIDO: Quitamos la comilla simple (') después del ?
+// 2. Preparar la consulta SQL
 $sqlQuery = "SELECT 
-            s.id_sombrero, -- Agregamos el ID principal por si acaso
+            s.id_sombrero, 
+            s.SKU,           -- AGREGADO
             s.Nombre, 
             s.Precio,
-            s.Color AS id_color,       -- NECESARIO PARA EDITAR (El ID)
-            c.Nombre AS Nombre_Color,  -- (El Texto)
-            s.Horma AS id_horma,       -- NECESARIO PARA EDITAR
+            s.Color AS id_color,       
+            c.Nombre AS Nombre_Color,  
+            s.Horma AS id_horma,       
             h.Nombre AS Nombre_Horma, 
-            s.Copa AS id_copa,         -- NECESARIO PARA EDITAR
+            s.Copa AS id_copa,         
             cp.Nombre AS Nombre_Copa,    
             s.Tam_Copa,
             s.Tam_ala,
-            s.Material AS id_material, -- NECESARIO PARA EDITAR
+            s.Material AS id_material, 
             m.Nombre AS Nombre_Material,
+            s.Tallas,        -- AGREGADO
             s.Img1,
             s.Img2,
             s.Img3,
@@ -35,9 +36,8 @@ $sqlQuery = "SELECT
         LEFT JOIN hormas h ON s.Horma = h.id_horma
         LEFT JOIN copas cp ON s.Copa = cp.id_copa
         LEFT JOIN materiales m ON s.Material = m.id_material
-        WHERE s.id_sombrero = ?"; // <-- SIN COMILLAS AQUÍ
+        WHERE s.id_sombrero = ?";
 
-// 3. Crear el objeto Statement
 $stmt = $conn->prepare($sqlQuery);
 
 if (!$stmt) {
@@ -45,20 +45,16 @@ if (!$stmt) {
     exit;
 }
 
-// 4. Vincular y Ejecutar
-// ERROR CORREGIDO: Usamos $stmt, no $sql
 $stmt->bind_param("i", $id_sombrero);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// 5. Verificar resultados
-if ($result->num_rows === 0) {
-    echo json_encode(['error' => 'No encontrado.']);
-    exit;
+if ($result->num_rows > 0) {
+    $data = $result->fetch_assoc();
+    echo json_encode($data);
+} else {
+    echo json_encode(['error' => 'No se encontró el sombrero con ID: ' . $id_sombrero]);
 }
-
-$sombrero = $result->fetch_assoc();
-echo json_encode($sombrero);
 
 $stmt->close();
 $conn->close();

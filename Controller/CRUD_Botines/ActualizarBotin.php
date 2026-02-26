@@ -1,114 +1,97 @@
 <?php
-include '../../Model/conexion.php'; 
+require('../../Model/conexion.php'); 
 
-// Respuesta JSON
 header('Content-Type: application/json');
 $response = ['success' => false, 'error' => 'Error desconocido.'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+try {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new Exception('Método no permitido.');
+    }
 
-    // 1. OBTENER ID
     $id = $_POST['id_botin'] ?? '';
 
     if (empty($id)) {
-        echo json_encode(['success' => false, 'error' => 'Error: ID no proporcionado.']);
-        exit;
+        throw new Exception('Error: ID de botín no encontrado.');
     }
 
-    // 2. ACTUALIZAR DATOS DE TEXTO
-    $Nombre = $_POST['NombreBotin'];
-    $Talla = $_POST['TallaBotin'];
-    $Material = $_POST['MaterialBotin'];
-    $Suela = $_POST['SuelaBotin'];
-    $Precio = $_POST['PrecioBotin'];
+    // OBTENER LOS NUEVOS DATOS
+    $sku = trim($_POST['SKUBotin']);
+    $nombre = trim($_POST['NombreBotin']);
+    $precio = $_POST['PrecioBotin'];
+    $talla = $_POST['TallaBotin'];
+    $material = $_POST['MaterialBotin'];
+    $suela = $_POST['SuelaBotin'];
 
+    // ACTUALIZAR DATOS EN BD
     $sql = "UPDATE botines SET 
+                SKU = ?,
                 Nombre = ?, 
-                Talla = ?, 
+                Precio = ?,
+                Talla = ?,
                 Material = ?, 
-                Suela = ?, 
-                Precio = ?
+                Suela = ?
             WHERE id_botin = ?";
-            
+
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sissii", $Nombre, $Talla, $Material, $Suela, $Precio, $id);
+    if (!$stmt) {
+        throw new Exception("Error preparando la consulta: " . $conn->error);
+    }
+
+    // sddiii = String, String, Double, Double, Int, Int, Int
+    $stmt->bind_param("sddiiii", $sku, $nombre, $precio, $talla, $material, $suela, $id);
 
     if (!$stmt->execute()) {
-        echo json_encode(['success' => false, 'error' => 'Error al actualizar texto: ' . $stmt->error]);
-        $stmt->close();
-        $conn->close();
-        exit;
+        throw new Exception("Error al actualizar datos: " . $stmt->error);
     }
     $stmt->close();
 
-    // 3. MANEJO DE IMÁGENES (Replicado de Cinturones)
-    
-    // Inputs del formulario HTML (adminBotines.js)
-    $imagenes_form = ['imgBotin1', 'imgBotin2', 'imgBotin3', 'imgBotin4'];
-    // Columnas en la Base de Datos
-    $columnas_db = ['Img1', 'Img2', 'Img3', 'Img4'];
-    
-    $ruta_subida = "../../uploads/botines/"; 
-
-    // Asegurar que la carpeta exista
+    // ----------------------------------------------------
+    // ACTUALIZACIÓN DE IMÁGENES
+    // ----------------------------------------------------
+    $ruta_subida = "../../uploads/botines/";
     if (!file_exists($ruta_subida)) {
         mkdir($ruta_subida, 0777, true);
     }
 
-    for ($i = 0; $i < count($imagenes_form); $i++) {
-        
-        $nombre_input = $imagenes_form[$i]; 
-        
-        // Verificar si el usuario subió una imagen nueva en este input
-        if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] == 0) {
+    $imagenes_keys = [
+        'imgBotin1' => 'Img1',
+        'imgBotin2' => 'Img2',
+        'imgBotin3' => 'Img3',
+        'imgBotin4' => 'Img4'
+    ];
+
+    foreach ($imagenes_keys as $nombre_input => $columna_actual) {
+        if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
             
-            $columna = $columnas_db[$i];
+            // Obtener imagen vieja
+            $sql_get_img = "SELECT $columna_actual FROM botines WHERE id_botin = ?";
+            $stmt_get = $conn->prepare($sql_get_img);
+            $stmt_get->bind_param("i", $id);
+            $stmt_get->execute();
+            $result_img = $stmt_get->get_result();
+            $row_img = $result_img->fetch_assoc();
+            $imagen_vieja = $row_img[$columna_actual] ?? '';
+            $stmt_get->close();
 
-            // A) Obtener nombre de la imagen VIEJA para borrarla
-            $sql_vieja = "SELECT $columna FROM botines WHERE id_botin = ?";
-            $stmt_v = $conn->prepare($sql_vieja);
-            $stmt_v->bind_param("i", $id);
-            $stmt_v->execute();
-            $stmt_v->bind_result($imagen_vieja);
-            $stmt_v->fetch();
-            $stmt_v->close();
-
-            // B) Procesar la imagen NUEVA
             $ext = pathinfo($_FILES[$nombre_input]['name'], PATHINFO_EXTENSION);
-            
-            // Validación básica de extensión (Seguridad)
-            if (!in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp'])) {
-                $response['warnings'][] = "Formato no permitido en $nombre_input. Solo jpg, png, webp.";
-                continue; 
-            }
-
-            // Generar nombre único: ImgBotin_ID_Timestamp_Indice.ext
-            $nombre_nuevo = 'ImgBotin_' . $id . '_' . time() . "_$i." . $ext;
+            $nombre_nuevo = uniqid('ImgBotin_') . '.' . $ext;
             $ruta_destino = $ruta_subida . $nombre_nuevo;
 
-            // C) Mover el archivo y Actualizar BD
             if (move_uploaded_file($_FILES[$nombre_input]['tmp_name'], $ruta_destino)) {
                 
-                // 1. Borrar archivo viejo si existe
                 if (!empty($imagen_vieja)) {
-                    $ruta_vieja_completa = $ruta_subida . $imagen_vieja;
-                    if (file_exists($ruta_vieja_completa)) {
-                        unlink($ruta_vieja_completa);
+                    $ruta_vieja = $ruta_subida . $imagen_vieja;
+                    if (file_exists($ruta_vieja)) {
+                        unlink($ruta_vieja);
                     }
                 }
 
-                // 2. Actualizar registro en BD
-                $sql_update_img = "UPDATE botines SET $columna = ? WHERE id_botin = ?";
+                $sql_update_img = "UPDATE botines SET $columna_actual = ? WHERE id_botin = ?";
                 $stmt_img = $conn->prepare($sql_update_img);
                 $stmt_img->bind_param("si", $nombre_nuevo, $id);
-                
-                if (!$stmt_img->execute()) {
-                    $response['warnings'][] = "Error SQL al guardar $columna";
-                }
+                $stmt_img->execute();
                 $stmt_img->close();
-
-            } else {
-                $response['warnings'][] = "No se pudo subir el archivo $nombre_input.";
             }
         }
     }
@@ -116,10 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response['success'] = true;
     $response['message'] = 'Botín actualizado correctamente.';
 
-} else {
-    $response['error'] = 'Método no permitido.';
+} catch (Exception $e) {
+    $response['error'] = $e->getMessage();
 }
 
-$conn->close();
 echo json_encode($response);
 ?>

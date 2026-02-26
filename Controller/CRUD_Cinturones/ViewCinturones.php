@@ -1,57 +1,53 @@
 <?php
 require('../../Model/conexion.php');
-header('Content-Type: application/json'); // Siempre envía JSON
+header('Content-Type: application/json');
 
-// 1. Verifica si el ID llegó
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    // Si no llegó ID, envía un error
     echo json_encode(['error' => 'No se recibió ningún ID.']);
     exit;
 }
 
 $id_cinturon = $_GET['id'];
 
-// 2. Prepara la consulta (¡ASEGÚRATE que tu columna se llama 'id_texana'!)
-$sql = $conn->prepare("SELECT 
-            c.id_cinturon,
-            c.Nombre,
+// Consultamos SKU, Tallas, Tamaño (Ancho), Material y Adorno
+$sqlQuery = "SELECT 
+            c.id_cinturon, 
+            c.SKU,
+            c.Nombre, 
             c.Precio,
-            c.Material AS id_material,
-            c.Adorno AS id_adorno,
+            c.Material AS id_material, 
             m_principal.Nombre AS Nombre_Material,
+            c.Adorno AS id_adorno,
             m_adorno.Nombre AS Nombre_Adorno,
-            c.Tamaño,
+            c.Tamaño,   -- Este es el Ancho/Grosor
+            c.Tallas,   -- Las tallas disponibles (32, 34, etc.)
             c.Img1,
             c.Img2,
             c.Img3,
             c.Img4
-            FROM cinturones c
-            INNER JOIN materiales m_principal ON c.Material = m_principal.id_material
-            INNER JOIN materiales m_adorno ON c.Adorno = m_adorno.id_material
-            WHERE c.id_cinturon = ?");
+        FROM cinturones c
+        LEFT JOIN materiales m_principal ON c.Material = m_principal.id_material
+        LEFT JOIN materiales m_adorno ON c.Adorno = m_adorno.id_material
+        WHERE c.id_cinturon = ?";
 
-if (!$sql) {
-    // Si la preparación falla (ej. error de sintaxis SQL)
-    echo json_encode(['error' => 'Error al preparar la consulta: ' . $conn->error]);
+$stmt = $conn->prepare($sqlQuery);
+
+if (!$stmt) {
+    echo json_encode(['error' => 'Error al preparar: ' . $conn->error]);
     exit;
 }
 
-// 3. Vincula el parámetro (asumimos que es un entero "i")
-$sql->bind_param("i", $id_cinturon);
-$sql->execute();
-$result = $sql->get_result();
+$stmt->bind_param("i", $id_cinturon);
+$stmt->execute();
+$result = $stmt->get_result();
 
-// 4. Verifica si la consulta encontró algo
-if ($result->num_rows === 0) {
-    // Si no encontró filas, este es tu problema
-    echo json_encode(['error' => 'Consulta vacía. No se encontró ningún producto con el ID: ' . $id_cinturon]);
-    exit;
+if ($result->num_rows > 0) {
+    $data = $result->fetch_assoc();
+    echo json_encode($data);
+} else {
+    echo json_encode(['error' => 'No se encontró el cinturón con ID: ' . $id_cinturon]);
 }
 
-// 5. Si todo salió bien, obtén los datos y envíalos
-$cinturon = $result->fetch_assoc();
-echo json_encode($cinturon);
-
-$sql->close();
+$stmt->close();
 $conn->close();
 ?>

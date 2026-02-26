@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ID del formulario de AGREGAR Cinturones
     const formulario = document.getElementById('form-AggCinturon');
-
     if (!formulario) return;
 
     formulario.addEventListener('submit', function(e) {
         e.preventDefault(); 
 
-        // --- A) LIMPIEZA VISUAL ---
         const limpiarEstilos = () => {
             formulario.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
             formulario.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
@@ -26,48 +23,48 @@ document.addEventListener('DOMContentLoaded', function() {
             errores.push(mensaje);
         };
 
-        // --- B) VALIDACIONES ---
+        // 1. Textos
+        const camposTexto = ['SKUCinturon', 'NombreCinturon'];
+        camposTexto.forEach(name => {
+            const input = formulario.querySelector(`[name="${name}"]`);
+            const nombreCampo = name.replace('Cinturon', ''); 
+            
+            if (!input) return;
+            const valor = input.value.trim();
 
-        // 1. Nombre
-        const inputNombre = document.getElementById('NombreCinturon');
-        if (inputNombre) {
-            const valor = inputNombre.value.trim();
-            if (valor === "") marcarError(inputNombre, "El Nombre es obligatorio.");
-            else if (valor.length < 3) marcarError(inputNombre, "El Nombre es muy corto.");
-        }
-
-        // 2. Selects (Material y Adorno)
-        const selects = ['MaterialCinturon', 'AdornoCinturon'];
-        selects.forEach(id => {
-            const input = document.getElementById(id);
-            // Validamos que exista y que no sea la opción por defecto
-            if (input && (input.value === "Null" || input.value === "")) {
-                marcarError(input, `Selecciona una opción para ${id.replace('Cinturon', '')}.`);
+            if (valor === "") {
+                marcarError(input, `El campo ${nombreCampo} es obligatorio.`);
+            } else if (name !== 'SKUCinturon' && /^\d+$/.test(valor)) {
+                marcarError(input, `El ${nombreCampo} no puede ser solo números.`);
+            } else if (valor.length < 3) {
+                marcarError(input, `El ${nombreCampo} es muy corto.`);
             }
         });
 
-        // 3. Tamaño (Input Texto/Número)
-        const inputTamano = document.getElementById('TamañoCinturon');
-        if (inputTamano && inputTamano.value.trim() === "") {
-            marcarError(inputTamano, "El Tamaño es obligatorio.");
-        }
-
-        // 4. Precio
-        const inputPrecio = document.getElementById('PrecioCinturon');
-        if (inputPrecio) {
-            if (inputPrecio.value === "" || Number(inputPrecio.value) <= 0) {
-                marcarError(inputPrecio, "El Precio debe ser mayor a 0.");
+        // 2. Selects
+        const selects = ['MaterialCinturon', 'AdornoCinturon'];
+        selects.forEach(name => {
+            const input = formulario.querySelector(`[name="${name}"]`);
+            if (!input || input.value === "Null" || input.value === "") {
+                marcarError(input, `Selecciona una opción para ${name.replace('Cinturon', '')}.`);
             }
-        }
+        });
 
-        // 5. Imágenes
+        // 3. Números
+        const numeros = ['PrecioCinturon'];
+        numeros.forEach(name => {
+            const input = formulario.querySelector(`[name="${name}"]`);
+            if (!input || input.value === "" || isNaN(input.value) || Number(input.value) <= 0) {
+                marcarError(input, `Revisa el valor numérico de ${name.replace('Cinturon', '')}.`);
+            }
+        });
+
+        // 4. Imágenes
         const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
-            const inputImg = document.getElementById(`imgCinturon${i}`);
-            
+            const inputImg = formulario.querySelector(`[name="imgCinturon${i}"]`);
             if (inputImg) {
                 const caja = inputImg.closest('.caja-preview');
-
                 if (inputImg.files.length === 0) {
                     errores.push(`Falta seleccionar la Imagen ${i}`);
                     if (caja) caja.classList.add('caja-error');
@@ -83,8 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // --- C) RESULTADO ---
-
         if (errores.length > 0) {
             Swal.fire({
                 icon: 'warning',
@@ -93,14 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Corregir'
             });
-
             if (primerElementoError) primerElementoError.focus();
 
         } else {
-            // --- D) ENVIAR ---
             const btnSubmit = document.getElementById('btnGuardarAggCinturon');
-            const textoOriginal = btnSubmit.value;
-            btnSubmit.value = "Guardando...";
+            const textoOriginal = btnSubmit.textContent;
+            btnSubmit.textContent = "Guardando...";
             btnSubmit.disabled = true;
 
             const formData = new FormData(formulario);
@@ -111,7 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                btnSubmit.value = textoOriginal;
+                
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
 
                 if (data.success) {
@@ -121,13 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     Alerta.exito(data.message || 'Cinturón registrado correctamente.')
                         .then(() => {
                             formulario.reset(); 
-                            document.querySelectorAll('#form-AggCinturon .preview').forEach(img => {
+                            document.querySelectorAll('.preview').forEach(img => {
                                 img.src = '#';
                                 img.style.display = 'none';
                             });
                             location.reload(); 
                         });
-
                 } else {
                     Alerta.error(data.message || "Error desconocido del servidor.");
                 }
@@ -135,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
                 Alerta.error("Hubo un error de conexión con el servidor.");
-                btnSubmit.value = textoOriginal;
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
             });
         }

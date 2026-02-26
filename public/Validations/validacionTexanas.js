@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Asegúrate que tu <form> en el HTML tenga este ID exacto
     const formulario = document.getElementById('form-AggTexana');
-
     if (!formulario) return;
 
     formulario.addEventListener('submit', function(e) {
-        e.preventDefault(); // Detenemos el envío para validar
+        e.preventDefault(); 
 
         // --- A) LIMPIEZA VISUAL PREVIA ---
         const limpiarEstilos = () => {
@@ -28,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- B) VALIDACIONES ROBUSTAS ---
 
-        // 1. Textos
-        const camposTexto = ['NombreTexana'];
+        // 1. Textos (¡AGREGAMOS EL SKU AQUÍ!)
+        const camposTexto = ['SKUTexana', 'NombreTexana'];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             const nombreCampo = name.replace('Texana', ''); 
@@ -39,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (valor === "") {
                 marcarError(input, `El campo ${nombreCampo} es obligatorio.`);
-            } else if (/^\d+$/.test(valor)) {
+            } else if (name !== 'SKUTexana' && /^\d+$/.test(valor)) {
                 marcarError(input, `El ${nombreCampo} no puede ser solo números.`);
             } else if (valor.length < 3) {
                 marcarError(input, `El ${nombreCampo} es muy corto.`);
@@ -64,14 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 4. Imágenes (Validación duplicados)
+        // 4. Imágenes
         const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
             const inputImg = formulario.querySelector(`[name="imgTexana${i}"]`);
-            
             if (inputImg) {
                 const caja = inputImg.closest('.caja-preview');
-
                 if (inputImg.files.length === 0) {
                     errores.push(`Falta seleccionar la Imagen ${i}`);
                     if (caja) caja.classList.add('caja-error');
@@ -88,9 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // --- C) RESULTADO DE VALIDACIÓN ---
-
         if (errores.length > 0) {
-            // MOSTRAR ERRORES CON SWEETALERT (Lista HTML)
             Swal.fire({
                 icon: 'warning',
                 title: 'Atención',
@@ -98,57 +92,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Corregir'
             });
-
             if (primerElementoError) primerElementoError.focus();
 
         } else {
             // --- D) SI TODO ESTÁ BIEN: ENVIAR FETCH ---
             
-            const btnSubmit = formulario.querySelector('input[type="submit"]');
-            const textoOriginal = btnSubmit.value;
-            btnSubmit.value = "Guardando...";
+            // CORREGIMOS EL BOTÓN A .textContent
+            const btnSubmit = document.getElementById('btnGuardarAggTexana');
+            const textoOriginal = btnSubmit.textContent;
+            btnSubmit.textContent = "Guardando...";
             btnSubmit.disabled = true;
 
             const formData = new FormData(formulario);
 
-            fetch(formulario.action, { // Usa la URL del atributo action="" del form
+            fetch(formulario.action, { 
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 
-                btnSubmit.value = textoOriginal;
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
 
                 if (data.success) {
-                    // ÉXITO: Usamos Alerta.exito
-                    // Cerramos el modal inmediatamente para mejor UX
                     const modal = document.getElementById('modal-AggTexana');
                     if(modal) modal.style.display = "none";
 
                     Alerta.exito(data.message || 'Texana registrada correctamente.')
                         .then(() => {
                             formulario.reset(); 
-                            // Limpiar previews
                             document.querySelectorAll('.preview').forEach(img => {
                                 img.src = '#';
                                 img.style.display = 'none';
                             });
-                            
-                            // Recargar la página
                             location.reload(); 
                         });
 
                 } else {
-                    // ERROR DEL PHP
                     Alerta.error(data.message || "Error desconocido del servidor.");
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 Alerta.error("Hubo un error de conexión con el servidor.");
-                btnSubmit.value = textoOriginal;
+                btnSubmit.textContent = textoOriginal;
                 btnSubmit.disabled = false;
             });
         }

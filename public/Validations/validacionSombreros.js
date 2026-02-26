@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // --- B) VALIDACIONES ROBUSTAS ---
 
         // 1. Textos
-        const camposTexto = ['NombreSombrero'];
+        const camposTexto = ['SKUSombrero','NombreSombrero'];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
             const nombreCampo = name.replace('Sombrero', ''); 
@@ -104,9 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // --- D) SI TODO ESTÁ BIEN: ENVIAR FETCH ---
             
-            const btnSubmit = formulario.querySelector('input[type="submit"]');
-            const textoOriginal = btnSubmit.value;
-            btnSubmit.value = "Guardando...";
+            const btnSubmit = document.getElementById('btnGuardarAggSombrero');
+            const textoOriginal = btnSubmit.textContent; // Usamos textContent en lugar de value
+            btnSubmit.textContent = "Guardando...";
             btnSubmit.disabled = true;
 
             const formData = new FormData(formulario);

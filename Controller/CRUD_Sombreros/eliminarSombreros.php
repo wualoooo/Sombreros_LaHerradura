@@ -1,6 +1,5 @@
 <?php
 // --- 1. CONEXIÓN A LA BD ---
-// Asegúrate de que esta ruta sea correcta
 include '../../Model/conexion.php'; 
 
 // Preparamos una respuesta JSON
