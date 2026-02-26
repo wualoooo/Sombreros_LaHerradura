@@ -96,7 +96,7 @@ const Carrito = {
             // Creamos el HTML del item
             const itemHTML = `
                 <div class="cart-item-side">
-                    <img src="/LaHerradura/uploads/${item.tipo.toLowerCase()}s/${item.imagen}" alt="${item.nombre}">
+                    <img src="/LaHerradura/uploads/${item.tipo}/${item.imagen}" alt="${item.nombre}">
                     <div class="item-details" style="flex-grow:1;">
                         <h4>${item.nombre}</h4>
                         

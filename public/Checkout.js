@@ -76,17 +76,25 @@ function procesarCompraFinal() {
     
     // 1. Recolectar Datos
     const carrito = JSON.parse(localStorage.getItem('laherradura_carrito')) || [];
+    
+    if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+    }
+
     // Buscar qué radio button de dirección está seleccionado
     const direccionSeleccionada = document.querySelector('input[name="direccion_envio"]:checked');
     
     if (!direccionSeleccionada) {
         alert("Por favor selecciona una dirección de envío en el paso 2.");
-        cambiarPaso(2); // Regresarlo al paso 2
+        // Asegúrate de que tu función cambiarPaso(2) exista en tu código
+        if(typeof cambiarPaso === 'function') cambiarPaso(2); 
         return;
     }
 
     const totalTexto = document.getElementById('pago-total-final').textContent;
-    const totalNumerico = parseFloat(totalTexto.replace('$', ''));
+    // IMPORTANTE: Quitamos el signo de dólar y las comas antes de convertir a decimal
+    const totalNumerico = parseFloat(totalTexto.replace('$', '').replace(/,/g, ''));
 
     const datosCompra = {
         carrito: carrito,
@@ -119,12 +127,12 @@ function procesarCompraFinal() {
             }).then((result) => {
                 // Esto se ejecuta SOLAMENTE cuando el usuario le da a "Aceptar"
                 if (result.isConfirmed) {
-                    cerrarModalCheckout();
+                    if(typeof cerrarModalCheckout === 'function') cerrarModalCheckout();
                     window.location.reload();
                 }
             });
         } else {
-            alert("Error: " + data.message);
+            Swal.fire('Error', data.message, 'error');
         }
     })
     .catch(error => {

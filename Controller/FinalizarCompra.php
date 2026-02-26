@@ -1,87 +1,76 @@
 <?php
-require('../Model/conexion.php');
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 0); 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['id_usuario'])) {
-    echo json_encode(['success' => false, 'message' => 'Usuario no logueado']);
-    exit;
-}
-
-$input = json_decode(file_get_contents('php://input'), true);
-
-$id_usuario = $_SESSION['id_usuario'];
-$id_direccion = $input['id_direccion'] ?? null;
-$carrito = $input['carrito'] ?? [];
-$total = $input['total'] ?? 0;
-
-if (!isset($id_direccion) || empty($carrito)) {
-    echo json_encode(['success' => false, 'message' => 'Faltan datos (dirección o carrito vacío)']);
-    exit;
-}
-
-// FUNCIÓN PARA GENERAR CÓDIGO ÚNICO (10 DÍGITOS)
-function generarCodigoRastreo($conn) {
-    $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $codigo = '';
-    
-    // Intentar generar hasta encontrar uno único
-    do {
-        $codigo = '';
-        for ($i = 0; $i < 10; $i++) {
-            $codigo .= $caracteres[rand(0, strlen($caracteres) - 1)];
-        }
-        
-        // Verificar si ya existe en la BD
-        $sql = "SELECT id_pedido FROM pedidos WHERE codigo_rastreo = '$codigo'";
-        $result = $conn->query($sql);
-    } while ($result->num_rows > 0); // Si existe, repite el bucle
-    
-    return $codigo;
-}
-
-$conn->begin_transaction();
+require('../Model/conexion.php');
 
 try {
-    $codigoRastreo = generarCodigoRastreo($conn);
+    // 1. VALIDAR SESIÓN
+    if (!isset($_SESSION['id_usuario'])) {
+        throw new Exception("Debes iniciar sesión para finalizar la compra.");
+    }
+    
+    $id_usuario = $_SESSION['id_usuario'];
 
-    $sqlPedido = "INSERT INTO pedidos (id_usuario, id_direccion, total, estado_pago, estado_envio, codigo_rastreo ) 
-                VALUES (?, ?, ?, '5', '1', ?)";
-    $stmt = $conn->prepare($sqlPedido);
-    $stmt->bind_param("iids", $id_usuario, $id_direccion, $total, $codigoRastreo);
-    $stmt->execute();
-    $id_pedido = $conn->insert_id;
+    // 2. RECIBIR DATOS
+    $input = file_get_contents('php://input');
+    $datosCompra = json_decode($input, true);
+
+    if (!$datosCompra || empty($datosCompra['carrito'])) {
+        throw new Exception("El carrito está vacío o hubo un error al leer los datos.");
+    }
+
+    $carrito = $datosCompra['carrito'];
+    $id_direccion = intval($datosCompra['id_direccion']);
+    $total = floatval($datosCompra['total']);
+
+    // 3. CONVERTIR CARRITO A JSON
+    $productos_json = json_encode($carrito, JSON_UNESCAPED_UNICODE);
+
+    // 4. INSERTAR EN LA BASE DE DATOS
+    $sql = "INSERT INTO pedidos (id_usuario, id_direccion, total, productos, estado_envio) VALUES (?, ?, ?, ?, 1)";
+    $stmt = $conn->prepare($sql);
+    
+    if (!$stmt) {
+        throw new Exception("Error al preparar la consulta: " . $conn->error);
+    }
+
+    $stmt->bind_param("iids", $id_usuario, $id_direccion, $total, $productos_json);
+
+    if ($stmt->execute()) {
+        $id_pedido = $stmt->insert_id;
+        
+        // 5. GENERAR CÓDIGO DE RASTREO
+        $codigo_rastreo = "LH-" . date('Y') . "-" . str_pad($id_pedido, 4, "0", STR_PAD_LEFT);
+        
+        // -------------------------------------------------------------
+        // ¡NUEVO! GUARDAR EL CÓDIGO DE RASTREO EN LA BASE DE DATOS
+        // -------------------------------------------------------------
+        $sql_update = "UPDATE pedidos SET codigo_rastreo = ? WHERE id_pedido = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("si", $codigo_rastreo, $id_pedido);
+        $stmt_update->execute();
+        $stmt_update->close();
+        
+        // 6. ENVIAR RESPUESTA AL USUARIO
+        echo json_encode([
+            'success' => true, 
+            'codigo_rastreo' => $codigo_rastreo,
+            'message' => 'Pedido guardado correctamente.'
+        ]);
+    } else {
+        throw new Exception("Error al guardar el pedido en la BD: " . $stmt->error);
+    }
+
     $stmt->close();
 
-    $sqlDetalle = "INSERT INTO detalle_pedido (id_pedido, id_producto, cantidad, precio_unitario, talla) 
-                VALUES (?, ?, ?, ?, ?)";
-    $stmtDetalle = $conn->prepare($sqlDetalle);
-
-    foreach ($carrito as $prod) {
-        $stmtDetalle->bind_param("iiids", 
-            $id_pedido, 
-            $prod['id'], 
-            $prod['cantidad'], 
-            $prod['precio'], 
-            $prod['talla']
-        );
-        $stmtDetalle->execute();
-    }
-    $stmtDetalle->close();
-
-    $conn->commit();
-
-    echo json_encode([
-        'success' => true, 
-        'message' => 'Compra realizada con éxito',
-        'codigo_rastreo' => $codigoRastreo,
-        'id_pedido' => $id_pedido
-    ]);
-
 } catch (Exception $e) {
-    // Si algo falla, deshacer todo (Rollback)
-    $conn->rollback();
-    echo json_encode(['success' => false, 'message' => 'Error al procesar: ' . $e->getMessage()]);
+    echo json_encode([
+        'success' => false, 
+        'message' => $e->getMessage()
+    ]);
 }
 
 $conn->close();
