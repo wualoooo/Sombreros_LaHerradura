@@ -130,7 +130,7 @@ $stmtD->close();
                     <table class="tabla-perfil">
                         <thead>
                             <tr>
-                                <th># Pedido</th>
+                                <th>Código pedido</th>
                                 <th>Fecha</th>
                                 <th>Total</th>
                                 <th>Estado</th>
@@ -142,7 +142,7 @@ $stmtD->close();
                                 
                             ?>
                             <tr>
-                                <td>#<?php echo $p['id_pedido']; ?></td>
+                                <td><?php echo $p['codigo_rastreo']; ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($p['fecha'])); ?></td>
                                 <td>$<?php echo number_format($p['total'], 2); ?></td>
                                 <td><span class=""><?php echo $p['status']; ?></span></td>
