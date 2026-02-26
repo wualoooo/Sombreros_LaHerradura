@@ -22,39 +22,20 @@
     <main>
         <h2 class="titleGestion">Gestión de Pedidos</h2>
         <table>
-            <th>Nombre usuario</th>
-            <th>Dirección de envío</th>
-            <th>Teléfono</th>
-            <th>Código de rastreo</th>
-            <th>Productos</th>
-            <th>Total</th>
-            <th>Fecha</th>
-            <th>Estado del pedido</th>
+            <thead>
+                <tr>
+                    <th>Nombre usuario</th>
+                    <th>Dirección de envío</th>
+                    <th>Teléfono</th>
+                    <th>Código de rastreo</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Estado del pedido</th>
+                </tr>
+            </thead>
         <tbody id="tabla-pedidos-body">
-            <!--<tr>
-                <td>1</td>
-                <td>Osbaldo Martínez Martin</td>
-                <td>7721042773</td>
-                <td>
-                    <ul>
-                        <li>Sombrero bangora</li>
-                        <li>Botin negro</li>
-                        <li>Cinturon</li>
-                    </ul>
-                </td>
-                <td>$1900.00</td>
-                <td>Pago con tarjeta</td>
-                <td>Santiago Ixtlahuaca, Tasquillo, <br> Hidalgo CP:42383</td>
-                <td>01/11/25</td>
-                <td>
-                    <Select id="StatePedido">
-                        <option value="">Revision de pago</option>
-                        <option value="">En proceso</option>
-                        <option value="">Enviado</option>
-                        <option value="">Completado</option>
-                    </Select>
-                </td>
-            </tr>-->
+            
             <?php 
     include (ROOT_PATH.'Model/conexion.php');
 

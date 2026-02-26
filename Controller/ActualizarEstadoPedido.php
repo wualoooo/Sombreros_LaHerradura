@@ -13,7 +13,7 @@ if(!isset($datos['id_pedido']) || !isset($datos['estado'])) {
 }
 
 $id_pedido = intval($datos['id_pedido']);
-$estado = trim($datos['estado']);
+$estado = intval($datos['estado']);
 
 // Hacemos el UPDATE en la tabla pedidos
 $sql = "UPDATE pedidos SET estado_envio = ? WHERE id_pedido = ?";
@@ -25,7 +25,7 @@ if(!$stmt) {
 }
 
 // "si" = string (estado), integer (id_pedido)
-$stmt->bind_param("si", $estado, $id_pedido);
+$stmt->bind_param("ii", $estado, $id_pedido);
 
 if($stmt->execute()) {
     echo json_encode(['success' => true]);
