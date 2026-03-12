@@ -88,7 +88,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                     </select>
 
                     <label class="lbl-Agregar">Tallas Disponibles</label>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Selecciona todas las tallas que tienes en existencia para este modelo:</p>
                     
                     <div class="contenedor-tallas">
                         <?php

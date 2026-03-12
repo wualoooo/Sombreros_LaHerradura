@@ -1,118 +1,101 @@
-.font-circles{
+/* ====== SECCIÓN HERO / BURBUJAS ====== */
+/* ====== SECCIÓN HERO / BURBUJAS ====== */
+.font-circles {
     color: #fff;
-    font-size: 20px;
-    padding-top: 9rem;
+    padding-top: 9rem; 
+    padding-bottom: 3rem; /* NUEVO: Le da un respiro abajo sin exagerar */
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Cambiado a más oscuro para contraste */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/LaHerradura/View/images/Img_Principal.png"); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 70vh; /* CORREGIDO: Antes era 100vh, esto causaba el espacio gigante */
     display: flex;
-    flex-direction: column; /* Cambiado para apilar elementos verticalmente */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    position: relative; /* Añadido para posicionamiento */
-    overflow: hidden; /* Añadido */
+    position: relative;
+    overflow: hidden;
 }
 
-.font-circles{
-  background-image: url("/LaHerradura/View/images/Img_Principal.png");
-  background-size: cover;      /* que cubra todo el contenedor */
-  background-position: center; /* centrada */
-  background-repeat: no-repeat;
-  min-height:60vh;            /* ocupa toda la altura de la ventana */
-  display:flex;
-  flex-direction:column;
-  justify-content:center;      /* centra verticalmente */
-  align-items:center;          /* centra horizontalmente */
+.principal {
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
 }
 
+.principal h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem); /* Texto fluido: min 1.8rem, ideal 4vw, max 2.8rem */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    line-height: 1.3;
+}
 
-/* ====== CONTENEDOR PRINCIPAL ====== */
+/* CONTENEDOR BURBUJAS */
 .hat-bubbles__inner {
     position: relative;
-    /* Ancho máximo contenido para que no se desparrame en pantallas gigantes */
     width: min(1200px, 95vw); 
-    height: 250px; /* AUMENTADO: Altura suficiente para los elementos grandes */
-    margin: 20px auto; /* Un poco de aire arriba y abajo */
+    height: 250px; 
+    margin: 20px auto; 
     display: flex;
     align-items: center;
     justify-content: center;
-    /* overflow: hidden; Útil durante desarrollo, quitar si corta sombras */
 }
 
-/* ====== EL FONDO BLANCO (La Pastilla) ====== */
 .bubble-pill {
     position: absolute;
     top: 50%;
-    /* Inicialmente centrado, pero se moverá con JS */
     left: 50%; 
     transform: translateY(-50%);
-    height: 190px; /* AUMENTADO: Altura de la pastilla */
+    height: 190px; 
     background: #fff;
     border-radius: 100px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    
-    /* Animación de anchura y posición */
-    transition: 
-        width 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-        left 0.6s cubic-bezier(0.25, 1, 0.5, 1),
-        opacity 0.3s ease;
-    
+    transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1), left 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
     z-index: 0;
-    
-    /* Estado INICIAL (Cerrado) */
     width: 0px; 
     opacity: 0;
     pointer-events: none;
 }
 
-/* Estado ACTIVO (Abierto) */
-.bubble-pill.is-open {
-    /* El ancho se calcula en el CSS para que llegue hasta el final del contenedor */
-    /* Nota: El 'left' lo pondrá el JS para que coincida con la burbuja activa */
-    width: 70%; /* Ocupa gran parte del ancho */
-    opacity: 1;
-}
+.bubble-pill.is-open { width: 70%; opacity: 1; }
 
-/* ====== TEXTO ====== */
 .bubble-text-container {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 30%; /* Posición relativa a la pastilla blanca */
-    width: 35%; /* Espacio para el texto */
+    left: 30%; 
+    width: 35%; 
     text-align: left;
     z-index: 2;
     opacity: 0;
-    transition: opacity 0.3s ease;
     pointer-events: none;
     transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
 }
 
 .bubble-text-container.is-visible {
     opacity: 1;
-    transition-delay: 0.2s; /* Que aparezca después de que se abra la pastilla */
+    transition-delay: 0.2s; 
 }
 
 .bubble-text-content {
     font-family: 'Montserrat', sans-serif;
-    font-size: 25px; 
+    font-size: clamp(18px, 2vw, 25px); 
     font-weight: 700;
     color: #111;
     line-height: 1.2;
 }
 
-/* ====== IMÁGENES (Burbujas) ====== */
 .avatar-anim {
     position: absolute;
     top: 50%;
-    transform: translate(-50%, -50%); /* Centrado perfecto en su punto */
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 4px solid #fff;
     background: #f0f0f0;
     object-fit: cover;
-    /* Animación suave tipo "rebote" al moverse */
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -120,39 +103,166 @@
 }
 
 .avatar-anim:hover {
-    transform: translate(-50%, -50%) scale(1.05); /* Pequeño zoom al pasar el mouse */
+    transform: translate(-50%, -50%) scale(1.05);
     box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-/* ====== Puntos indicadores ====== */
 .bubble-dots {
     position: absolute;
-    bottom: -40px;
+    bottom: -20px;
     left: 0; 
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 10px;
 }
+
 .bubble-dot {
     width: 10px; height: 10px;
     border-radius: 50%;
     background: #ddd;
     transition: background 0.3s, transform 0.3s;
 }
+
 .bubble-dot.is-active {
     background: #333;
     transform: scale(1.2);
 }
 
-/* ====== RESPONSIVE (Celular) ====== */
+/* ====== 3 CATEGORÍAS ====== */
+.three-category {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0 auto; 
+}
+
+.three-category .category {
+    flex: 1; 
+    height: clamp(300px, 50vw, 850px); /* Altura dinámica */
+    background-color: rgb(215, 118, 0);
+    overflow: hidden; 
+}
+
+.three-category .category img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block; 
+}
+
+/* ====== INFO CENTRAL (Iconos) ====== */
+.info-central {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos bajen a la siguiente línea si no caben */
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.space-info-central {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 250px; /* Crecen y se encogen, base de 250px */
+    max-width: 300px;
+    gap: 1rem;
+}
+
+.space-info-central > svg {
+    flex-shrink: 0;
+    width: 45px;
+    height: 45px;
+}
+
+.txt-info-central-tittle {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin: 0 0 0.2rem 0;
+}
+
+.txt-info-central-text {
+    font-weight: 300;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+/* ====== LEGADO ====== */
+.legado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1rem;
+    width: 100%;
+    background-color: beige;
+    box-sizing: border-box;
+}
+
+.legado-Tittle {
+    margin: 0 0 1.5rem 0;
+    width: 100%;
+    max-width: 800px;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+.legado-Text {
+    margin: 0;
+    width: 100%;
+    max-width: 800px;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* ====== UBICACIÓN ====== */
+.ubicacion {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 40vh;
+}
+
+.ubicacion-izquierda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    padding: 2rem;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.ubicacion-text {
+    text-align: center;
+    margin: 0 0 1.5rem 0;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.ubicacion > iframe {
+    width: 70%;
+    min-height: 400px;
+}
+
+/* =========================================
+   MEDIA QUERIES - MÓVIL Y TABLETS
+   ========================================= */
 @media (max-width: 850px) {
-    .hat-bubbles__inner { height: 450px; } /* Más alto en celular para apilar */
+    .font-circles {
+        padding-top: 80px; /* Ajuste para el header móvil más pequeño */
+    }
+
+    .hat-bubbles__inner { height: 450px; } 
     
     .bubble-pill { 
         height: auto; min-height: 250px;
         border-radius: 30px; 
-        top: 60%; /* Bajar la pastilla */
+        top: 60%; 
     }
     .bubble-pill.is-open { 
         width: 90%; left: 50% !important; transform: translate(-50%, -50%);
@@ -162,152 +272,27 @@
         left: 10%; width: 80%; top: 60%;
         text-align: center;
     }
-    .bubble-text-content { font-size: 20px; }
-}   
-
-
-.img_fondo_circles{
-    position: absolute; /* Añadido */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 696px;
-    z-index: -1;
-    object-fit: cover; /* Añadido para cubrir bien el espacio */
-}
-
-.principal{
-    z-index: 1;
-    text-align: center; /* Añadido */
-    padding: 20px; /* Añadido */
-    max-width: 800px; /* Añadido para limitar el ancho del texto */
     
-}
+    .three-category {
+        flex-direction: column; /* Apila las 3 imágenes verticalmente */
+    }
+    
+    .three-category .category {
+        height: 350px; /* Altura más controlada en móvil */
+        width: 100%;
+    }
 
-.principal h2 {
-    font-size: 2.5rem; /* Añadido tamaño específico */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Añadido para mejor legibilidad */
-    margin: 0; /* Añadido */
-}
+    .ubicacion {
+        flex-direction: column-reverse; /* Pone el texto arriba y el mapa abajo */
+    }
 
-/* CONTENEDOR PRINCIPAL - FLEXBOX */
-.three-category{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between; /* Distribuye espacio entre elementos */
-    margin: 0;
-    padding: 0;
-    gap: 20px; /* Espacio entre imágenes */
-    width: 100%;
-    margin: 0 auto; /* Centra el contenedor */
-}
+    .ubicacion-izquierda {
+        width: 100%;
+        padding: 3rem 1rem;
+    }
 
-/* CADA CATEGORÍA INDIVIDUAL */
-.three-category .category {
-    flex: 1; /* Cada categoría ocupa igual espacio */
-    min-width: 300px; /* Ancho mínimo en píxeles */
-    max-width: 100%; /* Ancho máximo en píxeles */
-    height: 850px; /* Altura fija en píxeles (ajusta según necesites) */
-    background-color: rgb(215, 118, 0);
-    margin: 0;
-    overflow: hidden; /* Evita que la imagen se salga del contenedor */
+    .ubicacion > iframe {
+        width: 100%;
+        height: 350px;
+    }
 }
-
-/* IMÁGENES DENTRO DE LAS CATEGORÍAS */
-.three-category .category img {
-    width: 100%; /* Ancho completo del contenedor */
-    height: 100%; /* Alto completo del contenedor */
-    object-fit: cover; /* Mantiene proporciones y cubre el espacio */
-    display: block; /* Elimina espacio inferior de imágenes inline */
-}
-
-.info-central{
-    display: flex;
-    justify-content: center;
-    height: 15vh;
-    width: 100%;
-}
-
-.space-info-central>svg{
-    height: 100%;
-    padding:0 1.5rem;
-}
-
-.space-info-central{
-    padding: 0 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.space-info-central>div{
-    margin:auto;
-    padding: auto;
-}
-
-.txt-info-central-tittle{
-    font-size: 1.7em;
-    font-weight: bold;
-    padding: 0.2rem 0;
-    margin: auto;
-}
-
-.txt-info-central-text{
-    font-weight: 300;
-    font-size: 0.8em;
-    padding: auto;
-    margin: auto;
-}
-
-.legado{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin: auto;
-    width: 100%;
-    height: 40vh;
-    background-color: beige;
-}
-
-.legado-Tittle{
-    margin: 1.5rem 0;
-    padding: 0;
-    width: 50%;
-    font-size: 2.8em;
-}
-
-.legado-Text{
-    margin: 0;
-    padding: 0;
-    width: 35%;
-    font-size: 1em;
-    font-weight: 200;
-}
-
-.ubicacion{
-    display: flex;
-    width: 100%;
-    height: 40vh;
-}
-
-.ubicacion>iframe{
-    width: 80%;
-    height: 100%;
-}
-
-.ubicacion>div{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 20%;
-}
-
-.ubicacion-text{
-    text-align: center;
-    margin: 1.5rem 1rem;
-    padding: 0;
-    font-size: 2.5rem;
-}
-

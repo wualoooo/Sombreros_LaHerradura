@@ -12,6 +12,23 @@
     backdrop-filter: blur(2px);
 }
 
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px; 
+    font-size: 20px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #dc3545 0%, #8b0000 100%);
+    padding: 10px 14px;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.close:hover { background: linear-gradient(135deg, #c82333 0%, #6a0f0f 100%); }
+
 .checkout-container {
     background-color: #fff;
     width: 90%;

@@ -22,7 +22,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
             <form class="FormAgregar" id="form-AggBotin" action="/LaHerradura/Controller/CRUD_Botines/registroBotines.php" method="POST" enctype="multipart/form-data">
                 
                 <div class="pasarela-step active" id="step-1">
-                    <h3>Paso 1: Información Básica</h3>
 
                     <label class="lbl-Agregar" for="SKUBotin">Código del Producto (SKU)</label>
                     <input class="input-Agregar" type="text" name="SKUBotin" id="SKUBotin" placeholder="Ej: BOT-HER-001" required>
@@ -39,7 +38,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                 </div>
 
                 <div class="pasarela-step" id="step-2" style="display: none;">
-                    <h3>Paso 2: Especificaciones y Talla</h3>
                     
                     <label class="lbl-Agregar" for="TallaBotin">Talla</label>
                     <input class="input-Agregar" type="number" name="TallaBotin" id="TallaBotin" placeholder="Ej. 26.5" min="10" step="0.5" max="35" required> 
@@ -69,7 +67,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                 </div>
 
                 <div class="pasarela-step" id="step-3" style="display: none;">
-                    <h3>Paso 3: Fotografías del Producto</h3>
                     <div class="contenedor-preview" style="grid-template-columns: 1fr 1fr; gap: 10px;">
                         <?php for($i=1; $i<=4; $i++): ?>
                         <div class="caja-preview">

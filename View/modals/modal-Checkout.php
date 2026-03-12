@@ -5,7 +5,7 @@
         
         <div class="modal-header">
             <h2>Finalizar Compra</h2>
-            <span class="close-modal" onclick="cerrarModalCheckout()">&times;</span>
+            <span class="close" onclick="cerrarModalCheckout()">&times;</span>
         </div>
 
         <div class="checkout-steps">

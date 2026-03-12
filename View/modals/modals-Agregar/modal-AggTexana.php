@@ -22,7 +22,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
             <form class="formAgregar" id="form-AggTexana" action="/LaHerradura/Controller/CRUD_Texanas/registroTexanas.php" method="POST" enctype="multipart/form-data">
                 
                 <div class="pasarela-step active" id="step-1">
-                    <h3>Paso 1: Información Básica</h3>
                     
                     <label class="lbl-Agregar" for="SKUTexana">Código del Producto (SKU)</label>
                     <input class="input-Agregar" type="text" name="SKUTexana" id="SKUTexana" readonly style="background-color: #e9ecef; cursor: not-allowed;">
@@ -49,7 +48,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                 </div>
 
                 <div class="pasarela-step" id="step-2" style="display: none;">
-                    <h3>Paso 2: Especificaciones y Tallas</h3>
                     
                     <label class="lbl-Agregar" for="HormaTexana">Horma</label>
                     <select class="input-Agregar Selects-Agregar" name="HormaTexana" id="HormaTexana" required>
@@ -92,7 +90,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                     <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
 
                     <label class="lbl-Agregar">Tallas Disponibles</label>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Selecciona todas las tallas que tienes en existencia para este modelo:</p>
                     
                     <div class="contenedor-tallas">
                         <?php
@@ -114,7 +111,6 @@ include_once(ROOT_PATH . 'Model/conexion.php');
                 </div>
 
                 <div class="pasarela-step" id="step-3" style="display: none;">
-                    <h3>Paso 3: Fotografías del Producto</h3>
                     <div class="contenedor-preview" style="grid-template-columns: 1fr 1fr; gap: 10px;">
                         <?php for($i=1; $i<=4; $i++): ?>
                         <div class="caja-preview">

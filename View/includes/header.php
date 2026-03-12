@@ -2,6 +2,12 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+//Definir la ruta
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+}
+//Conectar con la BD para toda la parte de user
+require_once(ROOT_PATH . 'Model/conexion.php'); 
 ?>
 
 <link rel="stylesheet" href="/LaHerradura/View/css/style-Header.css">
@@ -13,47 +19,53 @@ if (session_status() === PHP_SESSION_NONE) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <nav class="navbar">
-    <div class="logo">
-        <a href="/LaHerradura/index.php"><img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura"></a>
-        <h1>
-            Sombreros <br> La Herradura
-        </h1>
-    </div>
-    <ul class="nav-links">
-        <li><a href="/LaHerradura/View/pages/user/Sombreros.php">Sombreros</a></li>
-        <li><a href="/LaHerradura/View/pages/user/Texanas.php">Texanas</a></li>
-        <li><a href="/LaHerradura/View/pages/user/Cinturones.php">Cinturones</a></li>
-        <li><a href="/LaHerradura/View/pages/user/Botines.php">Botines</a></li>
+    <div class="nav-left">
+        <button id="btn-menu-movil" class="menu-movil-toggle">
+            <span class="material-symbols-outlined" id="menudesp">menu</span>
+        </button>
         
-        <?php if (isset($_SESSION['user_email'])): ?>
-            <li><a href="#" id="openUserInfo">
-                Perfil
-            </a></li>
-        <?php else: ?>
-            <li><a href="#" id="openLogin">Iniciar Sesion</a></li>
-        <?php endif; ?>
+        <div class="logo">
+            <a href="/LaHerradura/index.php"><img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura" id="ImgLogo"></a>
+            <h1>Sombreros <br> La Herradura</h1>
+        </div>
+    </div>
 
-        <li><a href="/LaHerradura/View/pages/user/rv.php">Guia de tallas</a></li>
-        <li><a href="#">Probador virtual</a></li>
-        <li><a href="#" id="btn-open-cart" style="position: relative;">    
-            <span class="material-symbols-outlined" id="Cart">shopping_cart</span>
-            <span id="cart-count" style="display: none; position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; font-weight: bold;">0</span>
-        </a></li>
-    </ul>
+    <div class="nav-menu-cart-group">
+        
+        <ul class="nav-links" id="menu-desplegable">
+            <li><a href="/LaHerradura/View/pages/user/Sombreros.php">Sombreros</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Texanas.php">Texanas</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Cinturones.php">Cinturones</a></li>
+            <li><a href="/LaHerradura/View/pages/user/Botines.php">Botines</a></li>
+            
+            <?php if (isset($_SESSION['user_email'])): ?>
+                <li class="desktop-user-link"><a href="#" id="openUserInfo">Perfil</a></li>
+            <?php else: ?>
+                <li class="desktop-user-link"><a href="#" id="openLogin">Iniciar Sesion</a></li>
+            <?php endif; ?>
+
+            <li><a href="/LaHerradura/View/pages/user/rv.php">Guía de tallas</a></li>
+            <li><a href="#">Probador virtual</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <?php if (isset($_SESSION['user_email'])): ?>
+                <a href="#" id="openUserInfoMobile" class="icono-link mobile-user-icon" title="Mi Perfil">
+                    <span class="material-symbols-outlined">person</span>
+                </a>
+            <?php else: ?>
+                <a href="#" id="openLoginMobile" class="icono-link mobile-user-icon" title="Iniciar Sesión">
+                    <span class="material-symbols-outlined">person</span>
+                </a>
+            <?php endif; ?>
+
+            <a href="#" id="btn-open-cart" class="icono-link" style="position: relative; display: flex; align-items: center;">    
+                <span class="material-symbols-outlined" id="Cart">shopping_cart</span>
+                <span id="cart-count" style="display: none; position: absolute; top: -8px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; font-weight: bold;">0</span>
+            </a>
+        </div>
+    </div>
 </nav>
-
-<?php
-//Iniciar sesión
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-//Definir la ruta
-if (!defined('ROOT_PATH')) {
-    define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
-}
-//Conectar con la BD para toda la parte de user
-require_once(ROOT_PATH . 'Model/conexion.php'); 
-?>
 
 <?php 
 include(ROOT_PATH . 'View/modals/modal-Checkout.php');
@@ -73,8 +85,7 @@ if (isset($_SESSION['user_email'])) {
         <span class="close-cart" id="btn-close-cart">&times;</span>
     </div>
     
-    <div id="cart-items-container" class="cart-items-container">
-        </div>
+    <div id="cart-items-container" class="cart-items-container"></div>
 
     <div class="cart-footer-side">
         <div class="cart-total-side">
@@ -84,4 +95,44 @@ if (isset($_SESSION['user_email'])) {
         <button id="btn-pagar-side" class="btn-checkout-side">Pagar Ahora</button>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnMenu = document.getElementById('btn-menu-movil');
+    const menuDesplegable = document.getElementById('menu-desplegable');
+    const iconoMenu = btnMenu ? btnMenu.querySelector('span') : null;
+
+    // Abrir/Cerrar menú móvil
+    if (btnMenu && menuDesplegable) {
+        btnMenu.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que el click se propague al document
+            menuDesplegable.classList.toggle('activo');
+            iconoMenu.textContent = menuDesplegable.classList.contains('activo') ? 'close' : 'menu';
+        });
+    }
+
+    // Cerrar menú al hacer clic fuera de él
+    document.addEventListener('click', (e) => {
+        if (menuDesplegable && menuDesplegable.classList.contains('activo')) {
+            // Si el click NO es dentro del menú
+            if (!menuDesplegable.contains(e.target)) {
+                menuDesplegable.classList.remove('activo');
+                iconoMenu.textContent = 'menu';
+            }
+        }
+    });
+
+    // Vincular iconos móviles con los modales existentes
+    const loginMobile = document.getElementById('openLoginMobile');
+    const loginDesktop = document.getElementById('openLogin');
+    if(loginMobile && loginDesktop) {
+        loginMobile.addEventListener('click', (e) => { e.preventDefault(); loginDesktop.click(); });
+    }
+
+    const userInfoMobile = document.getElementById('openUserInfoMobile');
+    const userInfoDesktop = document.getElementById('openUserInfo');
+    if(userInfoMobile && userInfoDesktop) {
+        userInfoMobile.addEventListener('click', (e) => { e.preventDefault(); userInfoDesktop.click(); });
+    }
+});
+</script>

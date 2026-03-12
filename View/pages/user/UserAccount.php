@@ -50,9 +50,13 @@ $stmtD->close();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Cuenta - La Herradura</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta</title>
     <link rel="stylesheet" href="/LaHerradura/View/css/style-userAccount.css"> <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -70,7 +74,7 @@ $stmtD->close();
                 $foto = $user['foto_perfil'] ?? null;
                 $src = ($foto && file_exists($_SERVER['DOCUMENT_ROOT'].$rutaImg.$foto)) ? $rutaImg.$foto : $imgDef;
             ?>
-            <img src="<?php echo $src; ?>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #8B0000; margin-bottom: 1rem;">
+            <img src="<?php echo htmlspecialchars($srcImagen); ?>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #8B0000; margin-bottom: 1rem;">
             <h4 style="margin: 0;"><?php echo htmlspecialchars($user['Nombre']); ?></h4>
             <p style="color: #888; font-size: 0.9rem;"><?php echo htmlspecialchars($user['Correo']); ?></p>
             
@@ -98,12 +102,40 @@ $stmtD->close();
                 <h2 style="border-bottom: 2px solid #8B0000; padding-bottom: 10px;">Información Personal</h2>
                 
                 <div style="text-align: center; margin: 2rem 0;">
-                    <label for="upload-profile-pic" class="profile-pic-container" title="Cambiar foto">
-                        <img src="<?php echo $src; ?>" alt="Foto" class="profile-pic-img" id="user-profile-image-big">
-                        <div class="profile-pic-overlay">
-                            <span class="material-symbols-outlined">photo_camera</span>
-                        </div>
-                    </label>
+                    <label for="upload-profile-pic" class="profile-pic-container" title="Cambiar foto de perfil">
+                <?php
+                $rutaUserImg = '/LaHerradura/uploads/users/';
+                // Nota: Como la imagen actual se ve rota, asegúrate de que 'avatar.png' sí exista en esta ruta exacta
+                $imgDefault = '/LaHerradura/View/images/avatar.png';
+
+                $fotoActual = $_SESSION['user_foto'] ?? null;
+
+                // Verificación robusta de la imagen
+                if ($fotoActual) {
+                    // 1. Verificamos si es una URL externa (Google)
+                    if (strpos($fotoActual, 'http://') === 0 || strpos($fotoActual, 'https://') === 0) {
+                        $srcImagen = $fotoActual;
+                    } 
+                    // 2. Si no es URL, verificamos si es un archivo local que sí existe
+                    else if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rutaUserImg . $fotoActual)) {
+                        $srcImagen = $rutaUserImg . $fotoActual;
+                    } 
+                    // 3. Si no existe ni como URL ni como archivo, usamos default
+                    else {
+                        $srcImagen = $imgDefault;
+                    }
+                } else {
+                    $srcImagen = $imgDefault;
+                }
+                ?>
+
+                <img src="<?php echo htmlspecialchars($srcImagen); ?>" 
+                    alt="Foto de perfil" 
+                    class="profile-pic-img" 
+                    id="user-profile-image" 
+                    referrerpolicy="no-referrer">
+            </label>
+
                     <input type="file" id="upload-profile-pic" style="display:none;" accept="image/*">
                 </div>
 
@@ -111,7 +143,7 @@ $stmtD->close();
                     <div>
                         <label style="color: #666; font-size: 0.9rem;">Nombre</label>
                         <p style="font-weight: bold; font-size: 1.1rem; margin-top: 5px;">
-                            <?php echo htmlspecialchars($user['Nombre'] . ' ' . $user['Apellido_Pat'] . ' ' . $user['Apellido_Mat']); ?>
+                            <?php echo htmlspecialchars($user['Nombre'] . ' ' . $user['Apellidos']); ?>
                         </p>
                     </div>
                     <div>
@@ -127,6 +159,7 @@ $stmtD->close();
                 <h2 style="border-bottom: 2px solid #8B0000; padding-bottom: 10px;">Historial de Pedidos</h2>
                 
                 <?php if (count($pedidos) > 0): ?>
+                <div class="tabla-responsiva">
                     <table class="tabla-perfil">
                         <thead>
                             <tr>
@@ -157,6 +190,7 @@ $stmtD->close();
                         <p>Aún no has realizado compras.</p>
                     </div>
                 <?php endif; ?>
+                </div>
             </div>
 
             <div id="direcciones" class="tab-content">

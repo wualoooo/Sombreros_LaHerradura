@@ -1,3 +1,4 @@
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="/LaHerradura/View/css/style-login.css">
 
 <div class="modal" id="modal-Login">
@@ -7,62 +8,74 @@
         <div id="cont-form-login">
             <form action="/LaHerradura/Controller/InicioSesion.php" method="POST" id="loginForm">
                 <div class="SpaceLogin">
-                    <label class="labelLogin" for="email">Correo Electrónico</label>
-                    <br>
-                    <br>
-                    <input class="input-login" type="email" name="Correo" id="correoLogin" placeholder="Ingresa tu usuario" >
-                    <br>
+                    <label class="labelLogin" for="correoLogin">Correo Electrónico</label>
+                    <input class="input-login" type="email" name="Correo" id="correoLogin" placeholder="Ingresa tu correo" required>
                 </div>
+                
                 <div class="SpaceLogin">
-                    <label class="labelLogin" for="contra">Contraseña</label>
-                    <br>
-                    <br>
+                    <label class="labelLogin" for="passwordLogin">Contraseña</label>
                     <div class="campo-password">
-                        <input  class="input-login" type="password" name="Password" id="passwordLogin" placeholder="Ingresa tu contraseña" >
+                        <input class="input-login" type="password" name="Password" id="passwordLogin" placeholder="Ingresa tu contraseña" required>
                         <button type="button" class="ButtonEyePassword" onclick="toggleVisibility('passwordLogin')">
                             <span class='material-symbols-outlined' id="buttonEye">visibility</span>
                         </button>
                     </div>
                 </div>
-                <br>
-                <span id="olv-contra">¿Olvidaste tu contraseña?</span>
-                <br>
+                
+                <a href="#" id="olv-contra">¿Olvidaste tu contraseña?</a>
 
                 <div id="loginError" style="color: red; margin-top: 10px; text-align: center;"></div>
                 
                 <div class="buttons">
                     <button type="submit" id="button-iniciar">Iniciar sesión</button>
-                    
                     <button type="button" id="buttonCrear">Crear cuenta</button>
                 </div>
             </form>
-            <div class="divisor">
-            <span>o</span>
-        </div>
-        
-        <div class="redes-sociales">
             
-            <button type="button" class="BotonFacebook">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px;">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                Continuar con Facebook
-            </button>
+            <div class="divisor">
+                <span>o</span>
+            </div>
+        
+            <div class="redes-sociales">
+                <!--<button type="button" class="BotonFacebook">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px;">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Continuar con Facebook
+                </button> -->
 
-            <button type="button" class="BotonGoogle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px;">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-                Continuar con Google
-            </button>
+                <div id="buttonGoogleContainer" style="width: 100%; display: flex; justify-content: center; margin-top: 5px;"></div>
+            </div>
 
-        </div>
-            <?php 
-            include(ROOT_PATH . 'View/modals/modal-CrearCuenta.php')
-            ?>
+            
         </div>
     </div>
 </div>
+<?php include(ROOT_PATH . 'View/modals/modal-CrearCuenta.php') ?>
+
+<script>
+    function handleCredentialResponse(response) {
+        fetch('/LaHerradura/Controller/LoginGoogle.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: response.credential })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) { window.location.href = '/LaHerradura/index.php'; } 
+            else { document.getElementById('loginError').innerText = "Error al iniciar con Google: " + data.message; }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    window.onload = function () {
+        google.accounts.id.initialize({
+            client_id: "143053972635-3supmue5rg7o0o3p32jkmfpl9uv9intv.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("buttonGoogleContainer"),
+            { theme: "outline", size: "large", width: "100%" } 
+        );
+    };
+</script>

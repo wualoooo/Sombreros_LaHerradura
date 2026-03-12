@@ -1,5 +1,5 @@
 <?php
-require('../Model/conexion.php'); // Tu conexión
+require('../../Model/conexion.php'); // Tu conexión
 session_start();
 header('Content-Type: application/json');
 

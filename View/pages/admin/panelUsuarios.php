@@ -31,13 +31,13 @@
             <?php 
             include (ROOT_PATH.'Model/conexion.php');
 
-            $sql = "SELECT id_usuario, Nombre, Apellido_Pat, Apellido_Mat, Correo FROM usuarios";
+            $sql = "SELECT id_usuario, Nombre, Apellidos, Correo FROM usuarios";
             $result = $conn -> query($sql);
             if ($result -> num_rows>0){
 
                 while($row = $result->fetch_assoc()) {
                     echo "<tr>
-                            <td>" . $row["Nombre"] . " " . $row["Apellido_Pat"] . "</td>
+                            <td>" . $row["Nombre"] . " " . $row["Apellidos"] . "</td>
                             <td>" . $row["Correo"] . "</td>";
 
                     $idUsuario = $row["id_usuario"];

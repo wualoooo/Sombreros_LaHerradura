@@ -18,7 +18,6 @@
 
 .Herradura_pie>img{
     height: 400px;
-
 }
 
 .menu_pie{
@@ -61,4 +60,72 @@
     width: 25%;
     height: auto;
     background: linear-gradient(#8B0000,#000);
+}
+
+/* =========================================
+   RESPONSIVIDAD CELULARES Y TABLETS (FOOTER)
+   ========================================= */
+@media screen and (max-width: 900px) {  
+    
+    /* 1. Ocultar los espacios laterales para que el footer use el 100% de la pantalla */
+    .space_left, .space_right {
+        display: none;
+    }
+
+    /* 2. Contenedor principal: Quitamos la altura fija (20rem) para que crezca según el contenido */
+    .cont_pie_pag {
+        width: 100%;
+        height: auto; 
+        padding-bottom: 20px; /* Damos un respiro al final */
+    }
+
+    /* 3. Ajuste del Logo: Quitamos porcentajes de altura que deforman la imagen */
+    .Herradura_pie {
+        height: auto;
+        padding: 20px 0;
+    }
+
+    .Herradura_pie > img {
+        height: auto;
+        max-width: 70%; /* Evita que el logo se salga de la pantalla */
+        max-height: 150px; /* Un tamaño ideal para móviles */
+    }
+
+    /* 4. Menú de enlaces: Quitamos el azul y permitimos que los enlaces bajen de renglón si no caben */
+    .menu_pie {
+        display: flex;
+        flex-wrap: wrap; /* Si no caben, bajan de renglón en automático */
+        justify-content: center;
+        gap: 10px; /* Espacio entre los enlaces */
+        background-color: #41090996; /* Regresamos a tu color original */
+        padding: 15px 10px;
+    }
+
+    .elementos_pie > a {
+        padding: 5px 10px;
+        font-size: 0.9rem; /* Letra ligeramente más chica para que quepan mejor */
+        text-align: center;
+    }
+
+    /* 5. Derechos de Autor y Redes: Los apilamos en columna y los centramos */
+    .Derechos_de_autor {
+        flex-direction: column-reverse; /* Pone los logos arriba y el texto abajo (o quita el -reverse si lo prefieres al revés) */
+        align-items: center;
+        justify-content: center;
+        gap: 15px; /* Espacio entre el texto y los logos */
+        margin-top: 20px;
+    }
+
+    /* 6. Quitamos los "paddings" enormes que tenías para PC */
+    .text_derechos {
+        padding-left: 0;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+
+    .logos {
+        padding-right: 0;
+        display: flex;
+        justify-content: center;
+    }
 }

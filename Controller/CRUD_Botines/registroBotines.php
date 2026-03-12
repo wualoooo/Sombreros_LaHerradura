@@ -53,7 +53,6 @@ try {
     $Suela = $_POST['SuelaBotin'];
     $Precio = $_POST['PrecioBotin'];
     
-    // INSERTAR EN BD (Incluyendo SKU y Estado)
     $sql = "INSERT INTO botines (SKU, Nombre, Talla, Material, Suela, Precio, Estado, Img1, Img2, Img3, Img4) 
             VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)";
     
@@ -62,7 +61,6 @@ try {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    // "ssdiidssss" = 2 String, 1 Double, 2 Int, 1 Double, 4 String
     $stmt->bind_param("ssdiidssss", 
         $SKU, $Nombre, $Talla, $Material, $Suela, $Precio,
         $img1, $img2, $img3, $img4

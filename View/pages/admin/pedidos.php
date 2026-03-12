@@ -54,7 +54,7 @@
     $sqlSELECT = "SELECT
                 p.id_pedido,
                 p.id_usuario,
-                CONCAT (u.Nombre,' ', u.Apellido_Pat,' ', u.Apellido_Mat) AS Nombre_Usuario, 
+                CONCAT (u.Nombre,' ', u.Apellidos) AS Nombre_Usuario, 
                 CONCAT ( d.colonia,', ', d.calle,', ', d.numero) AS Direccion_envio1,
                 CONCAT ( d.municipio,', ', d.estado,', ', d.cp) AS Direccion_envio2,
                 d.referencia,

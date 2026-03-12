@@ -1,97 +1,206 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    /* Compensa el tamaño original del header en computadora */
 }
 
-.navbar{
-    height: 9rem;
+/* --- NAVBAR ORIGINAL (ESCRITORIO) --- */
+.navbar {
+    height: 9rem; /* Tamaño original */
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center; 
     background: linear-gradient(#000,#8B0000);
     color: white;
     position: fixed;
     top: 0;
+    left: 0;
     box-shadow: 5px 5px 20px #000;
     z-index: 1000;
-    padding-right: 1rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
-.logo{
-    padding: 0.8rem 3rem !important;
+/* Lado izquierdo: Menu (oculto) y Logo */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.menu-movil-toggle {
+    display: none; /* Oculto en escritorio */
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+}
+
+.menu-movil-toggle span {
+    font-size: 2.5rem;
+}
+
+.logo {
+    padding: 0.8rem 1rem !important;
     display: flex !important;
     align-items: center !important;
-    gap: 3rem !important;
+    gap: 2rem !important;
+    text-decoration: none;
 }
 
-.logo img{
+.logo img {
+    height: 130px !important; /* Tamaño original */
     box-sizing: border-box !important;
-    height: 130px !important; 
 }
 
 .logo h1 {
-    font-family: "Cinzel Decorative";
-    font-size: 30px;
+    font-family: "Cinzel Decorative", serif;
+    font-size: 30px; /* Tamaño original */
     padding: 0.5rem 0;
     margin: 0;
     text-align: center;
+    line-height: 1.2;
+    color: white;
 }
 
-.nav-links{
+/* Agrupador derecho para quitar el espacio en blanco */
+.nav-menu-cart-group {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem; /* Ajusta este valor si quieres acercar más el carrito a las letras */
+    padding-right: 1.5rem;
+}
+
+/* Centro: Enlaces */
+.nav-links {
     display: flex;
     gap: 2rem;
     list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
 }
 
 .nav-links li {
     margin: auto;
 }
 
-
-.nav-links a{
-    padding: 8px;
+.nav-links a {
+    padding: 8px 12px;
     color: #fff;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 25px; /* Tamaño original */
+    transition: all 0.3s ease;
 }
 
-.nav-links a:hover{
+.nav-links a:hover {
     cursor: pointer;
-    box-sizing: border-box;
     border-radius: 6px;
     background-color: #b0b0b0;
     color: #000000;
-    font-size: 25px;
 }
 
-.nav-links a:active{
-    color:rgb(234, 246, 0);
+.nav-links a:active {
+    color: rgb(234, 246, 0);
+}
+
+/* Lado Derecho: Carrito e Iconos */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.icono-link {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.icono-link:hover {
+    color: #b0b0b0;
 }
 
 #Cart {
-    font-size: 4vh;
-    vertical-align: middle; /* Baja el icono para centrarlo */
-    line-height: 1;         /* Evita que tenga altura extra invisible */
-    display: inline-block;  /* Asegura que respete el tamaño */
-}
-
-/* 2. Asegurar que el enlace (la caja gris) crezca con el icono */
-/* Usamos :has para detectar el enlace que tiene el carrito (Funciona en navegadores modernos) */
-.nav-links a:has(#Cart) {
-    display: inline-flex;      /* Usa flexbox solo para este botón */
-    align-items: center;       /* Centra verticalmente perfecto */
-    justify-content: center;   /* Centra horizontalmente */
-    height: auto;              /* Deja que la altura se adapte al icono */
-    padding: 10px;     /* Un poco más de aire si lo necesitas */
+    font-size: 4vh; /* Original */
+    vertical-align: middle;
+    line-height: 1;
 }
 
 .material-symbols-outlined {
-    
     font-variation-settings:
     'FILL' 1,
     'wght' 900,
     'GRAD' 200,
-    'opsz' 48
+    'opsz' 48;
+}
+
+.mobile-user-icon {
+    display: none; /* Oculto en escritorio */
+}
+
+/* =========================================
+MEDIA QUERIES - RESPONSIVO PARA MÓVIL
+   ========================================= */
+@media (max-width: 1024px) {
+    .navbar {
+        height: 80px; /* En móvil reducimos la altura */
+        padding: 0 1rem;
+    }
+    
+    body {/* padding-top: 80px;*/ }
+
+    .menu-movil-toggle { display: block; }
+
+    .logo { gap: 0.5rem !important; padding: 0 !important; }
+    
+    .logo img { height: 60px !important; } /* Logo más chico en móvil */
+
+    /* Mostramos el icono de usuario en móvil y ocultamos el texto de la lista */
+    .mobile-user-icon { display: flex; }
+    .desktop-user-link { display: none; }
+
+    /* Menú lateral para móviles */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -100%; 
+        width: 250px;
+        height: 100vh;
+        background: linear-gradient(#000,#8B0000);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 100px; 
+        box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        transition: left 0.4s ease;
+        z-index: 999;
+    }
+
+    .nav-links.activo { left: 0; }
+
+    .nav-links li {
+        width: 100%;
+        margin: 0;
+    }
+
+    .nav-links a {
+        font-size: 1.3rem;
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 600px) {
+    .logo h1 { display: none; } /* Oculta el texto del logo en pantallas muy muy chicas */
+    .nav-menu-cart-group { gap: 1rem; padding-right: 0; }
 }
 
 /*Header admin*/
@@ -134,31 +243,11 @@ body {
     border-bottom: 1px solid #eee;
 }
 
-#op-somb:hover #despl-somb{
-    margin-left: 1%;
-    opacity: 1; 
-    visibility: visible;
-}
-
-#op-tex:hover #despl-tex{
-    opacity: 1; 
-    visibility: visible;
-}
-
-#op-cint:hover #despl-cint{
-    opacity: 1; 
-    visibility: visible;
-}
-
-#op-bot:hover #despl-bot{
-    opacity: 1; 
-    visibility: visible;
-}
-
-#op-admin:hover #despl-admin{
-    opacity: 1; 
-    visibility: visible;
-}
+#op-somb:hover #despl-somb{ margin-left: 1%; opacity: 1; visibility: visible; }
+#op-tex:hover #despl-tex{ opacity: 1; visibility: visible; }
+#op-cint:hover #despl-cint{ opacity: 1; visibility: visible; }
+#op-bot:hover #despl-bot{ opacity: 1; visibility: visible; }
+#op-admin:hover #despl-admin{ opacity: 1; visibility: visible; }
 
 #pedidosLink, .nav-links-admin li{
     text-align: center;
@@ -168,7 +257,7 @@ body {
     font-size: 25px;
 }
 
-.nav-links-admin li:hover{
+.nav-links-admin li:hover, #pedidosLink:hover{
     box-sizing: border-box;
     border-radius: 6px;
     background-color: #b0b0b0;
@@ -176,162 +265,62 @@ body {
     font-size: 25px;
 }
 
-#pedidosLink:hover{
-    box-sizing: border-box;
-    border-radius: 6px;
-    background-color: #b0b0b0;
-    color: #000000;
-    font-size: 25px;
-}
-
-.nav-links-admin li {
-    margin: auto;
-}
+.nav-links-admin li { margin: auto; }
 
 /* --- CARRITO LATERAL (OFF-CANVAS) --- */
-
-/* Fondo oscuro detrás del carrito */
 .cart-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2999; /* Debajo del carrito, encima de todo lo demás */
-    display: none; /* Oculto por defecto */
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); z-index: 2999; display: none; 
+    opacity: 0; transition: opacity 0.3s ease;
 }
+.cart-overlay.active { display: block; opacity: 1; }
 
-.cart-overlay.active {
-    display: block;
-    opacity: 1;
-}
-
-/* El panel lateral */
 .cart-sidebar {
-    position: fixed;
-    top: 0;
-    right: -450px; /* Oculto a la derecha */
-    width: 400px;
-    height: 100vh;
-    background: white;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-    z-index: 3000; /* Encima de todo */
-    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación suave */
-    display: flex;
-    flex-direction: column;
+    position: fixed; top: 0; right: -450px; width: 400px; height: 100vh;
+    background: white; box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 3000; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    display: flex; flex-direction: column;
 }
+.cart-sidebar.active { right: 0; }
 
-.cart-sidebar.active {
-    right: 0; /* Se desliza hacia adentro */
-}
-
-/* Cabecera del carrito */
 .cart-header-side {
-    padding: 20px;
-    background-color: #8B0000; /* Tu color vino */
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 20px; background-color: #8B0000; color: white;
+    display: flex; justify-content: space-between; align-items: center;
 }
+.cart-header-side h2 { margin: 0; font-size: 1.5rem; }
 
-.cart-header-side h2 {
-    margin: 0;
-    font-size: 1.5rem;
-}
+.close-cart { cursor: pointer; font-size: 2rem; line-height: 1; }
 
-.close-cart {
-    cursor: pointer;
-    font-size: 2rem;
-    line-height: 1;
-}
+.cart-items-container { flex-grow: 1; overflow-y: auto; padding: 20px; }
 
-/* Lista de productos (Scrollable) */
-.cart-items-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-/* Item individual en el carrito */
 .cart-item-side {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    display: flex; gap: 15px; margin-bottom: 15px;
+    border-bottom: 1px solid #eee; padding-bottom: 15px;
 }
+.cart-item-side img { width: 70px; height: 70px; object-fit: cover; border-radius: 5px; }
 
-.cart-item-side img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-.item-details h4 {
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    color: #333;
-}
-
-.item-price {
-    color: #8B0000;
-    font-weight: bold;
-}
+.item-details h4 { margin: 0 0 5px 0; font-size: 1rem; color: #333; }
+.item-price { color: #8B0000; font-weight: bold; }
 
 .btn-remove-item {
-    color: #999;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin-top: 5px;
-    display: inline-block;
+    color: #999; cursor: pointer; font-size: 0.9rem;
+    margin-top: 5px; display: inline-block;
 }
 .btn-remove-item:hover { color: red; }
 
-/* Footer del carrito (Total y Botón) */
-.cart-footer-side {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
-}
-
+.cart-footer-side { padding: 20px; background-color: #f9f9f9; border-top: 1px solid #ddd; }
 .cart-total-side {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #333;
+    display: flex; justify-content: space-between; font-size: 1.5rem;
+    font-weight: bold; margin-bottom: 15px; color: #333;
 }
 
 .btn-checkout-side {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: #28a745;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    transition: background 0.3s;
-    border: none;
-    cursor: pointer;
+    display: block; width: 100%; padding: 15px; background-color: #28a745;
+    color: white; text-align: center; text-decoration: none;
+    font-size: 1.2rem; border-radius: 8px; transition: background 0.3s;
+    border: none; cursor: pointer;
 }
+.btn-checkout-side:hover { background-color: #218838; }
 
-.btn-checkout-side:hover {
-    background-color: #218838;
-}
-
-/* Responsive para celular */
-@media (max-width: 480px) {
-    .cart-sidebar { width: 100%; right: -100%; }
-}
-
-.swal2-container {
-            z-index: 10000 !important;
-        }
+@media (max-width: 480px) { .cart-sidebar { width: 100%; right: -100%; } }
+.swal2-container { z-index: 10000 !important; }
