@@ -8,14 +8,12 @@ try {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception('Método no permitido.');
     }
-
     $id = $_POST['id_sombrero'] ?? '';
 
     if (empty($id)) {
         throw new Exception('Error: ID de sombrero no encontrado.');
     }
 
-    // OBTENER LOS NUEVOS DATOS
     $sku = trim($_POST['SKUSombrero']);
     $nombre = trim($_POST['NombreSombrero']);
     $color = $_POST['ColorSombrero'];
@@ -26,13 +24,11 @@ try {
     $material = $_POST['MaterialSombrero'];
     $precio = $_POST['PrecioSombrero'];
 
-    // PROCESAR TALLAS
     $tallas_texto = "Unitalla";
     if (isset($_POST['tallas_disponibles']) && is_array($_POST['tallas_disponibles'])) {
         $tallas_texto = implode(",", $_POST['tallas_disponibles']); 
     }
 
-    // ACTUALIZAR DATOS DE TEXTO EN BD
     $sql = "UPDATE sombreros SET 
                 SKU = ?,
                 Nombre = ?, 
@@ -51,7 +47,6 @@ try {
         throw new Exception("Error preparando la consulta: " . $conn->error);
     }
 
-    // ssiiiddidsi = String, String, Int, Int, Int, Double, Double, Int, Double, String, Int
     $stmt->bind_param("ssiiiddidsi", $sku, $nombre, $color, $horma, $copa, $tam_copa, $tam_ala, $material, $precio, $tallas_texto, $id);
 
     if (!$stmt->execute()) {
@@ -59,9 +54,7 @@ try {
     }
     $stmt->close();
 
-    // ----------------------------------------------------
-    // LÓGICA DE ACTUALIZACIÓN DE IMÁGENES (Queda intacta)
-    // ----------------------------------------------------
+    // LÓGICA DE ACTUALIZACIÓN DE IMÁGENES
     $ruta_subida = "../../uploads/sombreros/";
     
     if (!file_exists($ruta_subida)) {

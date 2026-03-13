@@ -38,17 +38,14 @@ try {
         throw new Exception("Error preparando la consulta: " . $conn->error);
     }
 
-    // sddiii = String, String, Double, Double, Int, Int, Int
     $stmt->bind_param("sddiiii", $sku, $nombre, $precio, $talla, $material, $suela, $id);
 
     if (!$stmt->execute()) {
         throw new Exception("Error al actualizar datos: " . $stmt->error);
     }
-    $stmt->close();
+    $stmt->close(); 
 
-    // ----------------------------------------------------
     // ACTUALIZACIÓN DE IMÁGENES
-    // ----------------------------------------------------
     $ruta_subida = "../../uploads/botines/";
     if (!file_exists($ruta_subida)) {
         mkdir($ruta_subida, 0777, true);
@@ -64,7 +61,6 @@ try {
     foreach ($imagenes_keys as $nombre_input => $columna_actual) {
         if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
             
-            // Obtener imagen vieja
             $sql_get_img = "SELECT $columna_actual FROM botines WHERE id_botin = ?";
             $stmt_get = $conn->prepare($sql_get_img);
             $stmt_get->bind_param("i", $id);

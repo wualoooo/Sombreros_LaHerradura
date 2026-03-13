@@ -9,7 +9,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id_cinturon = $_GET['id'];
 
-// Consultamos SKU, Tallas, Tamaño (Ancho), Material y Adorno
 $sqlQuery = "SELECT 
             c.id_cinturon, 
             c.SKU,

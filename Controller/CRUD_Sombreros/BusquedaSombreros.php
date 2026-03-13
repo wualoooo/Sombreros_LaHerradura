@@ -1,12 +1,8 @@
 <?php
-// Asegúrate de incluir tu conexión aquí
 include '../../Model/conexion.php'; 
-
-// 1. Recibir datos y limpiarlos para evitar errores de comillas
 $busqueda = isset($_POST['busqueda']) ? $conn->real_escape_string($_POST['busqueda']) : '';
 $columna = isset($_POST['columna']) ? $_POST['columna'] : 'nombre';
 
-// 2. La consulta BASE (Copiada exactamente de tu Imagen 1)
 $sql = "SELECT 
             s.SKU,
             s.id_sombrero,
@@ -26,13 +22,12 @@ $sql = "SELECT
         INNER JOIN copas cp ON s.Copa = cp.id_copa
         INNER JOIN materiales m ON s.Material = m.id_material";
 
-// 3. Lógica dinámica del WHERE 
 $where = "";
 
 if ($busqueda != "") {
     switch ($columna) {
         case 'SKU':
-            $where = " WHERE s.SKU LIKE '%$busqueda%'"; // <-- Espacio asegurado aquí
+            $where = " WHERE s.SKU LIKE '%$busqueda%'";
             break;
         case 'Precio':
             $where = " WHERE s.Precio LIKE '%$busqueda%'";
@@ -55,13 +50,10 @@ if ($busqueda != "") {
     }
 }
 
-// Unimos la consulta base con el filtro ¡y arreglamos el espacio antes del ORDER BY!
 $sqlFinal = $sql . $where . " ORDER BY s.id_sombrero DESC";
 
-// 4. Ejecutar la consulta
 $result = $conn->query($sqlFinal);
 
-// 5. Generar el HTML (Respetando tus 7 columnas exactas)
 if ($result && $result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo("
@@ -97,7 +89,6 @@ if ($result && $result->num_rows > 0) {
                 );
     }
 } else {
-    // Si no hay resultados, mostramos un mensaje bonito
     echo "<tr><td colspan='7' style='text-align:center;'>No se encontraron sombreros con ese criterio.</td></tr>";
 }
 ?>

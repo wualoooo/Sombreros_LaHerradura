@@ -1,16 +1,10 @@
 <?php
-// --- 1. CONEXIÓN A LA BD ---
 include '../../Model/conexion.php'; 
 
-// Preparamos una respuesta JSON
 header('Content-Type: application/json');
 $response = ['success' => false, 'error' => 'Error desconocido.'];
-
-// --- 2. VERIFICACIÓN ---
-// Solo continuamos si los datos se enviaron por POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    //OBTENER EL ID
     $id = $_POST['id'];
 
     if (empty($id)) {
@@ -49,11 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ];
 
         foreach ($imagenes_a_borrar as $nombre_img) {
-            // VERIFICACIONES
             if (!empty($nombre_img)) {
                 $ruta_completa = $ruta_base . $nombre_img;
                 if (file_exists($ruta_completa)) {
-                    unlink($ruta_completa); // ¡Borra el archivo!
+                    unlink($ruta_completa);
                 }
             }
         }
@@ -64,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $stmt = $conn->prepare($sql);
 
-    // VERIFICAMOS SI FALLÓ
     if ($stmt === false) {
         $response['error'] = 'Error al preparar la consulta: ' . $conn->error;
         echo json_encode($response);
@@ -74,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmt->bind_param("i", $id);
 
-    // VERIFICAR ÉXITO ---
     if ($stmt->execute()) {
         $response['success'] = true;
         $response['error'] = '';
@@ -85,11 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
 
 } else {
-    // Si alguien intenta acceder al script sin POST
     $response['error'] = 'Método no permitido.';
 }
-
-// --- 8. (AHORA ES PASO 8) ENVIAR RESPUESTA Y CERRAR ---
 $conn->close();
 echo json_encode($response);
 ?>

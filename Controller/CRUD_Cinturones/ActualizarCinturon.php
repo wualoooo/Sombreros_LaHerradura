@@ -53,9 +53,7 @@ try {
     }
     $stmt->close();
 
-    // ----------------------------------------------------
     // ACTUALIZACIÓN DE IMÁGENES
-    // ----------------------------------------------------
     $ruta_subida = "../../uploads/cinturones/";
     if (!file_exists($ruta_subida)) {
         mkdir($ruta_subida, 0777, true);
@@ -71,7 +69,6 @@ try {
     foreach ($imagenes_keys as $nombre_input => $columna_actual) {
         if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
             
-            // Obtener imagen vieja
             $sql_get_img = "SELECT $columna_actual FROM cinturones WHERE id_cinturon = ?";
             $stmt_get = $conn->prepare($sql_get_img);
             $stmt_get->bind_param("i", $id);

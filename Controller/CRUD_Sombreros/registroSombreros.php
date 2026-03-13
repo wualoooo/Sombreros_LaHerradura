@@ -13,7 +13,6 @@ try {
         throw new Exception("Acceso no permitido.");
     }
 
-    // 1. VALIDACIONES BÁSICAS
     if (empty($_POST['NombreSombrero']) || empty($_POST['PrecioSombrero'])) {
         throw new Exception("Faltan datos obligatorios.");
     }
@@ -23,7 +22,6 @@ try {
         mkdir($carpeta_destino, 0777, true);
     }
 
-    // Función interna para manejar la subida y el rastreo
     function procesarImagen($key, $destino, &$lista_borrado) {
         if (!isset($_FILES[$key]) || $_FILES[$key]['error'] !== UPLOAD_ERR_OK) {
             throw new Exception("Error al subir la imagen $key.");
@@ -45,13 +43,11 @@ try {
         }
     }
 
-    // INTENTAR SUBIR LAS IMÁGENES
     $img1 = procesarImagen('imgSombrero1', $carpeta_destino, $imagenes_subidas);
     $img2 = procesarImagen('imgSombrero2', $carpeta_destino, $imagenes_subidas);
     $img3 = procesarImagen('imgSombrero3', $carpeta_destino, $imagenes_subidas);
     $img4 = procesarImagen('imgSombrero4', $carpeta_destino, $imagenes_subidas);
 
-    // PREPARAR DATOS PARA BD
     $sku = $_POST['SKUSombrero'];
     $Nombre = trim($_POST['NombreSombrero']);
     $Color = ($_POST['ColorSombrero']);
@@ -71,7 +67,6 @@ try {
         $tallas_texto = "Unitalla"; 
         }
 
-    // INSERTAR EN BD
     $sql = "INSERT INTO sombreros (SKU, Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Tallas, Img1, Img2, Img3, Img4, Estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
     
     $stmt = $conn->prepare($sql);
@@ -94,10 +89,7 @@ try {
     $stmt->close();
 
 } catch (Exception $e) {
-    // SI ALGO FALLÓ (En subida o en BD):
     $response['message'] = $e->getMessage();
-
-    // *** ROLLBACK DE IMÁGENES ***
     foreach ($imagenes_subidas as $ruta_borrar) {
         if (file_exists($ruta_borrar)) {
             unlink($ruta_borrar);

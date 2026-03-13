@@ -1,14 +1,11 @@
 <?php 
-// 1. ACTIVAR ERRORES (Solo para depurar, luego lo pones en 0)
 error_reporting(E_ALL);
-ini_set('display_errors', 1); // <--- CAMBIADO A 1 PARA VER EL ERROR SI FALLA
+ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
-// 2. CORRECCIÓN DE RUTA (3 Niveles hacia atrás)
 $ruta_conexion = '../../../Model/conexion.php';
 
 if (!file_exists($ruta_conexion)) {
-    // Si no encuentra el archivo, detiene todo y avisa
     echo json_encode(['success' => false, 'message' => 'Error Crítico: No se encuentra el archivo conexion.php en la ruta: ' . $ruta_conexion]);
     exit;
 }
@@ -29,7 +26,6 @@ try {
     $nombre = trim($_POST['NombreMaterial']);
     $producto = trim($_POST['ProductoMaterial']);
 
-    // Validación de solo letras y espacios
     if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre)) {
         throw new Exception("El nombre solo puede contener letras y espacios.");
     }
@@ -38,7 +34,6 @@ try {
         throw new Exception("El nombre es muy corto.");
     }
 
-    // Insertar
     $sql = "INSERT INTO materiales (Nombre, Producto) VALUES (?,?)";
     $stmt = $conn->prepare($sql);
 
@@ -58,9 +53,7 @@ try {
             throw new Exception("Error al guardar: " . $stmt->error);
         }
     }
-
     $stmt->close();
-
 } catch (Exception $e) {
     $response['success'] = false;
     $response['message'] = $e->getMessage();

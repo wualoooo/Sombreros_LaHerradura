@@ -17,7 +17,7 @@ try {
         exit;
     }
 
-    // --- 1. BUSCAR EN ADMINISTRADORES ---
+    // BUSCAR EN ADMINISTRADORES
     $sql_admin = "SELECT id_admin, Nombre, Contra FROM administradores WHERE Correo = ?";
     $stmt_admin = $conn->prepare($sql_admin);
     
@@ -43,7 +43,7 @@ try {
         $stmt_admin->close();
     }
 
-    // --- 2. BUSCAR EN USUARIOS (CLIENTES) ---
+    // BUSCAR EN USUARIOS
     $sql_user = "SELECT id_usuario, Nombre, Contra, foto_perfil FROM usuarios WHERE Correo = ?";
     $stmt_user = $conn->prepare($sql_user);
 

@@ -15,7 +15,6 @@ try {
         throw new Exception('Error: ID de texana no encontrado.');
     }
 
-    // OBTENER LOS NUEVOS DATOS
     $sku = trim($_POST['SKUTexana']);
     $nombre = trim($_POST['NombreTexana']);
     $color = $_POST['ColorTexana'];
@@ -26,13 +25,11 @@ try {
     $material = $_POST['MaterialTexana'];
     $precio = $_POST['PrecioTexana'];
 
-    // PROCESAR TALLAS
     $tallas_texto = "Unitalla";
     if (isset($_POST['tallas_disponibles']) && is_array($_POST['tallas_disponibles'])) {
         $tallas_texto = implode(",", $_POST['tallas_disponibles']); 
     }
 
-    // ACTUALIZAR DATOS EN BD
     $sql = "UPDATE texanas SET 
                 SKU = ?,
                 Nombre = ?, 
@@ -51,7 +48,6 @@ try {
         throw new Exception("Error preparando la consulta: " . $conn->error);
     }
 
-    // ssiiiddidsi = String, String, Int, Int, Int, Double, Double, Int, Double, String, Int
     $stmt->bind_param("ssiiiddidsi", $sku, $nombre, $color, $horma, $copa, $tam_copa, $tam_ala, $material, $precio, $tallas_texto, $id);
 
     if (!$stmt->execute()) {
@@ -59,9 +55,6 @@ try {
     }
     $stmt->close();
 
-    // ----------------------------------------------------
-    // ACTUALIZACIÓN DE IMÁGENES
-    // ----------------------------------------------------
     $ruta_subida = "../../uploads/texanas/";
     if (!file_exists($ruta_subida)) {
         mkdir($ruta_subida, 0777, true);
@@ -76,8 +69,7 @@ try {
 
     foreach ($imagenes_keys as $nombre_input => $columna_actual) {
         if (isset($_FILES[$nombre_input]) && $_FILES[$nombre_input]['error'] === UPLOAD_ERR_OK) {
-            
-            // Obtener nombre de imagen vieja para borrarla
+
             $sql_get_img = "SELECT $columna_actual FROM texanas WHERE id_texana = ?";
             $stmt_get = $conn->prepare($sql_get_img);
             $stmt_get->bind_param("i", $id);

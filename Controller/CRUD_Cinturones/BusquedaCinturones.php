@@ -1,12 +1,10 @@
 <?php
-// Asegúrate de incluir tu conexión aquí
 include '../../Model/conexion.php'; 
 
-// 1. Recibir datos y limpiarlos
 $busqueda = isset($_POST['busqueda']) ? $conn->real_escape_string($_POST['busqueda']) : '';
 $columna = isset($_POST['columna']) ? $_POST['columna'] : 'Nombre';
 
-// 2. La consulta BASE
+// consulta BASE
 $sql = "SELECT 
             c.id_cinturon,
             c.SKU,
@@ -21,7 +19,6 @@ $sql = "SELECT
         INNER JOIN materiales m_principal ON c.Material = m_principal.id_material
         INNER JOIN materiales m_adorno ON c.Adorno = m_adorno.id_material";
 
-// 3. Lógica dinámica del WHERE 
 $where = "";
 
 if ($busqueda != "") {
@@ -44,13 +41,11 @@ if ($busqueda != "") {
     }
 }
 
-// Unimos la consulta base con el filtro y agregamos ordenamiento
 $sqlFinal = $sql . $where . " ORDER BY c.id_cinturon DESC";
 
-// 4. Ejecutar la consulta
 $result = $conn->query($sqlFinal);
 
-// 5. Generar el HTML (Respetando las 8 columnas)
+// Generar el HTML
 if ($result && $result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         echo("

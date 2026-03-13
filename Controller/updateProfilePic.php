@@ -1,24 +1,23 @@
 <?php
 session_start();
-// Definir ROOT_PATH para includes seguros
-define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
+define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '../');
 require(ROOT_PATH . 'Model/conexion.php');
 
 header('Content-Type: application/json');
 
-// 1. Verificar sesión
-if (!isset($_SESSION['user_email']) || !isset($_SESSION['user_id'])) {
+// Verificar sesión
+if (!isset($_SESSION['user_email']) || !isset($_SESSION['id_usuario'])) {
     echo json_encode(['success' => false, 'message' => 'No hay sesión activa.']);
     exit;
 }
 
-$idUsuario = $_SESSION['user_id'];
+$idUsuario = $_SESSION['id_usuario'];
 $uploadDir = ROOT_PATH . 'uploads/users/';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_pic'])) {
     $file = $_FILES['profile_pic'];
 
-    // 2. Validaciones básicas
+    // Validaciones básicas
     if ($file['error'] !== UPLOAD_ERR_OK) {
         echo json_encode(['success' => false, 'message' => 'Error al subir el archivo. Código: ' . $file['error']]);
         exit;
@@ -38,8 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_pic'])) {
         exit;
     }
 
-    // 3. Procesar archivo
-    // Nombre único: user_ID_timestamp.ext
+    // Procesar archivo
     $newFileName = 'user_' . $idUsuario . '_' . time() . '.' . $ext;
     $destPath = $uploadDir . $newFileName;
 
@@ -48,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_pic'])) {
 
     if (move_uploaded_file($file['tmp_name'], $destPath)) {
         
-        // 4. Borrar imagen anterior si existe (opcional pero recomendado)
+        // Borrar imagen anterior si existe
         $sqlOld = "SELECT foto_perfil FROM usuarios WHERE id_usuario = ?";
         $stmtOld = $conn->prepare($sqlOld);
         $stmtOld->bind_param("i", $idUsuario);
@@ -61,13 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_pic'])) {
             unlink($uploadDir . $oldPic);
         }
 
-        // 5. Actualizar BD
+        // Actualizar BD
         $sqlUpdate = "UPDATE usuarios SET foto_perfil = ? WHERE id_usuario = ?";
         $stmtUp = $conn->prepare($sqlUpdate);
         $stmtUp->bind_param("si", $newFileName, $idUsuario);
 
         if ($stmtUp->execute()) {
-            // 6. Actualizar SESIÓN para que se refleje sin reloguear
+            // Actualizar SESIÓN para que se refleje sin reloguear
             $_SESSION['user_foto'] = $newFileName;
 
             echo json_encode([

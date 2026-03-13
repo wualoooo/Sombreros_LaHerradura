@@ -53,15 +53,13 @@ try {
     $Precio = $_POST['PrecioCinturon'];
     $Material = $_POST['MaterialCinturon'];
     $Adorno = $_POST['AdornoCinturon'];
-    $Tamano = !empty($_POST['TamañoCinturon']) ? $_POST['TamañoCinturon'] : 0; // Por si lo dejan vacío
+    $Tamano = !empty($_POST['TamañoCinturon']) ? $_POST['TamañoCinturon'] : 0;
 
-    // PROCESAR TALLAS
     $tallas_texto = "Unitalla";
     if (isset($_POST['tallas_disponibles']) && is_array($_POST['tallas_disponibles'])) {
         $tallas_texto = implode(",", $_POST['tallas_disponibles']); 
     }
 
-    // 12 Columnas en total
     $sql = "INSERT INTO cinturones (SKU, Nombre, Precio, Material, Adorno, Tamaño, Tallas, Estado, Img1, Img2, Img3, Img4) 
             VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)";
     
@@ -69,8 +67,7 @@ try {
     if (!$stmt) {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
-
-    // "ssdiddsssss" => String, String, Double, Int, Int, Double, String, String x 4
+    
     $stmt->bind_param("ssdiidsssss", 
         $SKU, $Nombre, $Precio, $Material, $Adorno, $Tamano, $tallas_texto, 
         $img1, $img2, $img3, $img4

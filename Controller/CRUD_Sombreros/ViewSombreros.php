@@ -2,7 +2,6 @@
 require('../../Model/conexion.php');
 header('Content-Type: application/json');
 
-// 1. Verificación
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo json_encode(['error' => 'No se recibió ningún ID.']);
     exit;
@@ -10,7 +9,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id_sombrero = $_GET['id'];
 
-// 2. Preparar la consulta SQL
 $sqlQuery = "SELECT 
             s.id_sombrero, 
             s.SKU,           -- AGREGADO

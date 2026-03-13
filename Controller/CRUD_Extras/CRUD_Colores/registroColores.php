@@ -2,8 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json');
-
-// 2. CORRECCIÓN DE RUTA (3 Niveles hacia atrás)
 $ruta_conexion = '../../../Model/conexion.php';
 
 if (!file_exists($ruta_conexion)) {
@@ -27,7 +25,6 @@ try {
     $nombre = trim($_POST['NombreColor']);
     $producto = trim($_POST['ProductoColor']);
 
-    // Validación de solo letras y espacios
     if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre)) {
         throw new Exception("El nombre solo puede contener letras y espacios.");
     }
@@ -36,7 +33,6 @@ try {
         throw new Exception("El nombre es muy corto.");
     }
 
-    // Insertar
     $sql = "INSERT INTO colores (Nombre, Producto) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);
 

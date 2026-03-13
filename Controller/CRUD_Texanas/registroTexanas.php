@@ -13,7 +13,6 @@ try {
         throw new Exception("Acceso no permitido.");
     }
 
-    // 1. VALIDACIONES BÁSICAS (Agregamos SKU)
     if (empty($_POST['NombreTexana']) || empty($_POST['PrecioTexana']) || empty($_POST['SKUTexana'])) {
         throw new Exception("Faltan datos obligatorios (SKU, Nombre o Precio).");
     }
@@ -23,7 +22,6 @@ try {
         mkdir($carpeta_destino, 0777, true);
     }
 
-    // Función interna para manejar la subida y el rastreo
     function procesarImagen($key, $destino, &$lista_borrado) {
         if (!isset($_FILES[$key]) || $_FILES[$key]['error'] !== UPLOAD_ERR_OK) {
             throw new Exception("Error al subir la imagen $key.");
@@ -45,13 +43,11 @@ try {
         }
     }
 
-    // INTENTAR SUBIR LAS 4 IMÁGENES
     $img1 = procesarImagen('imgTexana1', $carpeta_destino, $imagenes_subidas);
     $img2 = procesarImagen('imgTexana2', $carpeta_destino, $imagenes_subidas);
     $img3 = procesarImagen('imgTexana3', $carpeta_destino, $imagenes_subidas);
     $img4 = procesarImagen('imgTexana4', $carpeta_destino, $imagenes_subidas);
 
-    // PREPARAR DATOS PARA BD
     $SKU = trim($_POST['SKUTexana']);
     $Nombre = trim($_POST['NombreTexana']);
     $Color = $_POST['ColorTexana'];
@@ -62,14 +58,11 @@ try {
     $Material = trim($_POST['MaterialTexana']);
     $Precio = $_POST['PrecioTexana'];
 
-    // PROCESAR TALLAS
     $tallas_texto = "Unitalla";
     if (isset($_POST['tallas_disponibles']) && is_array($_POST['tallas_disponibles'])) {
         $tallas_texto = implode(",", $_POST['tallas_disponibles']); 
     }
 
-    // INSERTAR EN BD (15 Columnas = 14 variables dinámicas + el "1" directo en Estado)
-    // Asumimos que la tabla "texanas" tiene la misma estructura que "sombreros"
     $sql = "INSERT INTO texanas (SKU, Nombre, Color, Horma, Copa, Tam_Copa, Tam_ala, Material, Precio, Tallas, Estado, Img1, Img2, Img3, Img4) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)";
     
@@ -78,7 +71,6 @@ try {
         throw new Exception("Error en la consulta SQL: " . $conn->error);
     }
 
-    // Vincular variables (ssiiiddidsssss = 14 parámetros exactos para los '?')
     $stmt->bind_param("ssiiiddidsssss", 
         $SKU, $Nombre, $Color, $Horma, $Copa, $Tam_Copa, $Tam_Ala, $Material, $Precio, $tallas_texto, 
         $img1, $img2, $img3, $img4
@@ -94,10 +86,8 @@ try {
     $stmt->close();
 
 } catch (Exception $e) {
-    // SI ALGO FALLÓ (En subida o en BD)
     $response['message'] = $e->getMessage();
 
-    // ROLLBACK DE IMÁGENES
     foreach ($imagenes_subidas as $ruta_borrar) {
         if (file_exists($ruta_borrar)) {
             unlink($ruta_borrar);
