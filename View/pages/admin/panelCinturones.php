@@ -116,7 +116,7 @@
         <?php 
         include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarCinturon.php');
         include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggCinturon.php');
-        include(ROOT_PATH.'View/modals/modals-View/modal-ViewCinturones.php');
+        include(ROOT_PATH.'View/modals/modals-View/modal-ViewProduct.php');
         ?>
     </main>
 

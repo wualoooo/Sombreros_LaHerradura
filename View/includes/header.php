@@ -25,9 +25,14 @@ require_once(ROOT_PATH . 'Model/conexion.php');
         </button>
         
         <div class="logo">
-            <a href="/LaHerradura/index.php"><img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura" id="ImgLogo"></a>
-            <h1>Sombreros <br> La Herradura</h1>
+            <a href="/LaHerradura/index.php">
+                <img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura" id="ImgLogo">
+            </a>
+            <a href="/LaHerradura/index.php" class="titulo-link">
+                <h1>Sombreros <br> La Herradura</h1>
+            </a>
         </div>
+</div>
     </div>
 
     <div class="nav-menu-cart-group">
@@ -44,7 +49,7 @@ require_once(ROOT_PATH . 'Model/conexion.php');
                 <li class="desktop-user-link"><a href="#" id="openLogin">Iniciar Sesion</a></li>
             <?php endif; ?>
 
-            <li><a href="/LaHerradura/View/pages/user/rv.php">Guía de tallas</a></li>
+            <li><a href="/LaHerradura/View/pages/user/GuiaTallas.php">Guía de tallas</a></li>
             <li><a href="#">Probador virtual</a></li>
         </ul>
 
