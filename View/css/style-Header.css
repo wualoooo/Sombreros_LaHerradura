@@ -4,6 +4,11 @@ body {
     /* Compensa el tamaño original del header en computadora */
 }
 
+.titulo-link {
+    text-decoration: none;   /* elimina la línea azul */
+    color: inherit;          /* mantiene el color del texto del h1 */
+}
+
 /* --- NAVBAR ORIGINAL (ESCRITORIO) --- */
 .navbar {
     height: 9rem; /* Tamaño original */

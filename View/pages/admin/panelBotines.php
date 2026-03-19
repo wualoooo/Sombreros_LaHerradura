@@ -117,7 +117,7 @@
         <?php 
         include(ROOT_PATH.'View/modals/modals-Editar/modal-EditarBotin.php');
         include(ROOT_PATH.'View/modals/modals-Agregar/modal-AggBotin.php');
-        include(ROOT_PATH.'View/modals/modals-View/modal-ViewBotines.php');
+        include(ROOT_PATH.'View/modals/modals-View/modal-ViewProduct.php');
         ?>
     </main>
 

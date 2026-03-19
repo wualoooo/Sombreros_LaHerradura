@@ -2,78 +2,65 @@
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sombreros</title>
-    <link rel="stylesheet" href="/LaHerradura/View/css/style-Sombreros.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Guía de Tallas</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cinzel Decorative', serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-y: auto; 
+        }
+
+        /* Contenedor principal */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 180px; 
+        }
+
+        /* Contenedor de imágenes */
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap; 
+        }
+
+        .images img {
+            width: 650px;   
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    
-
     <header>
         <?php 
         define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/LaHerradura/');
-        include(ROOT_PATH . 'View/includes/header.php')
+        include(ROOT_PATH . 'View/includes/header.php');
         ?>
     </header>
-    
+
     <div class="container">
-        <div class="item" id="space"></div>
-        <div class="item" id="Sombreros">
-            <div class="container2">
-
-
-                <?php 
-
-                    $sql = "SELECT id_sombrero, Img1, Nombre, Precio FROM sombreros";
-                    $result = $conn->query($sql);
-                    while ($row = $result -> fetch_assoc()){
-                        echo("
-
-                            <div class='card abrir-modal-vp' data-id='" . $row["id_sombrero"] . "'>
-                                <div class='img-sombrero'>
-                                    <img src='/LaHerradura/uploads/sombreros/".$row["Img1"]."'>
-                                </div>
-                                <div class='vista-rapida'>
-                                <span>Ver más detalles</span>
-                                </div>
-                                <div class='text-sombrero'>
-                                    <h4>".$row["Nombre"]."</h4>
-                                    <h5>$".$row["Precio"].".00 mxn</h5>
-                                </div>
-                            </div>
-                        ");
-                    }
-                ?>
-
-            </div>
+        <!-- Dos imágenes centradas -->
+        <div class="images">
+            <img src="/LaHerradura/assets/images/talla-sombrero1.jpg" alt="Sombrero 1">
+            <img src="/LaHerradura/assets/images/talla-sombrero2.jpg" alt="Sombrero 2">
         </div>
-
-        <?php 
-        include(ROOT_PATH . 'View/modals/modal-ViewProduct.php')
-
-        ?>
-
-    <div class="item" id="space">
-        <img id="wpp" src="/LaHerradura/View/images/WhatsApp.png" alt="WhatsApp">
     </div>
-    <div class="item" id="Filtros">
-        
-    </div>
-    <div class="item" id="Espacio"></div>
-    </div>
-
 
     <footer>
         <?php 
-        include(ROOT_PATH . 'View/includes/footer.php')
+        include(ROOT_PATH . 'View/includes/footer.php');
         ?>
     </footer>
-    <script src="/LaHerradura/public/viewSombreros.js"></script>
 </body>
 </html>

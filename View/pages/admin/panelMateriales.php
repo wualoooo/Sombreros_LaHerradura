@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Materiales</title>
-    <link rel="stylesheet" href="../../css/style-Panels.css">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-Panels.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -20,7 +21,8 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Materiales</h2>
-        <button class="btn btn-agregar" id="btnAgg-Material">Agregar nueva Material</button>
+        <button class="btn btn-agregar" id="btnAgg-Material">
+            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Agregar nueva Material</button>
         <table>
             <th>Producto</th>
             <th>Nombre material</th>
@@ -39,8 +41,12 @@
                             <td>".$row["Producto"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>
-                                <button class='btn btn-editarCinturon' data-id='".$row["id_material"]."'>Editar</button>
-                                <button class='btn btn-eliminarCinturon' data-id='".$row["id_material"]."'>Eliminar</button>
+                                <button class='btn btn-editarCinturon' data-id='".$row["id_material"]."'>
+                                <span class='material-symbols-outlined'>edit</span>
+                                </button>
+                                <button class='btn btn-eliminarCinturon' data-id='".$row["id_material"]."'>
+                                    <span class='material-symbols-outlined'>delete</span>
+                                </button>
                             </td>
                         </tr>"
                     );
@@ -68,6 +74,7 @@
     <script src="/LaHerradura/public/crud_extras.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
     <script src="/LaHerradura/public/alerts.js"></script>
+    <script src="/LaHerradura/public/main.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
