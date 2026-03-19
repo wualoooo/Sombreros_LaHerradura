@@ -324,3 +324,67 @@ MEDIA QUERIES - RESPONSIVO PARA MÓVIL
 
 @media (max-width: 480px) { .cart-sidebar { width: 100%; right: -100%; } }
 .swal2-container { z-index: 10000 !important; }
+
+/* =========================================
+   RESPONSIVIDAD CELULAR: SÓLO HEADER ADMIN
+   (Convierte los enlaces en Lista Desplegable)
+   ========================================= */
+@media screen and (max-width: 900px) {
+    /* 1. Ocultamos el cuadro feo y lo volvemos una lista vertical */
+    .nav-links-admin {
+        order: 4;
+        width: 100%;
+        display: none; /* Oculto hasta tocar la hamburguesa */
+        flex-direction: column;
+        background-color: #5c0000;
+        position: absolute;
+        top: 100%; /* Cae justo debajo de la barra negra */
+        left: 0;
+        z-index: 1000;
+        padding: 0;
+        margin: 0;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.5);
+    }
+
+    /* 2. Esta clase enciende la lista cuando toca el JS */
+    .nav-links-admin.activo {
+        display: flex;
+    }
+
+    /* 3. Diseño de cada opción en la lista */
+    .nav-links-admin li {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 0;
+    }
+
+    #pedidosLink, .nav-links-admin li {
+        font-size: 1.2rem;
+        padding: 15px;
+        display: block;
+    }
+
+    /* 4. Convertimos los submenús para que caigan hacia abajo y no floten raro */
+    .desplegable {
+        position: static; 
+        opacity: 1;
+        visibility: visible;
+        display: none; /* Oculto por defecto */
+        background-color: #4a0000; /* Un tono más oscuro para diferenciarlo */
+        box-shadow: none;
+        padding: 0;
+        margin: 0 !important;
+        border-radius: 0;
+    }
+
+    /* Al tocar una categoría, baja su submenú */
+    .nav-links-admin li:hover .desplegable,
+    .opcion:hover .desplegable {
+        display: block;
+    }
+
+    .desplegable li {
+        border-bottom: none;
+    }
+}

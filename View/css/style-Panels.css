@@ -351,3 +351,52 @@
             z-index: 10000 !important;
         }
 
+        /* =========================================
+   RESPONSIVIDAD: TABLETS (Pantallas medianas)
+   ========================================= */
+@media screen and (max-width: 1024px) {
+    /* Mantenemos tus estilos, solo permitimos deslizar la tabla si no cabe */
+    table {
+        margin: 0 auto;
+        width: 95%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* =========================================
+   RESPONSIVIDAD: CELULARES (Pantallas pequeñas)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    /* Achicamos el tamaño de la letra del título principal */
+    .titleGestion {
+        font-size: 2rem; 
+        margin: 1.5rem 0;
+    }
+
+    /* Reducimos la letra de la tabla */
+    table {
+        font-size: 1rem;
+        width: 100%;
+        margin: 0; /* Quitamos márgenes para aprovechar toda la pantalla */
+    }
+
+    /* Reducimos el tamaño de la letra y el padding interno de los botones de la tabla */
+    .btn {
+        font-size: 1rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    /* Ajustamos el buscador y el botón verde (solo tamaños y acomodo) */
+    .FiltroBusquedaAdmin, .buttonAgg {
+        font-size: 1.2rem;
+        width: 90%; /* Hacemos que ocupen casi todo el ancho */
+        display: block;
+        margin: 10px auto; /* Los centramos */
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+

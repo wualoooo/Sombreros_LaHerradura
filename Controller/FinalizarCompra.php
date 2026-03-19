@@ -1,75 +1,100 @@
 <?php
 session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 0); 
+
+// 1. Declarar que SIEMPRE devolveremos JSON (Debe ir antes de cualquier echo)
 header('Content-Type: application/json');
 
-require('../Model/conexion.php');
-
-try {
-    // VALIDAR SESIÓN
-    if (!isset($_SESSION['id_usuario'])) {
-        throw new Exception("Debes iniciar sesión para finalizar la compra.");
-    }
-    
-    $id_usuario = $_SESSION['id_usuario'];
-
-    // RECIBIR DATOS
-    $input = file_get_contents('php://input');
-    $datosCompra = json_decode($input, true);
-
-    if (!$datosCompra || empty($datosCompra['carrito'])) {
-        throw new Exception("El carrito está vacío o hubo un error al leer los datos.");
-    }
-
-    $carrito = $datosCompra['carrito'];
-    $id_direccion = intval($datosCompra['id_direccion']);
-    $total = floatval($datosCompra['total']);
-
-    // CONVERTIR CARRITO A JSON
-    $productos_json = json_encode($carrito, JSON_UNESCAPED_UNICODE);
-
-    // INSERTAR EN LA BASE DE DATOS
-    $sql = "INSERT INTO pedidos (id_usuario, id_direccion, total, productos, estado_envio) VALUES (?, ?, ?, ?, 1)";
-    $stmt = $conn->prepare($sql);
-    
-    if (!$stmt) {
-        throw new Exception("Error al preparar la consulta: " . $conn->error);
-    }
-
-    $stmt->bind_param("iids", $id_usuario, $id_direccion, $total, $productos_json);
-
-    if ($stmt->execute()) {
-        $id_pedido = $stmt->insert_id;
-        
-        // GENERAR CÓDIGO DE RASTREO
-        $codigo_rastreo = "LH-" . date('Y') . "-" . str_pad($id_pedido, 4, "0", STR_PAD_LEFT);
-        
-        // GUARDAR EL CÓDIGO DE RASTREO EN LA BASE DE DATOS
-        $sql_update = "UPDATE pedidos SET codigo_rastreo = ? WHERE id_pedido = ?";
-        $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("si", $codigo_rastreo, $id_pedido);
-        $stmt_update->execute();
-        $stmt_update->close();
-        
-        // ENVIAR RESPUESTA AL USUARIO
-        echo json_encode([
-            'success' => true, 
-            'codigo_rastreo' => $codigo_rastreo,
-            'message' => 'Pedido guardado correctamente.'
-        ]);
-    } else {
-        throw new Exception("Error al guardar el pedido en la BD: " . $stmt->error);
-    }
-
-    $stmt->close();
-
-} catch (Exception $e) {
-    echo json_encode([
-        'success' => false, 
-        'message' => $e->getMessage()
-    ]);
+// 2. FILTRO DE SEGURIDAD VITAL: Verificar si hay sesión ANTES de hacer nada
+if (!isset($_SESSION['id_usuario']) || empty($_SESSION['id_usuario'])) {
+    // Si no hay sesión, detenemos todo y le avisamos al JS amablemente
+    echo json_encode(['success' => false, 'message' => 'Sesión expirada o no iniciada. Por favor, vuelve a iniciar sesión para comprar.']);
+    exit;
 }
 
-$conn->close();
+require_once '../Model/conexion.php'; 
+require_once '../vendor/autoload.php'; 
+
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+
+// 3. RECIBIR DATOS DEL FETCH
+$inputJSON = file_get_contents('php://input');
+$datosCompra = json_decode($inputJSON, true);
+
+if (!$datosCompra || empty($datosCompra['carrito'])) {
+    echo json_encode(['success' => false, 'message' => 'Carrito vacío o datos inválidos.']);
+    exit;
+}
+
+$carrito = $datosCompra['carrito'];
+$id_direccion = (int)$datosCompra['id_direccion'];
+$id_usuario = $_SESSION['id_usuario']; // Ya estamos 100% seguros de que esto existe
+
+try {
+    // 4. CALCULAR TOTAL Y PREPARAR JSON PARA LA BASE DE DATOS
+    $total_calculado = 0;
+    foreach ($carrito as $prod) {
+        $total_calculado += ($prod['precio'] * $prod['cantidad']);
+    }
+    
+    $productos_json = json_encode($carrito);
+    $codigo_rastreo = "LH-" . date('Y') . "-" . rand(1000, 9999);
+
+    // 5. GUARDAR EN MYSQL CON TUS COLUMNAS REALES
+    $sqlPedido = "INSERT INTO pedidos (id_usuario, id_direccion, total, productos, estado_pago, estado_envio, fecha, codigo_rastreo) 
+                  VALUES (?, ?, ?, ?, 'PENDIENTE', 1, NOW(), ?)";
+                  
+    $stmt = $conn->prepare($sqlPedido);
+    $stmt->bind_param("iidss", $id_usuario, $id_direccion, $total_calculado, $productos_json, $codigo_rastreo);
+    $stmt->execute();
+    
+    $id_pedido_interno = $conn->insert_id; 
+
+    // 6. CONFIGURAR MERCADO PAGO 
+    MercadoPagoConfig::setAccessToken("APP_USR-5809738382506813-031721-1b0c424c0020a16bce3c576b9dfef5ef-3273777057");
+  
+
+    $items_mp = [];
+    foreach ($carrito as $prod) {
+        $items_mp[] = [
+            "title" => $prod['nombre'],
+            "quantity" => (int)$prod['cantidad'],
+            "unit_price" => (float)$prod['precio'],
+            "currency_id" => "MXN"
+        ];
+    }
+
+    $client = new PreferenceClient();
+    $preference = $client->create([
+        "items" => $items_mp,
+        "external_reference" => (string)$id_pedido_interno,
+        "back_urls" => [
+            "success" => "https://sombreroslaherradura.com/View/pago_exitoso.php",
+            "failure" => "https://sombreroslaherradura.com/View/pago_fallido.php",
+            "pending" => "https://sombreroslaherradura.com/View/pago_pendiente.php"
+        ],
+        "auto_return" => "approved"
+    ]);
+
+    // 7. RESPONDER AL FRONTEND
+    echo json_encode([
+        'success' => true,
+        'id_preferencia' => $preference->id
+    ]);
+
+
+} catch (\MercadoPago\Exceptions\MPApiException $e) {
+    // ESTO ATRAPA EL ERROR EXACTO DE MERCADO PAGO
+    $respuesta_cruda = $e->getApiResponse()->getContent();
+    echo json_encode([
+        'success' => false,
+        'message' => 'Mercado Pago dice: ' . json_encode($respuesta_cruda)
+    ]);
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error general: ' . $e->getMessage()
+    ]);
+}
 ?>
+

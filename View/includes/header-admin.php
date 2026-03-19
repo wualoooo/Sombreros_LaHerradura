@@ -4,13 +4,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
     
     <nav class="navbar">
+        
         <div class="logo">
             <img src="/LaHerradura/View/images/Logo_Herradura.png" alt="Logo Herradura">
             <h1>
                 Sombreros La Herradura
             </h1>
         </div>
-        <ul class="nav-links-admin">
+        <ul class="nav-links-admin" id="menu-desplegable">
             <li class="opcion" id="op-somb">Sombreros
                 <ul class="desplegable" id="despl-somb">
                     <li><a class="opcionesAdmin" href="/LaHerradura/View/pages/admin/panelSombreros.php">Panel</a></li>
