@@ -10,6 +10,7 @@ if (!defined('ROOT_PATH')) {
 require_once(ROOT_PATH . 'Model/conexion.php'); 
 ?>
 
+<link rel="icon" type="image/x-icon" href="/LaHerradura/assets/images/favicon.ico">
 <link rel="stylesheet" href="/LaHerradura/View/css/style-Header.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
