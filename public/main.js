@@ -4,75 +4,59 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    // =======================================================
-    // 1. LÓGICA DE INICIO DE SESIÓN (LOGIN) - CON VALIDACIONES
-    // =======================================================
     const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError'); // Opcional
+    const loginError = document.getElementById('loginError');
 
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
-            // 1. ¡CRUCIAL! Evita que el formulario se mande solo
             event.preventDefault(); 
-            
-            // 2. OBTENER LOS CAMPOS (Asegúrate que los IDs coincidan con tu HTML)
-            // He puesto 'correoLogin' y 'passwordLogin'. Revisa tu HTML.
+            //OBTENER LOS CAMPOS
             const emailInput = document.getElementById('correoLogin'); 
             const passInput = document.getElementById('passwordLogin');
             
             const email = emailInput ? emailInput.value.trim() : '';
             const pass = passInput ? passInput.value.trim() : '';
 
-            // 3. BLOQUE DE VALIDACIONES (Aquí es donde frenamos todo)
-            
-            // A) Validar campos vacíos
+            //VALIDACIONES
             if (email === '' || pass === '') {
                 Alerta.error("Por favor, completa todos los campos.");
-                // Ponemos el foco en el campo vacío
                 if(email === '') emailInput.focus();
                 else passInput.focus();
-                return; // <--- ESTO DETIENE EL ENVÍO A LA BASE DE DATOS
+                return; //
             }
 
-            // B) Validar formato de correo (Opcional pero recomendado)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 Alerta.error("El formato del correo no es válido.");
                 emailInput.focus();
-                return; // <--- DETIENE EL ENVÍO
+                return;
             }
 
-            // 4. SI PASA LAS VALIDACIONES, PREPARAMOS EL ENVÍO
-            if(loginError) loginError.textContent = ''; // Limpiamos errores viejos
-
+            //PREPARAMOS EL ENVÍO
+            if(loginError) loginError.textContent = '';
             const btnSubmit = loginForm.querySelector('button[type="submit"]');
             const textoOriginal = btnSubmit ? btnSubmit.innerText : 'Entrar';
             
             if(btnSubmit) {
                 btnSubmit.innerText = "Verificando...";
-                btnSubmit.disabled = true; // Evita doble clic
+                btnSubmit.disabled = true;
             }
 
             const formData = new FormData(loginForm);
-
-            // 5. ENVIAMOS AL SERVIDOR (PHP)
+            //ENVIAMOS AL SERVIDOR
             fetch('/LaHerradura/Controller/InicioSesion.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json()) 
             .then(data => {
-                // Restauramos el botón
                 if(btnSubmit) {
                     btnSubmit.innerText = textoOriginal;
                     btnSubmit.disabled = false;
                 }
-
                 console.log("Respuesta Login:", data);
 
                 if (data.status === 'success') {
-                    // --- ÉXITO ---
                     if (data.role === 'admin') {
                         Alerta.exito('Bienvenido Administrador.')
                             .then(() => {
@@ -82,15 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         if(typeof Alerta !== 'undefined') {
                             Alerta.exito('¡Bienvenido de nuevo!')
                                 .then(() => {
-                                    location.reload(); // Recargamos para actualizar el header
+                                    location.reload();
                                 });
                         } else {
                             alert('¡Bienvenido!');
-                            location.reload(); // Recarga obligatoria
+                            location.reload();
                         }
                     }
                 } else {
-                    // --- ERROR DESDE PHP (Contraseña mal, usuario no existe) ---
+                    //ERROR DESDE PHP
                     Alerta.error(data.message || 'Usuario o contraseña incorrectos.');
                 }
             })

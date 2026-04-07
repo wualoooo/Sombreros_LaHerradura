@@ -49,6 +49,11 @@
                         </button>
                     </div>
 
+                    <div>
+                        <input type="checkbox" name="" id="" required>
+                        <label for="">Al registrarte aceptas los <a href="">Términos y condiciones</a></label>
+                    </div>
+
                     <div class="divButton-pasarela">
                         <button type="button" class="btn-pasarela btn-anterior" onclick="cambiarPasoCC(2, 1)">Anterior</button>
                         <button type="submit" id="buttonCrearCuenta">Crear Cuenta</button>

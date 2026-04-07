@@ -2,46 +2,107 @@ body {
     margin: 0;
 }
 
+/* =========================================
+   CONTENEDOR PRINCIPAL (GRID / FLEX)
+   ========================================= */
 .container {
     margin-top: 9.5rem;
     display: flex;
-    gap: 5px;
-    height: auto;
+    gap: 20px; /* Separación uniforme entre columnas */
+    padding: 0 20px; /* Margen a los lados para que no toque los bordes */
     min-height: 60vh;
+    align-items: flex-start; /* CRÍTICO: Permite que position: sticky funcione en los hijos */
 }
 
-.item:nth-child(2) {
-    flex-grow: 1;
-}
-
-
-#space {
-    width: 20%;
-}
-
+/* =========================================
+   PANEL IZQUIERDO: FILTROS
+   ========================================= */
 #Filtros {
     width: 20%;
-    position: fixed;
-    left: 0;
-    top: 9.5rem;
+    flex-shrink: 0;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    height: fit-content; /* No borrar, necesario para sticky */
+    position: sticky;
+    top: 9.5rem; 
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
+#Filtros h3 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #9f7200;
+    padding-bottom: 5px;
+}
+
+#Filtros h4 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.grupo-filtro { margin-bottom: 20px; }
+
+.filtro-input {
+    width: 100%;
+    padding: 10px;
+    /*margin-bottom: 10px;*/
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.filtro-input:focus {
+    border-color: #9f7200;
+    outline: none;
+}
+
+.rango-precios {
+    display: flex;
+    gap: 10px;
+}
+
+.rango-precios input { width: 50%; }
+
+.checkbox-list label {
+    display: flex;
+    align-items: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.checkbox-list label:hover { color: #9f7200; }
+.checkbox-list input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: #9f7200;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* =========================================
+   PANEL CENTRAL: PRODUCTOS
+   ========================================= */
 #Productos {
     width: 60%; 
-}
-
-#Espacio {
-    width: 20%;
-    position: fixed;
-    right: 0;
-    top: 9.5rem;
+    flex-grow: 1; /* Toma el espacio sobrante */
 }
 
 .container2 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    padding: 10px;
 }
 
 .container2 > div {
@@ -95,7 +156,6 @@ h5 {
     color: #9f7200;
 }
 
-
 .vista-rapida {
     text-align: center;
     width: 85%;
@@ -118,6 +178,80 @@ h5 {
     pointer-events: auto;
 }
 
+/* =========================================
+   PANEL DERECHO: PERFIL Y CARRITO
+   ========================================= */
+#PanelDerecho {
+    width: 20%;
+    flex-shrink: 0;
+    height: fit-content;
+    position: sticky; 
+    top: 9.5rem;      
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.tarjeta-lateral {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.tarjeta-lateral h4 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #9f7200;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.info-perfil {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.foto-perfil, .icono-invitado {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #ddd;
+}
+
+.icono-invitado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.btn-perfil-ingresar {
+    display: inline-block;
+    background-color: #9f7200;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn-perfil-ingresar:hover { background-color: #7a5800; }
+
+.link-perfil {
+    color: #9f7200;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.link-perfil:hover { text-decoration: underline; }
+
+/* =========================================
+   WHATSAPP (FLOTANTE)
+   ========================================= */
 #wpp {
     position: fixed;
     bottom: 3%;
@@ -128,80 +262,39 @@ h5 {
     transition: transform 0.3s;
 }
 
-#wpp:hover {
-    transform: scale(1.1);
-}
+#wpp:hover { transform: scale(1.1); }
 
-/*Laptops pequeñas o pantallas divididas */
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================= */
 @media screen and (max-width: 1350px) {
-    .container2 {
-        grid-template-columns: repeat(2, 1fr); 
-    }
+    .container2 { grid-template-columns: repeat(2, 1fr); }
 }
 
-/*Tablets (Ocultar filtros laterales y centrar productos) */
 @media screen and (max-width: 1024px) {
-    #space, #Filtros, #Espacio {
-        display: none !important;
+    #Filtros, #PanelDerecho {
+        display: none !important; /* Oculta los paneles laterales en tablets */
     }
 
     #Productos {
         width: 100%;
-        padding: 0 15px;
+        padding: 0;
     }
     
-    .container2 {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    .container2 { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media screen and (max-width: 768px) {
-    .container2 {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-    
+    .container2 { grid-template-columns: repeat(2, 1fr); gap: 15px; }
     h4 { font-size: 0.9rem; }
     h5 { font-size: 1rem; }
 }
 
 @media screen and (max-width: 480px) {
-    .container {
-        margin-top: 6rem; 
-    }
-
-    .container2 {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-
-    .vista-rapida {
-        /*opacity: 1;
-        position: relative;
-        bottom: 0;
-        left: 0;
-        transform: none;
-        width: 90%;
-        margin: 15px auto 10px auto;
-        font-size: 1.2rem;
-        padding: 10px;
-        pointer-events: auto;*/
-        display: none;
-    }
-
-    .card { 
-        width: 100%;
-        height: 1rem;
-    }
-
-    .container2 > div {
-    min-height: 200px; 
-    height: auto;
-}
-    
-    #wpp {
-        width: 50px;
-        right: 5%;
-        bottom: 5%;
-    }
+    .container { margin-top: 6rem; padding: 0 10px; }
+    .container2 { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .vista-rapida { display: none; }
+    .card { width: 100%; height: 1rem; }
+    .container2 > div { min-height: 200px; height: auto; }
+    #wpp { width: 50px; right: 5%; bottom: 5%; }
 }
