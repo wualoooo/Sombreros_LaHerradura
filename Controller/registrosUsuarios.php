@@ -42,14 +42,16 @@ try {
     // Hashear contraseña e Insertar
     $Contra_Hash = password_hash($Contra, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO usuarios (Nombre, Apellido_Pat, Apellido_Mat, Correo, Contra) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuarios (Nombre, Apellidos, Correo, Contra) VALUES (?, ?, ?, ?)";
     $insert = $conn->prepare($sql);
     
     if (!$insert) {
         throw new Exception("Error en la preparación de la consulta: " . $conn->error);
     }
 
-    $insert->bind_param("sssss", $Nombre, $Ap_Pat, $Ap_Mat, $Correo, $Contra_Hash);
+    $Apellidos = $Ap_Pat . ' ' . $Ap_Mat;
+
+    $insert->bind_param("ssss", $Nombre, $Apellidos, $Correo, $Contra_Hash);
 
     if ($insert->execute()) {
         $response['success'] = true;

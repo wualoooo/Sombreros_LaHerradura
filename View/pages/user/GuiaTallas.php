@@ -40,6 +40,7 @@ session_start();
             border: 1px solid #ccc;
         }
     </style>
+    <link rel="shortcut icon" href="../../images/Logo_Herradura_head3.png" type="image/x-icon">
 </head>
 <body>
     <header>

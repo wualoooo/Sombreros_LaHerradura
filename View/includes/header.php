@@ -46,7 +46,7 @@ require_once(ROOT_PATH . 'Model/conexion.php');
             <?php if (isset($_SESSION['user_email'])): ?>
                 <li class="desktop-user-link"><a href="#" id="openUserInfo">Perfil</a></li>
             <?php else: ?>
-                <li class="desktop-user-link"><a href="#" id="openLogin">Iniciar Sesion</a></li>
+                <li class="desktop-user-link"><a href="#" id="openLogin">Iniciar Sesión</a></li>
             <?php endif; ?>
 
             <li><a href="/LaHerradura/View/pages/user/GuiaTallas.php">Guía de tallas</a></li>
