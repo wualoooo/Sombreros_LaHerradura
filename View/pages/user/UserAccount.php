@@ -21,6 +21,7 @@ $stmt->close();
 
 
 // --- CONSULTA 2: PEDIDOS ---
+// Nota: p.* ya nos trae el estado_pago de la base de datos
 $sqlPedidos = "SELECT p.*, e.status
                 FROM pedidos as p
                 JOIN estatus e ON e.id_status = p.estado_envio
@@ -30,7 +31,6 @@ $stmtP = $conn->prepare($sqlPedidos);
 $stmtP->bind_param("i", $id_usuario);
 $stmtP->execute();
 $resultPedidos = $stmtP->get_result();
-// Guardamos en array para recorrer después
 $pedidos = [];
 while($row = $resultPedidos->fetch_assoc()) { $pedidos[] = $row; }
 $stmtP->close();
@@ -52,7 +52,8 @@ $stmtD->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Cuenta</title>
-    <link rel="stylesheet" href="/LaHerradura/View/css/style-userAccount.css"> <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/LaHerradura/View/css/style-userAccount.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +75,7 @@ $stmtD->close();
                 $foto = $user['foto_perfil'] ?? null;
                 $src = ($foto && file_exists($_SERVER['DOCUMENT_ROOT'].$rutaImg.$foto)) ? $rutaImg.$foto : $imgDef;
             ?>
-            <img src="<?php echo htmlspecialchars($srcImagen); ?>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #8B0000; margin-bottom: 1rem;">
+            <img src="<?php echo htmlspecialchars($src); ?>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #8B0000; margin-bottom: 1rem;">
             <h4 style="margin: 0;"><?php echo htmlspecialchars($user['Nombre']); ?></h4>
             <p style="color: #888; font-size: 0.9rem;"><?php echo htmlspecialchars($user['Correo']); ?></p>
             
@@ -105,22 +106,16 @@ $stmtD->close();
                     <label for="upload-profile-pic" class="profile-pic-container" title="Cambiar foto de perfil">
                 <?php
                 $rutaUserImg = '/LaHerradura/uploads/users/';
-                // Nota: Como la imagen actual se ve rota, asegúrate de que 'avatar.png' sí exista en esta ruta exacta
                 $imgDefault = '/LaHerradura/View/images/avatar.png';
-
                 $fotoActual = $_SESSION['user_foto'] ?? null;
 
-                // Verificación robusta de la imagen
                 if ($fotoActual) {
-                    // 1. Verificamos si es una URL externa (Google)
                     if (strpos($fotoActual, 'http://') === 0 || strpos($fotoActual, 'https://') === 0) {
                         $srcImagen = $fotoActual;
                     } 
-                    // 2. Si no es URL, verificamos si es un archivo local que sí existe
                     else if (file_exists($_SERVER['DOCUMENT_ROOT'] . $rutaUserImg . $fotoActual)) {
                         $srcImagen = $rutaUserImg . $fotoActual;
                     } 
-                    // 3. Si no existe ni como URL ni como archivo, usamos default
                     else {
                         $srcImagen = $imgDefault;
                     }
@@ -163,34 +158,51 @@ $stmtD->close();
                     <table class="tabla-perfil">
                         <thead>
                             <tr>
-                                <th>Código pedido</th>
+                                <th>Folio</th>
                                 <th>Fecha</th>
                                 <th>Total</th>
                                 <th>Estado</th>
-                                <th>Detalles</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($pedidos as $p): 
-                                
-                            ?>
+                            <?php foreach($pedidos as $p): ?>
                             <tr>
-                                <td><?php echo $p['codigo_rastreo']; ?></td>
+                                <td><strong><?php echo $p['codigo_rastreo']; ?></strong>
                                 <td><?php echo date('d/m/Y', strtotime($p['fecha'])); ?></td>
                                 <td>$<?php echo number_format($p['total'], 2); ?></td>
-                                <td><span class=""><?php echo $p['status']; ?></span></td>
-                                <td><button class="btn-ver">Ver</button></td>
+                                
+                                <td>
+                                    <div style="font-size: 0.85em; margin-bottom: 5px;">
+                                        <strong>Pago:</strong> 
+                                        <?php if($p['estado_pago'] == 'APROBADO'): ?>
+                                            <span style="color: #28a745; font-weight: bold;">Aprobado</span>
+                                        <?php elseif($p['estado_pago'] == 'PENDIENTE'): ?>
+                                            <span style="color: #ffc107; font-weight: bold;">Pendiente</span>
+                                        <?php else: ?>
+                                            <span><?php echo htmlspecialchars($p['estado_pago']); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div style="font-size: 0.85em;">
+                                        <strong>Envío:</strong> <span style="color: #555;"><?php echo htmlspecialchars($p['status']); ?></span>
+                                    </div>
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    <a href="/LaHerradura/Controller/GenerarTicket.php?id_pedido=<?php echo $p['id_pedido']; ?>" target="_blank" style="background-color: #8B0000; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-right: 5px; font-weight: bold;">PDF</a>
+                                    <a href="detalle_pedido.php?id=<?php echo $p['id_pedido']; ?>" class="btn-ver " style="padding: 5px 10px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; font-size: 0.85rem; background: white; text-decoration: none; color: black; display: inline-block;">Ver</a>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                </div>
                 <?php else: ?>
                     <div style="text-align: center; padding: 3rem;">
                         <span class="material-symbols-outlined" style="font-size: 3rem; color: #ccc;">shopping_cart_off</span>
                         <p>Aún no has realizado compras.</p>
                     </div>
                 <?php endif; ?>
-                </div>
             </div>
 
             <div id="direcciones" class="tab-content">
@@ -204,8 +216,8 @@ $stmtD->close();
                 <div class="grid-direcciones">
                     <div class="card-direccion">
                             <p>
-                                Recoger en tienda
-                                Carretera Ixmiquilpan-Tasquillo km 25
+                                <strong>Recoger en tienda</strong><br>
+                                Carretera Ixmiquilpan-Tasquillo km 25<br>
                                 Panales, Ixmiquilpan 42326
                             </p>
                         </div>
@@ -219,7 +231,9 @@ $stmtD->close();
                         </div>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <p>No tienes direcciones guardadas.</p>
+                        <div class="card-direccion" style="border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #888;">
+                            <p style="margin: 0;">No tienes direcciones guardadas.</p>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -227,28 +241,21 @@ $stmtD->close();
         </main>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/LaHerradura/public/alerts.js"></script>
     <script>
-        // Lógica simple para cambiar de pestañas
         function mostrarTab(tabId) {
-            // 1. Ocultar todos
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.menu-lateral button').forEach(el => el.classList.remove('active'));
             
-            // 2. Mostrar el seleccionado
             document.getElementById(tabId).classList.add('active');
             
-            // 3. Activar botón del menú (truco para encontrar el botón que se clickeó)
-            // En un caso real, pasaríamos 'this' como argumento, pero para rápido:
             const botones = document.querySelectorAll('.menu-lateral button');
             if(tabId === 'info') botones[0].classList.add('active');
             if(tabId === 'pedidos') botones[1].classList.add('active');
             if(tabId === 'direcciones') botones[2].classList.add('active');
         }
 
-        // Lógica de Foto de Perfil (Versión Inline para esta página)
         document.getElementById('upload-profile-pic').addEventListener('change', function() {
             const file = this.files[0];
             if (!file) return;
@@ -263,9 +270,9 @@ $stmtD->close();
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    // Actualizar imagen grande y la del sidebar
-                    document.getElementById('user-profile-image-big').src = data.newSrc;
-                    location.reload(); // Recargar para ver cambios globales
+                    // ID corregido para que coincida con tu HTML
+                    document.getElementById('user-profile-image').src = data.newSrc;
+                    location.reload(); 
                 } else {
                     Swal.fire('Error', data.message, 'error');
                 }
@@ -276,11 +283,9 @@ $stmtD->close();
 </body>
         <script src="/LaHerradura/public/modals.js" defer></script>
         <script src="/LaHerradura/public/main.js" defer></script>
-        <script src="/LaHerradura/public/alerts.js" defer></script>
         <script src="/LaHerradura/public/Validations/ValidacionRegistro.js" defer></script>
         <script src="/LaHerradura/public/Validations/ValidacionDirecciones.js"></script>
         <script src="/LaHerradura/public/userProfile.js"></script>
         <script src="/LaHerradura/public/carrito.js" defer></script>
         <script src="/LaHerradura/public/Checkout.js" defer></script>
-
 </html>

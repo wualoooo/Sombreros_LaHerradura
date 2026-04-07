@@ -1,5 +1,5 @@
 // INICIALIZA MERCADO PAGO (Pon tu PUBLIC KEY de pruebas aquí)
-const mp = new MercadoPago('APP_USR-d7315938-5543-4aed-86c2-db72c07c58f7', {
+const mp = new MercadoPago('APP_USR-37155d4b-4c70-40c5-bd20-69052649bade', {
     locale: 'es-MX'
 });
 
@@ -76,7 +76,7 @@ function procesarCompraFinal() {
     };
 
     // Llamamos a tu controlador PHP
-    fetch('/LaHerradura/Controller/FinalizarCompra.php', {
+    fetch('../Controller/FinalizarCompra.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosCompra)
@@ -84,19 +84,20 @@ function procesarCompraFinal() {
     .then(response => response.json())
     .then(data => {
         if (data.success && data.id_preferencia) {
-            // Ocultamos el botón original
-            btnPago.style.display = 'none';
+    btnPago.style.display = 'none';
 
-            // Dibujamos la pasarela de Mercado Pago
-            mp.bricks().create("wallet", "wallet_container", {
-                initialization: {
-                    preferenceId: data.id_preferencia,
-                },
-                customization: {
-                    texts: { valueProp: 'security_safety' },
-                },
-            });
-        } else {
+    // LIMPIAR EL CONTENEDOR ANTES DE CREAR EL BRICK
+    document.getElementById('wallet_container').innerHTML = ''; 
+
+    mp.bricks().create("wallet", "wallet_container", {
+        initialization: {
+            preferenceId: data.id_preferencia,
+        },
+        customization: {
+            texts: { valueProp: 'security_safety' },
+        },
+    });
+} else {
             alert('Error: ' + (data.message || 'No se pudo generar el pago'));
             btnPago.textContent = "CONTINUAR AL PAGO";
             btnPago.disabled = false;
