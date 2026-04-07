@@ -21,8 +21,22 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Materiales</h2>
-        <button class="btn btn-agregar" id="btnAgg-Material">
-            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Agregar nueva Material</button>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Material">
+                    <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo Material</button>
+            </div>
+            <div class="PanelUpSeach">
+                <input type="text" class="TxtBusquedaAdmin" for="" id="" placeholder="Buscador"></input>
+                    <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="">
+                        <option value="">Nombre Material</option>
+                        <option value="">Sombreros</option>
+                        <option value="">Texanas</option>
+                        <option value="">Cinturones</option>
+                        <option value="">Botines</option>
+                    </select>
+            </div>
+        </div>
         <table>
             <th>Producto</th>
             <th>Nombre material</th>
@@ -41,10 +55,10 @@
                             <td>".$row["Producto"]."</td>
                             <td>".$row["Nombre"]."</td>
                             <td>
-                                <button class='btn btn-editarCinturon' data-id='".$row["id_material"]."'>
+                                <button class='btn-editar btn-editarCinturon' data-id='".$row["id_material"]."'>
                                 <span class='material-symbols-outlined'>edit</span>
                                 </button>
-                                <button class='btn btn-eliminarCinturon' data-id='".$row["id_material"]."'>
+                                <button class='btn-eliminar btn-eliminarCinturon' data-id='".$row["id_material"]."'>
                                     <span class='material-symbols-outlined'>delete</span>
                                 </button>
                             </td>

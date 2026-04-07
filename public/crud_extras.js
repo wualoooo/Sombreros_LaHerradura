@@ -68,3 +68,42 @@ function configurarFormularioExtra(idFormulario, urlBackend, nombreEntidad) {
         });
     });
 }
+
+function borrarExtra(id, tipo) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Estás a punto de eliminar este ${tipo}.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Preparamos los datos a enviar
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('tipo', tipo);
+
+            // Enviamos a PHP
+            fetch('../../../Controller/CRUD_Extras/eliminarExtras.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire('¡Eliminado!', data.message, 'success')
+                    .then(() => location.reload());
+                } else {
+                    Swal.fire('No se pudo eliminar', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error', 'Hubo un problema de conexión con el servidor.', 'error');
+            });
+        }
+    });
+}

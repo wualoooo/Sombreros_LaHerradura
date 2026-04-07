@@ -20,11 +20,25 @@
         ?>
     </header>
     <main>
-        <h2 class="titleGestion">Gestión de Hormas</h2>
-        <button class="btn btn-agregar" id="btnAgg-Horma">
-            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva Horma</button>
+        <h2 class="titleGestion">Gestión de Copas</h2>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Horma">
+                    <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nueva Horma</button>
+            </div>
+            <div class="PanelUpSeach">
+                <input type="text" class="TxtBusquedaAdmin" for="" id="" placeholder="Buscador"></input>
+                    <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="">
+                        <option value="">Nombre Horma</option>
+                        <option value="">Sombreros</option>
+                        <option value="">Texanas</option>
+                        <option value="">Cinturones</option>
+                        <option value="">Botines</option>
+                    </select>
+            </div>
+        </div>
+        
         <table>
-            
             <th>ID</th>
             <th>Nombre</th>
             <th>Acciones</th>

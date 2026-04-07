@@ -21,6 +21,18 @@
     </header>
     <main>
         <h2 class="titleGestion">Usuarios registrados</h2>
+        <div class="PanelUp">
+            <div class="PanelUpSeach">
+                    <input type="text" class="TxtBusquedaAdmin" for="" id="" placeholder="Buscador"></input>
+                        <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="">
+                            <option value="">Usuario</option>
+                            <option value="">Fecha</option>
+                            <option value="">Pedido</option>
+                            <option value="">Telefono</option>
+                            <option value="">Correo</option>
+                        </select>
+            </div>
+        </div>
         <table>
             <th>Nombre</th>
             <th>Correo</th>
