@@ -53,7 +53,34 @@ try {
     if (!$stmt->execute()) {
         throw new Exception("Error al actualizar datos: " . $stmt->error);
     }
-    $stmt->close();
+    $stmt->close(); // Esta es la línea 46 que ya tienes
+
+    // --- NUEVO: ACTUALIZAR STOCK EN LA TABLA inventario_tallas ---
+    
+    // 1. Borramos el inventario VIEJO de este SKU específico
+    // (Esto es más seguro que intentar hacer UPDATEs uno por uno, nos asegura que quede exactamente como viene en el form)
+    $sql_delete_inv = "DELETE FROM inventario_tallas WHERE SKU_producto = ? AND tipo_producto = 'texanas'";
+    $stmt_del = $conn->prepare($sql_delete_inv);
+    $stmt_del->bind_param("s", $sku);
+    $stmt_del->execute();
+    $stmt_del->close();
+
+    // 2. Insertamos el inventario NUEVO
+    if (isset($_POST['tallas_disponibles']) && !empty($_POST['tallas_disponibles'])) {
+        $sql_inventario = "INSERT INTO inventario_tallas (SKU_producto, tipo_producto, talla, stock) VALUES (?, 'texanas', ?, ?)";
+        $stmt_inv = $conn->prepare($sql_inventario);
+
+        foreach ($_POST['tallas_disponibles'] as $talla) {
+            // Buscamos cuánto stock pusieron para esta talla en específico
+            $stock = isset($_POST['stock_talla'][$talla]) ? intval($_POST['stock_talla'][$talla]) : 0;
+
+            if ($stock > 0) {
+                $stmt_inv->bind_param("ssi", $sku, $talla, $stock);
+                $stmt_inv->execute();
+            }
+        }
+        $stmt_inv->close();
+    }
 
     $ruta_subida = "../../uploads/texanas/";
     if (!file_exists($ruta_subida)) {
