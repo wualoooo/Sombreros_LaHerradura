@@ -7,6 +7,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sombreros La Herradura</title>
+    <link rel="icon" type="image/x-icon" href="/LaHerradura/assets/images/favicon.ico">
     <link rel="stylesheet" href="/LaHerradura/View/css/style-Inicio.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -102,9 +103,24 @@ session_start();
     <div class="legado">
         <h5 class="legado-Tittle">Nuestro legado</h5>
         <h6 class="legado-Text">
-            Herederos de más de 80 años en la fabricación original de botas vaqueras hechas a mano, nos hemos dado a la tarea de innovar para mejorar constantemente, incorporando nuevas técnicas a la fabricación tradicional, sin olvidar que en las artesanías la mano del hombre difícilmente puede sustituirse.
+            Herederos de más de 80 años en la fabricación original de botas vaqueras hechas a mano, 
+            nos hemos dado a la tarea de innovar para mejorar constantemente, incorporando nuevas técnicas 
+            a la fabricación tradicional, sin olvidar que en las artesanías la mano del hombre difícilmente 
+            puede sustituirse.
         </h6>
+
+        <!-- Video de YouTube incrustado -->
+        <div class="video-container" style="margin-top:20px;">
+            <iframe width="560" height="315" 
+                src="https://www.youtube.com/embed/e9h106V6c1A" 
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
     </div>
+
 
     <div class="ubicacion">
         <div class="ubicacion-izquierda">
