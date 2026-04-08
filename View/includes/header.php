@@ -51,7 +51,14 @@ require_once(ROOT_PATH . 'Model/conexion.php');
             <?php endif; ?>
 
             <li><a href="/LaHerradura/View/pages/user/GuiaTallas.php">Guía de tallas</a></li>
-            <li><a href="#">Probador virtual</a></li>
+            <li>
+                <a href="/LaHerradura/View/pages/user/probador.php" style="position: relative; display: inline-block;">
+                    <span style="position: absolute; top: -12px; left: -15px; background: red; color: white; border-radius: 12px; padding: 2px 6px; font-size: 13px; font-weight: bold; line-height: 1; z-index: 10;">
+                        Beta
+                    </span>
+                    Probador virtual
+                </a>
+            </li>
         </ul>
 
         <div class="nav-right">
