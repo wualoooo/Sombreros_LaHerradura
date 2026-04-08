@@ -21,8 +21,23 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Colores</h2>
-        <button class="btn btn-agregar" id="btnAgg-Color"> 
-            <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo Color</button>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Color"> 
+                    <span class="material-symbols-outlined" id="IconAdd">add_2</span>Nuevo Color</button>
+            </div>
+            <div class="PanelUpSeach">
+                <input type="text" class="TxtBusquedaAdmin" for="" id="" placeholder="Buscador"></input>
+                <select name="FiltroBusquedaAdminSombrero" class="FiltroBusquedaAdmin" id="">
+                    <option value="">Nombre Color</option>
+                    <option value="">Sombreros</option>
+                    <option value="">Texanas</option>
+                    <option value="">Cinturones</option>
+                    <option value="">Botines</option>
+                </select>
+            </div> 
+        </div>
+
         <table>
             <th>Producto</th>
             <th>Color</th>
@@ -44,7 +59,8 @@
                                 <button class='btn-editar btn-editarCopa' data-id='".$row["id_color"]."'>
                                     <span class='material-symbols-outlined'>edit</span>
                                 </button>
-                                <button class='btn-eliminar btn-eliminarCopa' data-id='".$row["id_color"]."'>
+
+                                <button class='btn-eliminar btn-eliminarColor' onclick=\"borrarExtra(".$row['id_color'].", 'color')\">
                                     <span class='material-symbols-outlined'>delete</span>
                                 </button>
                             </td>
@@ -55,7 +71,7 @@
             }
 
             else{
-                echo("
+                echo(" 
                     <tr>
                         <td colspan='2'>No hay resultados</td>
                     </tr>
@@ -73,11 +89,10 @@
 
     <script src="/LaHerradura/public/crud_extras.js"></script>
     <script src="/LaHerradura/public/modals.js"></script>
+    <script src="/LaHerradura/public/alerts.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        
-        // Configurar HORMAS
         configurarFormularioExtra(
             'form-AggColor',
             '/LaHerradura/Controller/CRUD_Extras/CRUD_Colores/registroColores.php', 

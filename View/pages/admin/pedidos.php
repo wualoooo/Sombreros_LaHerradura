@@ -29,8 +29,7 @@
                     <th>Teléfono</th>
                     <th>Código de rastreo</th>
                     <th>Productos</th>
-                    <th>Total</th>
-                    <th>Fecha</th>
+                    <th>Total / Pago</th> <th>Fecha</th>
                     <th>Estado del pedido</th>
                 </tr>
             </thead>
@@ -51,6 +50,7 @@
         }
     }
     
+    // --- CAMBIO 1: Agregué p.estado_pago a la consulta SQL ---
     $sqlSELECT = "SELECT
                 p.id_pedido,
                 p.id_usuario,
@@ -62,7 +62,8 @@
                 p.codigo_rastreo, 
                 p.productos, 
                 p.total, 
-                p.estado_envio ,
+                p.estado_envio,
+                p.estado_pago, 
                 p.fecha,
                 e.status
                 FROM pedidos as p 
@@ -103,7 +104,21 @@
             }
             echo "</td>";
             
-            echo "<td>$".$row["total"]."</td>";
+            // --- CAMBIO 2: Lógica visual del Estado de Pago ---
+            echo "<td style='text-align: center;'>";
+            echo "<strong style='display:block; margin-bottom: 8px;'>$".number_format($row["total"], 2)."</strong>";
+            
+            // Etiqueta de colores dependiendo de si ya pagó
+            if($row['estado_pago'] == 'APROBADO') {
+                echo "<span style='background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; white-space: nowrap;'>APROBADO</span>";
+            } elseif($row['estado_pago'] == 'PENDIENTE') {
+                echo "<span style='background: #ffc107; color: black; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; white-space: nowrap;'>PENDIENTE</span>";
+            } else {
+                echo "<span style='background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; white-space: nowrap;'>".strtoupper($row['estado_pago'])."</span>";
+            }
+            echo "</td>";
+            // ----------------------------------------------------
+
             echo "<td>".$row["fecha"]."</td>";
 
             echo "<td>";
@@ -122,7 +137,7 @@
     else {
         echo("
             <tr>
-                <td colspan='7'>No hay resultados</td>
+                <td colspan='8'>No hay resultados</td>
             </tr>
         ");
     }

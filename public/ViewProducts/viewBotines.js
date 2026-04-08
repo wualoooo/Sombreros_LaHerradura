@@ -143,4 +143,75 @@ nuevoBtn.addEventListener('click', () => {
             });
         });
     }
+// LÓGICA DE FILTRADO AJAX
+// ==========================================
+
+function aplicarFiltros() {
+    const nombre = document.getElementById('filtro-nombre').value;
+    const precioMin = document.getElementById('filtro-precio-min').value;
+    const precioMax = document.getElementById('filtro-precio-max').value;
+    const materialesSeleccionados = Array.from(document.querySelectorAll('.check-material:checked')).map(cb => cb.value);
+    const suelasSeleccionados = Array.from(document.querySelectorAll('.check-suela:checked')).map(cb => cb.value);
+    const tallasSeleccionadas = Array.from(document.querySelectorAll('.check-talla-botin:checked')).map(cb => cb.value);
+
+    const datosFiltro = {
+        nombre: nombre,
+        precioMin: precioMin,
+        precioMax: precioMax,
+        materiales: materialesSeleccionados,
+        suelas: suelasSeleccionados,
+        tallas: tallasSeleccionadas,
+    };
+
+    fetch('/LaHerradura/Controller/CRUD_Botines/FiltrarBotines.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datosFiltro)
+    })
+    .then(res => res.json())
+    .then(data => {
+        const contenedorProductos = document.querySelector('.container2');
+        contenedorProductos.innerHTML = ''; // Limpiamos los productos actuales
+
+        if (data.length === 0) {
+            contenedorProductos.innerHTML = '<h3 style="grid-column: 1 / -1; text-align: center; color: #666;">No se encontraron productos con estos filtros.</h3>';
+            return;
+        }
+
+        // Dibujamos las tarjetas exactamente como las hace tu PHP original
+        data.forEach(producto => {
+            const cardHTML = `
+                <div class='card abrir-modal-vp' data-id='${producto.id_botin}'>
+                    <div class='img-producto'>
+                        <img src='/LaHerradura/uploads/botines/${producto.Img1}' alt='${producto.Nombre}'>
+                    </div>
+                    <div class='vista-rapida'>
+                        <span>Ver más detalles</span>
+                    </div>
+                    <div class='text-producto'>
+                        <h4>${producto.Nombre}</h4>
+                        <h5>$${producto.Precio}.00 mxn</h5>
+                    </div>
+                </div>
+            `;
+            contenedorProductos.insertAdjacentHTML('beforeend', cardHTML);
+        });
+    })
+    .catch(err => console.error("Error en filtros:", err));
+}
+
+// Listeners para Checkboxes y Precios (Se ejecutan al instante)
+document.querySelectorAll('.check-material, .check-suela, .check-talla-botin,#filtro-precio-min, #filtro-precio-max').forEach(el => {
+    el.addEventListener('change', aplicarFiltros);
+});
+
+// Listener para el Buscador de Texto con "Debounce" (Retraso inteligente)
+let timeoutBuscador;
+document.getElementById('filtro-nombre').addEventListener('input', () => {
+    clearTimeout(timeoutBuscador); // Si sigue escribiendo, reinicia el reloj
+    timeoutBuscador = setTimeout(() => {
+        aplicarFiltros(); // Solo busca cuando deja de teclear por 300ms
+    }, 300); 
+});
+
 });

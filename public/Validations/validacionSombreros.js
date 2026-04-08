@@ -1,14 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // Asegúrate que tu <form> en el HTML tenga este ID exacto
     const formulario = document.getElementById('form-AggSombrero');
-
     if (!formulario) return;
 
     formulario.addEventListener('submit', function(e) {
-        e.preventDefault(); // Detenemos el envío para validar
+        e.preventDefault();
 
-        // --- A) LIMPIEZA VISUAL PREVIA ---
         const limpiarEstilos = () => {
             formulario.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
             formulario.querySelectorAll('.caja-error').forEach(el => el.classList.remove('caja-error'));
@@ -26,9 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             errores.push(mensaje);
         };
 
-        // --- B) VALIDACIONES ROBUSTAS ---
-
-        // 1. Textos
+        //VALIDACIONES ROBUSTAS
         const camposTexto = ['SKUSombrero','NombreSombrero'];
         camposTexto.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
@@ -46,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 2. Selects
+        //Selects
         const selects = ['HormaSombrero', 'CopaSombrero', 'ColorSombrero', 'MaterialSombrero'];
         selects.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
@@ -55,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 3. Números
+        //Números
         const numeros = ['PrecioSombrero', 'TamañoCopaSombrero', 'TamañoAlaSombrero'];
         numeros.forEach(name => {
             const input = formulario.querySelector(`[name="${name}"]`);
@@ -64,7 +58,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 4. Imágenes (Validación duplicados)
+        // --- NUEVA VALIDACIÓN: TALLAS Y STOCK ---
+        const checkboxesTallas = formulario.querySelectorAll('.check-talla:checked');
+        if (checkboxesTallas.length === 0) {
+            errores.push("Debes seleccionar al menos una talla para el sombrero.");
+        } else {
+            checkboxesTallas.forEach(cb => {
+                const talla = cb.value;
+                const inputStock = formulario.querySelector(`input[name="stock_talla[${talla}]"]`);
+                
+                if (!inputStock || inputStock.value === "" || isNaN(inputStock.value) || Number(inputStock.value) <= 0) {
+                    marcarError(inputStock, `Ingresa una cantidad válida para la Talla ${talla}.`);
+                }
+            });
+        }
+
+        //Imágenes (Validación duplicados)
         const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
             const inputImg = formulario.querySelector(`[name="imgSombrero${i}"]`);
@@ -87,10 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // --- C) RESULTADO DE VALIDACIÓN ---
-
+        //RESULTADO DE VALIDACIÓN
         if (errores.length > 0) {
-            // MOSTRAR ERRORES CON SWEETALERT (Lista HTML)
             Swal.fire({
                 icon: 'warning',
                 title: 'Atención',
@@ -98,20 +105,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Corregir'
             });
-
             if (primerElementoError) primerElementoError.focus();
-
         } else {
-            // --- D) SI TODO ESTÁ BIEN: ENVIAR FETCH ---
-            
             const btnSubmit = document.getElementById('btnGuardarAggSombrero');
-            const textoOriginal = btnSubmit.textContent; // Usamos textContent en lugar de value
+            const textoOriginal = btnSubmit.textContent;
             btnSubmit.textContent = "Guardando...";
             btnSubmit.disabled = true;
 
             const formData = new FormData(formulario);
 
-            fetch(formulario.action, { // Usa la URL del atributo action="" del form
+            fetch(formulario.action, {
                 method: 'POST',
                 body: formData
             })
@@ -122,26 +125,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 btnSubmit.disabled = false;
 
                 if (data.success) {
-                    // ÉXITO: Usamos Alerta.exito
-                    // Cerramos el modal inmediatamente para mejor UX
                     const modal = document.getElementById('modal-AggSombrero');
                     if(modal) modal.style.display = "none";
 
                     Alerta.exito(data.message || 'Sombrero registrado correctamente.')
                         .then(() => {
                             formulario.reset(); 
-                            // Limpiar previews
                             document.querySelectorAll('.preview').forEach(img => {
                                 img.src = '#';
                                 img.style.display = 'none';
                             });
-                            
-                            // Recargar la página
                             location.reload(); 
                         });
-
                 } else {
-                    // ERROR DEL PHP
                     Alerta.error(data.message || "Error desconocido del servidor.");
                 }
             })

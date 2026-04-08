@@ -1,73 +1,73 @@
 // Espera a que todo el HTML esté cargado
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Selecciona el modal y sus partes
     const modal = document.getElementById('modal-ViewCinturones');
-    // ... (todos tus otros selectores 'modalNombre', 'modalPrecio', etc. están bien)
 
     // Usamos delegación de eventos para más eficiencia
     document.body.addEventListener('click', function(evento) {
         
-        // Vemos si el clic fue en una tarjeta (o en algo dentro de ella)
         const tarjetaClicada = evento.target.closest('.abrir-modal-vp');
         
         if (tarjetaClicada) {
             
-            // 1. Obtenemos el ID del 'data-id'
             const id = tarjetaClicada.dataset.id;
             
             console.log("Haciendo fetch para el ID:", id);
-            // 2. Llamamos a nuestro PHP usando fetch
             fetch(`/LaHerradura/Controller/CRUD_Cinturones/ViewCinturones.php?id=${id}`)
-                .then(response => response.json()) // Convierte la respuesta a JSON
+                .then(response => response.json()) 
                 .then(data => {
-                    // 3. Rellenamos el modal con los datos recibidos
                     console.log("Datos recibidos del PHP:", data);
 
                     document.getElementById('name-sombrero-vp').textContent = data.Nombre;
                     document.getElementById('precio-vp').textContent = `$${data.Precio}.00 mxn`;
 
-                    // Rellenamos los detalles (usando los nuevos IDs)
+                    // Rellenamos los detalles
                     document.getElementById('modal-material').textContent = `Material: ${data.Nombre_Material || data.id_Material}`;
                     document.getElementById('modal-adorno').textContent = `Adorno: ${data.Nombre_Adorno || data.id_Adorno}`;
                     document.getElementById('modal-tamaño').textContent = `Tamaño: ${data.Tamaño} cm`;
-                    // --- INICIO DE LA MODIFICACIÓN DE GALERÍA ---
+                    
+                    // --- LÓGICA DE TALLAS Y STOCK ---
                     const contenedorTallas = document.getElementById('container-tallas');
+                    const inputCantidad = document.getElementById('cant-products');
                     
                     if (contenedorTallas) {
-                        // A) Limpiar tallas anteriores (del producto que viste antes)
                         contenedorTallas.innerHTML = ''; 
-
-                        // B) Obtener el string de tallas (ej: "54,55,56" o "Unitalla")
-                        let stringTallas = data.Tallas || "Unitalla";
                         
-                        // C) Convertirlo en un array separando por comas
-                        let arrayTallas = stringTallas.split(',');
+                        if (data.inventario && data.inventario.length > 0) {
+                            let hayStock = false;
 
-                        // D) Crear un botón por cada talla
-                        arrayTallas.forEach(talla => {
-                            let span = document.createElement('span');
-                            span.classList.add('talla'); // Clase para estilos CSS
-                            span.textContent = talla.trim(); // .trim() quita espacios extra
+                            data.inventario.forEach(item => {
+                                if (item.stock > 0) {
+                                    hayStock = true;
+                                    let span = document.createElement('span');
+                                    span.classList.add('talla');
+                                    span.textContent = item.talla;
+                                    span.dataset.stock = item.stock; 
 
-                            // E) Agregar el evento de click AQUÍ MISMO a los nuevos botones
-                            span.addEventListener('click', function() {
-                                // 1. Quitar 'selected' a todos los hermanos
-                                contenedorTallas.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
-                                // 2. Poner 'selected' al actual
-                                this.classList.add('selected');
+                                    span.addEventListener('click', function() {
+                                        contenedorTallas.querySelectorAll('.talla').forEach(t => t.classList.remove('selected'));
+                                        this.classList.add('selected');
+                                        
+                                        inputCantidad.max = item.stock;
+                                        if (parseInt(inputCantidad.value) > item.stock) {
+                                            inputCantidad.value = item.stock;
+                                        }
+                                    });
+                                    contenedorTallas.appendChild(span);
+                                }
                             });
 
-                            // F) Insertar en el HTML
-                            contenedorTallas.appendChild(span);
-                        });
+                            if (!hayStock) {
+                                contenedorTallas.innerHTML = '<span style="color: #dc3545; font-weight: bold;">Agotado</span>';
+                            }
+                        } else {
+                            contenedorTallas.innerHTML = '<span style="color: #888;">Tallas no configuradas</span>';
+                        }
                     }
-                    // En lugar de una sola imagen, generamos la galería completa
+
+                    // --- GALERÍA DE IMÁGENES ---
                     const imgCont = document.getElementById('img-sombrero');
 
-                    // 1. Preparamos el HTML para la vista principal y las miniaturas
-                    
-                    // Asignamos un ID único a la imagen principal del modal
                     let galeriaHtml = `
                         <div id="vista-foto">
                             <img id="main-image-modal" src="/LaHerradura/uploads/cinturones/${data.Img1}" alt="${data.Nombre}">
@@ -75,45 +75,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div id="vista-miniaturas">
                     `;
 
-                    // 2. Creamos un array solo con las imágenes que existen
                     const imagenes = [];
                     if (data.Img1) imagenes.push(data.Img1);
                     if (data.Img2) imagenes.push(data.Img2);
                     if (data.Img3) imagenes.push(data.Img3);
                     if (data.Img4) imagenes.push(data.Img4);
-                    // (Puedes añadir más si tu BD tiene Img5, Img6, etc.)
 
-                    // 3. Generamos el HTML de cada miniatura
                     imagenes.forEach(imgSrc => {
                         const rutaCompleta = `/LaHerradura/uploads/cinturones/${imgSrc}`;
-                        // Usamos una clase única para las miniaturas del modal
                         galeriaHtml += `<img class="thumbnail-modal" src="${rutaCompleta}" alt="Miniatura ${data.Nombre}">`;
                     });
 
-                    // 4. Cerramos los divs
-                    galeriaHtml += `</div>`; // Cierra #vista-miniaturas
-
-                    // 5. Inyectamos todo el HTML de la galería en el contenedor
+                    galeriaHtml += `</div>`; 
                     imgCont.innerHTML = galeriaHtml;
-                    
-                    // 6. ¡IMPORTANTE! Activamos los listeners para las miniaturas que ACABAMOS de crear
                     activarListenersGaleriaModal();
 
-                    // --- LÓGICA DE CARRITO ---
-                    // Reemplazar el botón para limpiar eventos anteriores
+                    // --- LÓGICA DE CARRITO CON STOCK ---
                     const btnAgregar = document.getElementById('btn-AggCart');
-                    const inputCantidad = document.getElementById('cant-products');
                     const nuevoBtn = btnAgregar.cloneNode(true);
                     btnAgregar.parentNode.replaceChild(nuevoBtn, btnAgregar);
 
                     nuevoBtn.addEventListener('click', () => {
                         
-                        // Validar talla seleccionada (buscamos dentro del contenedor dinámico)
                         const tallaSeleccionada = contenedorTallas.querySelector('.talla.selected');
                         
                         if (!tallaSeleccionada) {
                             if (typeof Alerta !== 'undefined') {
-                                Alerta.error("Por favor, selecciona una talla.");
+                                Alerta.error("Por favor, selecciona una talla disponible.");
                             } else {
                                 alert("Selecciona una talla");
                             }
@@ -121,17 +109,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
 
                         const valorTalla = tallaSeleccionada.textContent.trim();
-                        const cantidad = parseInt(inputCantidad.value) || 1;
+                        const cantidadSolicitada = parseInt(inputCantidad.value) || 1;
+                        const stockDisponible = parseInt(tallaSeleccionada.dataset.stock);
 
-                        const producto = 
-                        {
+                        // VALIDACIÓN ESTRELLA
+                        if (cantidadSolicitada > stockDisponible) {
+                            if (typeof Alerta !== 'undefined') {
+                                Alerta.error(`Lo sentimos, solo tenemos ${stockDisponible} piezas disponibles en talla ${valorTalla}.`);
+                            } else {
+                                alert(`Solo hay ${stockDisponible} piezas disponibles.`);
+                            }
+                            return; 
+                        }
+
+                        const producto = {
                             sku: data.SKU,
                             id: data.id_cinturon,
                             nombre: data.Nombre,
                             precio: data.Precio,
                             imagen: data.Img1,
                             tipo: 'cinturones', 
-                            cantidad: cantidad,
+                            cantidad: cantidadSolicitada,
                             talla: valorTalla 
                         };
 
@@ -142,48 +140,103 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    // --- FIN DE LA MODIFICACIÓN DE GALERÍA ---
-
-                    // 4. Mostramos el modal
                     modal.style.display = 'block';
                 })
                 .catch(error => console.error('Error al cargar datos:', error));
         }
     });
 
-    // Tu código para cerrar el modal
+    // Cerrar el modal
     const spanClose = document.querySelector('.modal-content-vp .close');
-    spanClose.onclick = function() {
-        modal.style.display = "none";
-        
-        // --- BUENA PRÁCTICA (Opcional) ---
-        // Limpiamos la galería al cerrar para que no se vea la anterior
-        // si la siguiente carga falla.
-        const imgCont = document.getElementById('img-sombrero');
-        imgCont.innerHTML = ""; // Limpiamos el contenido
+    if (spanClose) {
+        spanClose.onclick = function() {
+            modal.style.display = "none";
+            const imgCont = document.getElementById('img-sombrero');
+            if (imgCont) imgCont.innerHTML = ""; 
+        }
     }
 
-    
-    // --- NUEVA FUNCIÓN ---
-    // Esta función añade la lógica de clic a las miniaturas del modal
     function activarListenersGaleriaModal() {
-        // Seleccionamos la imagen principal DENTRO DEL MODAL
         const mainImage = document.getElementById('main-image-modal'); 
-        
-        // Seleccionamos las miniaturas DENTRO DEL MODAL
         const thumbnails = document.querySelectorAll('#img-sombrero .thumbnail-modal');
 
-        if (!mainImage) {
-            console.error("No se encontró la imagen principal del modal ('main-image-modal')");
-            return;
-        }
+        if (!mainImage) return;
 
         thumbnails.forEach(thumbnail => {
             thumbnail.addEventListener('click', () => {
-                // Al hacer clic, cambiamos el 'src' de la imagen principal
                 mainImage.src = thumbnail.src;
-                mainImage.alt = thumbnail.alt; // También actualizamos el alt
+                mainImage.alt = thumbnail.alt; 
             });
         });
     }
+
+       // ==========================================
+// LÓGICA DE FILTRADO AJAX
+// ==========================================
+
+function aplicarFiltros() {
+    const nombre = document.getElementById('filtro-nombre').value;
+    const precioMin = document.getElementById('filtro-precio-min').value;
+    const precioMax = document.getElementById('filtro-precio-max').value;
+    const adornosSeleccionados = Array.from(document.querySelectorAll('.check-adorno:checked')).map(cb => cb.value);
+    const materialesSeleccionados = Array.from(document.querySelectorAll('.check-material:checked')).map(cb => cb.value);
+
+    const datosFiltro = {
+        nombre: nombre,
+        precioMin: precioMin,
+        precioMax: precioMax,
+        adornos: adornosSeleccionados,
+        materiales: materialesSeleccionados
+    };
+
+    fetch('/LaHerradura/Controller/CRUD_Cinturones/FiltrarCinturones.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datosFiltro)
+    })
+    .then(res => res.json())
+    .then(data => {
+        const contenedorProductos = document.querySelector('.container2');
+        contenedorProductos.innerHTML = ''; // Limpiamos los productos actuales
+
+        if (data.length === 0) {
+            contenedorProductos.innerHTML = '<h3 style="grid-column: 1 / -1; text-align: center; color: #666;">No se encontraron productos con estos filtros.</h3>';
+            return;
+        }
+
+        // Dibujamos las tarjetas exactamente como las hace tu PHP original
+        data.forEach(producto => {
+            const cardHTML = `
+                <div class='card abrir-modal-vp' data-id='${producto.id_cinturon}'>
+                    <div class='img-producto'>
+                        <img src='/LaHerradura/uploads/cinturones/${producto.Img1}' alt='${producto.Nombre}'>
+                    </div>
+                    <div class='vista-rapida'>
+                        <span>Ver más detalles</span>
+                    </div>
+                    <div class='text-producto'>
+                        <h4>${producto.Nombre}</h4>
+                        <h5>$${producto.Precio}.00 mxn</h5>
+                    </div>
+                </div>
+            `;
+            contenedorProductos.insertAdjacentHTML('beforeend', cardHTML);
+        });
+    })
+    .catch(err => console.error("Error en filtros:", err));
+}
+
+// Listeners para Checkboxes y Precios (Se ejecutan al instante)
+document.querySelectorAll('.check-adorno, .check-material, #filtro-precio-min, #filtro-precio-max').forEach(el => {
+    el.addEventListener('change', aplicarFiltros);
+});
+
+// Listener para el Buscador de Texto con "Debounce" (Retraso inteligente)
+let timeoutBuscador;
+document.getElementById('filtro-nombre').addEventListener('input', () => {
+    clearTimeout(timeoutBuscador); // Si sigue escribiendo, reinicia el reloj
+    timeoutBuscador = setTimeout(() => {
+        aplicarFiltros(); // Solo busca cuando deja de teclear por 300ms
+    }, 300); 
+});
 });

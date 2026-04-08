@@ -61,7 +61,7 @@
                 
                 <div id="lista-direcciones" class="direcciones-grid">
                     <label class="card-direccion">
-                        <input type="radio" name="direccion_envio" value="0" checked>
+                        <input type="radio" name="direccion_envio" value="1" checked>
                         <div class="info-dir">
                             <strong>Recoger en tienda</strong>
                             <p>Carretera Ixmiquilpan-Tasquillo km 25 Panales, Ixmiquilpan 42326</p>

@@ -130,13 +130,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('edit-TamañoCopaSombrero').value = data.Tam_Copa;
                     document.getElementById('edit-TamañoAlaSombrero').value = data.Tam_ala;
 
-                    if (data.Tallas && data.Tallas !== "Unitalla") {
-                        const tallasGuardadas = data.Tallas.split(',');
-                        tallasGuardadas.forEach(talla => {
-                            const cb = document.querySelector(`.talla-edit-checkbox[value="${talla.trim()}"]`);
-                            if (cb) cb.checked = true;
+                    // --- NUEVO: LLENAR TALLAS Y STOCK ---
+                    // 1. Limpiamos todas las casillas por si abriste otro sombrero antes
+                    document.querySelectorAll('.check-talla-edit').forEach(cb => { 
+                        cb.checked = false; 
+                        toggleStockEdit(cb); // Oculta los inputs de stock
+                    });
+
+                    // 2. Llenamos las casillas y el stock que vienen de la Base de Datos
+                    if (data.inventario && data.inventario.length > 0) {
+                        data.inventario.forEach(item => {
+                            // Buscamos el checkbox y el input de cantidad usando los IDs que creamos
+                            const cb = document.getElementById(`edit-check-talla-${item.talla}`);
+                            const inputStock = document.getElementById(`edit-stock-talla-${item.talla}`);
+                            
+                            if (cb && inputStock) {
+                                cb.checked = true;                  // Marcamos la palomita
+                                inputStock.value = item.stock;      // Ponemos la cantidad
+                                toggleStockEdit(cb);                // Mostramos el cuadro de texto
+                            }
                         });
                     }
+                    // -----------------------------------
 
                     cargarPreviewDesdeBD(data.Img1, 'previewEditSombrero1');
                     cargarPreviewDesdeBD(data.Img2, 'previewEditSombrero2');

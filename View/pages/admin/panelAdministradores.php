@@ -21,7 +21,13 @@
     </header>
     <main>
         <h2 class="titleGestion">Gestión de Administradores</h2>
-        <button class="btn btn-agregar" id="btnAgg-Admin">Agregar nuevo administrador</button>
+        <div class="PanelUp">
+            <div class="PanelUpAdd">
+                <button class="btn btn-agregar" id="btnAgg-Admin">Agregar nuevo administrador</button>
+            </div>
+        </div>
+            
+
         <table>
             <th>ID</th>
             <th>Nombre</th>
@@ -49,8 +55,12 @@
                             <td>".$row["Fecha_Adicion"]."</td>
                             <td>".$row["Rol"]."</td>
                             <td>
-                                <button class='btn btn-editar'>Editar</button>
-                                <button class='btn btn-eliminar'>Eliminar</button>
+                                <button class='btn btn-editar'>
+                                    <span class='material-symbols-outlined'>edit</span>
+                                </button>
+                                <button class='btn btn-eliminar'>
+                                    <span class='material-symbols-outlined'>delete</span>
+                                </button>
                             </td>
                         </tr>"
                     );

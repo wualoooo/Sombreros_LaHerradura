@@ -38,12 +38,12 @@ try {
     }
     
     $productos_json = json_encode($carrito);
-    $codigo_rastreo = "LH-" . date('Y') . "-" . rand(1000, 9999);
+    $codigo_rastreo = "LH-" . date('Y') . "-" . time();
 
     // 5. GUARDAR EN MYSQL CON TUS COLUMNAS REALES
     $sqlPedido = "INSERT INTO pedidos (id_usuario, id_direccion, total, productos, estado_pago, estado_envio, fecha, codigo_rastreo) 
-                  VALUES (?, ?, ?, ?, 'PENDIENTE', 1, NOW(), ?)";
-                  
+                VALUES (?, ?, ?, ?, 'PENDIENTE', 1, NOW(), ?)";
+
     $stmt = $conn->prepare($sqlPedido);
     $stmt->bind_param("iidss", $id_usuario, $id_direccion, $total_calculado, $productos_json, $codigo_rastreo);
     $stmt->execute();
@@ -51,8 +51,8 @@ try {
     $id_pedido_interno = $conn->insert_id; 
 
     // 6. CONFIGURAR MERCADO PAGO 
-    MercadoPagoConfig::setAccessToken("APP_USR-5809738382506813-031721-1b0c424c0020a16bce3c576b9dfef5ef-3273777057");
-  
+    MercadoPagoConfig::setAccessToken("APP_USR-8083355483045380-033123-94c8d46063527a1b88721c4d2d2dcca8-3307374496");
+
 
     $items_mp = [];
     foreach ($carrito as $prod) {
@@ -67,9 +67,9 @@ try {
     $client = new PreferenceClient();
     $preference = $client->create([
         "items" => $items_mp,
-        "external_reference" => (string)$id_pedido_interno,
+        "external_reference" => (string)$codigo_rastreo,
         "back_urls" => [
-            "success" => "https://sombreroslaherradura.com/View/pago_exitoso.php",
+            "success" => "https://sombreroslaherradura.com/View/pages/user/pago_exitoso.php",
             "failure" => "https://sombreroslaherradura.com/View/pago_fallido.php",
             "pending" => "https://sombreroslaherradura.com/View/pago_pendiente.php"
         ],
@@ -97,4 +97,3 @@ try {
     ]);
 }
 ?>
-

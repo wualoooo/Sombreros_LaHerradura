@@ -58,20 +58,46 @@
 
                     <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
 
-                    <label class="lbl-Edit">Tallas Disponibles</label>
-                    <div class="contenedor-tallas">
-                        <?php
-                        // Tallas típicas de cinturones
-                        $tallas_comunes = ['30', '32', '34', '36', '38', '40', '42', '44'];
-                        foreach($tallas_comunes as $talla) {
-                            echo "
-                            <label class='talla-checkbox'>
-                                <input type='checkbox' name='tallas_disponibles[]' value='$talla' class='talla-edit-checkbox'>
-                                <span class='talla-btn'>$talla</span>
-                            </label>";
-                        }
-                        ?>
-                    </div>
+                    <label class="lbl-Edit">Tallas y Cantidad (Stock)</label>
+                        <div class="contenedor-tallas" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
+                            <?php
+                            $tallas_comunes = ['53', '54', '55', '56', '57', '58', '59', '60', '61'];
+                            foreach($tallas_comunes as $talla) {
+                                echo "
+                                <div class='item-talla-edit' style='border: 1px solid #ccc; padding: 10px; border-radius: 6px; background-color: #f9f9f9;'>
+                                    <label style='display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold;'>
+                                        <input type='checkbox' class='check-talla-edit' name='tallas_disponibles[]' value='$talla' onchange='toggleStockEdit(this)' id='edit-check-talla-$talla'>
+                                        Talla $talla
+                                    </label>
+                                    <div class='input-stock-container-edit' style='display: none; margin-top: 10px;'>
+                                        <input type='number' name='stock_talla[$talla]' id='edit-stock-talla-$talla' class='input-Edit input-stock-edit' placeholder='Cantidad' min='1' disabled style='width: 100%; padding: 5px; box-sizing: border-box;'>
+                                    </div>
+                                </div>";
+                            }
+                            ?>
+                        </div>
+
+                        <script>
+                        // Función exclusiva para el modal de edición
+                        function toggleStockEdit(checkbox) {
+                                const container = checkbox.closest('.item-talla-edit').querySelector('.input-stock-container-edit');
+                                const input = container.querySelector('input');
+                                
+                                if (checkbox.checked) {
+                                    container.style.display = 'block';
+                                    input.disabled = false;
+                                    
+                                    // CORRECCIÓN AQUÍ: Verificamos si 'event' existe antes de usarlo
+                                    if (typeof event !== 'undefined' && event && event.type === 'change') {
+                                        input.focus(); 
+                                    }
+                                } else {
+                                    container.style.display = 'none';
+                                    input.disabled = true;
+                                    input.value = '';
+                                }
+                            }
+                        </script>
 
                     <div class="divButton-pasarela">
                         <button type="button" class="btn-anterior" onclick="cambiarPasoEditCinturon(2, 1)">Anterior</button>

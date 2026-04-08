@@ -62,6 +62,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+         // --- NUEVA VALIDACIÓN: TALLAS Y STOCK ---
+        const checkboxesTallas = formulario.querySelectorAll('.check-talla:checked');
+        if (checkboxesTallas.length === 0) {
+            errores.push("Debes seleccionar al menos una talla para el sombrero.");
+        } else {
+            checkboxesTallas.forEach(cb => {
+                const talla = cb.value;
+                const inputStock = formulario.querySelector(`input[name="stock_talla[${talla}]"]`);
+                
+                if (!inputStock || inputStock.value === "" || isNaN(inputStock.value) || Number(inputStock.value) <= 0) {
+                    marcarError(inputStock, `Ingresa una cantidad válida para la Talla ${talla}.`);
+                }
+            });
+        }
+
         // 4. Imágenes
         const nombresArchivosVistos = new Set();
         for (let i = 1; i <= 4; i++) {
