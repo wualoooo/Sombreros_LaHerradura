@@ -95,11 +95,22 @@
                     </div>
                 </div>
 
+                <div class="contenedor-legales-checkout">
+                    <label class="checkbox-legal-checkout">
+                        <input type="checkbox" id="acepto-terminos-checkout" required>
+                        <span>He leído y acepto los <a href="/LaHerradura/View/pages/Terminos.php" target="_blank">Términos y Condiciones</a>.</span>
+                    </label>
+                    <br>
+                    <label class="checkbox-legal-checkout">
+                        <input type="checkbox" id="acepto-privacidad-checkout" required>
+                        <span>He leído y acepto el <a href="/LaHerradura/View/pages/Privacidad.php" target="_blank">Aviso de Privacidad</a>.</span>
+                    </label>
+                </div>
                 <div id="wallet_container"></div>
 
                 <div class="checkout-actions">
                     <button class="btn-atras" onclick="cambiarPaso(2)">&larr; Atrás</button>
-                    <button id="btn-preparar-pago" class="btn-finalizar" onclick="procesarCompraFinal()">CONTINUAR AL PAGO</button>
+                    <button id="btn-preparar-pago-legales" class="btn-finalizar" onclick="procesarCompraConLegales()">CONTINUAR AL PAGO</button>
                 </div>
             </div>
 

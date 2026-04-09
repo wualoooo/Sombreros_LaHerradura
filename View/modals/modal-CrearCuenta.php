@@ -49,9 +49,16 @@
                         </button>
                     </div>
 
-                    <div>
-                        <input type="checkbox" name="" id="" required>
-                        <label for="">Al registrarte aceptas los <a href="">Términos y condiciones</a></label>
+                    <div class="contenedor-legales">
+                        <label class="checkbox-legal">
+                            <input type="checkbox" id="acepto-terminos" required>
+                            <span>He leído los <a href="/LaHerradura/View/pages/user/terminos.php" target="_blank">Términos y condiciones</a> y estoy de acuerdo.</span>
+                        </label>
+                        
+                        <label class="checkbox-legal">
+                            <input type="checkbox" id="acepto-privacidad" required>
+                            <span>He leído la <a href="/LaHerradura/View/pages/user/privacidad.php" target="_blank">Política de privacidad</a> y estoy de acuerdo.</span>
+                        </label>
                     </div>
 
                     <div class="divButton-pasarela">

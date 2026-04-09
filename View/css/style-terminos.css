@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    background-color: #f4f4f4;
+}
+
+.contenedor-terminos {
+    max-width: 800px;
+    margin: 10rem auto 4rem auto; /* Espacio para el header fijo */
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.contenedor-terminos h1 {
+    text-align: center;
+    color: #333;
+    font-family: "Cinzel Decorative", serif;
+    margin-bottom: 10px;
+}
+
+.fecha-actualizacion {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.contenedor-terminos section {
+    margin-bottom: 25px;
+}
+
+.contenedor-terminos h2 {
+    color: #9f7200; /* Tu color dorado/café */
+    font-size: 1.3rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.contenedor-terminos p {
+    color: #444;
+    line-height: 1.6;
+    font-size: 1rem;
+    text-align: justify;
+}

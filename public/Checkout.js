@@ -53,6 +53,35 @@ function toggleNuevaDireccion() {
     if(form) form.style.display = (form.style.display === 'none') ? 'block' : 'none';
 }
 
+// Esta es la función que conectamos al botón
+function procesarCompraConLegales() {
+    const checkTerminos = document.getElementById('acepto-terminos-checkout');
+    const checkPrivacidad = document.getElementById('acepto-privacidad-checkout');
+
+    if (!checkTerminos.checked || !checkPrivacidad.checked) {
+        // Usa tu librería de Alertas si la tienes (SweetAlert)
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Aviso Legal',
+                text: 'Debes aceptar los Términos y Condiciones y el Aviso de Privacidad para continuar.',
+                confirmButtonColor: '#9f7200'
+            });
+        } else {
+            alert('Debes aceptar los Términos y Condiciones y el Aviso de Privacidad para continuar.');
+        }
+        return; // Detiene la ejecución aquí
+    }
+
+    // Si todo está marcado, llamamos a la función original que procesa la compra
+    // Aquí pon el nombre de la función que originalmente llamaba tu botón
+    if (typeof procesarCompraFinal === 'function') {
+        procesarCompraFinal(); 
+    } else {
+        console.error("La función procesarCompraFinal no está definida.");
+    }
+}
+
 // LA CONEXIÓN CON EL BACKEND
 function procesarCompraFinal() {
     const carrito = JSON.parse(localStorage.getItem('laherradura_carrito')) || [];
@@ -66,7 +95,7 @@ function procesarCompraFinal() {
         cambiarPaso(2); return;
     }
 
-    const btnPago = document.getElementById('btn-preparar-pago');
+    const btnPago = document.getElementById('btn-preparar-pago-legales');
     btnPago.textContent = "Conectando...";
     btnPago.disabled = true;
 
@@ -110,3 +139,4 @@ function procesarCompraFinal() {
         btnPago.disabled = false;
     });
 }
+

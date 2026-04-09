@@ -182,3 +182,47 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
     background: linear-gradient(135deg, #2d5528 0%, #22431f 100%);
 }
+
+/* =========================================
+   ESTILOS DE CHECKBOXES LEGALES (Checkout)
+   ========================================= */
+.contenedor-legales-checkout {
+    background-color: #fcfcfc;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkbox-legal-checkout {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0; /* Resetea márgenes por si hay conflictos */
+}
+
+.checkbox-legal-checkout input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: #9f7200; /* Color principal de La Herradura */
+    flex-shrink: 0; /* Evita que el checkbox se apachurre en pantallas chicas */
+}
+
+.checkbox-legal-checkout a {
+    color: #9f7200;
+    text-decoration: underline;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.checkbox-legal-checkout a:hover {
+    color: #6d4e00;
+}

@@ -53,7 +53,7 @@ form { width: 100%; }
 
 .input-register {
     background-color: #f5f5f5;
-    padding-left: 0.7rem;
+    padding: 0 10px; /* Ajuste el padding para centrar mejor el texto verticalmente */
     margin: 0.5rem 0 1rem 0;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -61,9 +61,14 @@ form { width: 100%; }
     height: 45px;
     font-size: 1rem;
     box-sizing: border-box;
+    font-family: inherit;
 }
 
-.campo-password { position: relative; }
+/* Contenedor relativo para poder posicionar el ojito encima del input */
+.campo-password { 
+    position: relative; 
+    width: 100%;
+}
 
 /* === ESTILOS PARA LA PASARELA DE PASOS === */
 .indicador-pasos {
@@ -154,4 +159,59 @@ form { width: 100%; }
     .labelRegistrer { font-size: 1rem; }
     .input-register { height: 40px; font-size: 0.95rem; }
     .btn-pasarela, #buttonCrearCuenta { padding: 10px; font-size: 1rem; }
+}
+
+.campo-password .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%; /* Centra verticalmente */
+    transform: translateY(-50%); /* Ajuste fino del centrado */
+    cursor: pointer;
+    color: #666; /* Color sutil */
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-top: -4px; /* Ajuste fino para alinearlo visualmente con el input */
+}
+
+.campo-password .toggle-password:hover {
+    color: #8B0000; /* Cambia al color vino de la marca al pasar el mouse */
+}
+
+/* =========================================
+   CHECKBOXES (Términos y Privacidad)
+   ========================================= */
+.contenedor-legales {
+    margin: 15px 0 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espacio entre los dos checkboxes */
+}
+
+.checkbox-legal {
+    display: flex;
+    align-items: flex-start; /* Alinea el texto arriba si es muy largo */
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.checkbox-legal input[type="checkbox"] {
+    width: 18px; /* Un poco más grande para ser fácil de clicar */
+    height: 18px;
+    margin: 2px 0 0 0; /* Lo baja un poquito para alinearlo con la primera línea de texto */
+    cursor: pointer;
+    accent-color: #9f7200; /* El color dorado/café de la marca */
+}
+
+.checkbox-legal a {
+    color: #9f7200;
+    text-decoration: none;
+    font-weight: 500;
+    transition: text-decoration 0.2s;
+}
+
+.checkbox-legal a:hover {
+    text-decoration: underline;
 }
