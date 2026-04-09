@@ -21,7 +21,8 @@ session_start();
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 180px; 
+            margin-top: 10rem; 
+            margin-bottom: 4rem;
         }
 
         .images {

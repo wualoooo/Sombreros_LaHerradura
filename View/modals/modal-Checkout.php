@@ -57,7 +57,7 @@
 
             <div id="step-view-2" class="step-view" style="display: none;">
                 <h3>Selecciona una Dirección</h3>
-                <button class="btn-nueva-dir" onclick="toggleNuevaDireccion()">+ Agregar Nueva Dirección</button>
+                <button class="Botonverde" id="AgregarDireccion2">+ Agregar Nueva Dirección</button>
                 
                 <div id="lista-direcciones" class="direcciones-grid">
                     <label class="card-direccion">
@@ -106,3 +106,7 @@
         </div>
     </div>
 </div>
+
+<?php 
+include('modal-AggDireccion.php');
+?>

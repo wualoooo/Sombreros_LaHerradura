@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 2. MAPEO DE MODALES (Configuración) ---
     const conexiones = [
-        { btn: "openLogin", modal: "" },
+        { btn: "openLogin", modal: "modal-Login" },
         { btn: "buttonCrear", modal: "modal-CrearCuenta" },
         { btn: "btnAgg-Sombrero", modal: "modal-AggSombrero" },
         { btn: "btnAgg-Texana", modal: "modal-AggTexana" },
@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         { btn: "btnAgg-Material", modal: "modal-AggMaterial" },
         { btn: "btnAgg-Color", modal: "modal-AggColor" },
         { btn: "openUserInfo", modal: "modal-UserInfo" },
-        { btn: "AgregarDireccion", modal: "modal-AgregarDirección" },
+        { btn: "AgregarDireccion", modal: "modal-AgregarDirección" }, 
+        { btn: "AgregarDireccion2", modal: "modal-AgregarDirección" }, 
         { btn: "OpenLogin2", modal: "modal-Login" }
     ];
 
