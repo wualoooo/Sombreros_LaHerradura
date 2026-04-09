@@ -244,7 +244,6 @@ session_start();
         const anchor = isMobile ? POS.mobile.anchor : POS.active.anchor;
         const step = isMobile ? POS.mobile.stackStep : POS.active.stackStep;
         
-       // ... (resto del código de updateView)
         avatarsElements.forEach((img, idx) => {
             let finalLeft, zIndex, size, topPos = '50%', borderW = '3px';
 
@@ -259,13 +258,12 @@ session_start();
                     pillEl.style.left = (anchor) + '%'; 
                     pillEl.style.width = (POS.active.textGap + 13) + '%'; 
                     pillEl.style.opacity = '1';
-                    pillEl.style.transform = 'translateY(-50%)'; // <-- RESETEA EN ESCRITORIO
+                    pillEl.style.transform = 'translateY(-50%)'; 
                     
                     textContainerEl.style.left = (anchor + 12) + '%';
                     textContainerEl.style.transform = 'translateY(-50%)';
                 }
             } 
-            // ... (resto de las condiciones else if y else)  
             else if (idx < currentIndex) {
                 const distance = currentIndex - idx;
                 finalLeft = anchor - (distance * step);
@@ -278,8 +276,7 @@ session_start();
             pillEl.style.left = '50%';
             pillEl.style.width = '90%';
             pillEl.style.opacity = '1';
-            pillEl.style.transform = 'translate(-50%, -50%)';  // <-- ESTA LÍNEA CENTRA LA CAJA BLANCA
-            
+            pillEl.style.transform = 'translate(-50%, -50%)'; 
             textContainerEl.style.left = '50%'; 
             textContainerEl.style.transform = 'translate(-50%, -50%)'; 
         } else {
