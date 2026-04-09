@@ -252,7 +252,7 @@ h5 {
 /* =========================================
    WHATSAPP (FLOTANTE)
    ========================================= */
-#wpp {
+#wpp-link {
     position: fixed;
     bottom: 3%;
     right: 3%;
@@ -260,9 +260,15 @@ h5 {
     height: auto;
     z-index: 100; 
     transition: transform 0.3s;
+    display: block; /* Asegura que el enlace tome la forma de la imagen */
 }
 
-#wpp:hover { transform: scale(1.1); }
+#wpp-link:hover { transform: scale(1.1); }
+
+#wpp {
+    width: 100%; /* La imagen se adapta a su contenedor (#wpp-link) */
+    height: auto;
+}
 
 /* =========================================
    MEDIA QUERIES (RESPONSIVE)
@@ -296,5 +302,5 @@ h5 {
     .vista-rapida { display: none; }
     .card { width: 100%; height: 1rem; }
     .container2 > div { min-height: 200px; height: auto; }
-    #wpp { width: 50px; right: 5%; bottom: 5%; }
+    #wpp-link { width: 50px; right: 5%; bottom: 5%; }
 }

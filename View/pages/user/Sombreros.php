@@ -148,7 +148,12 @@ session_start();
             </div>
 
 
-        </div> </div> <img id="wpp" src="/LaHerradura/View/images/WhatsApp.png" alt="WhatsApp">
+        </div> 
+    </div> 
+    
+    <a href="https://wa.me/527721437028?text=Hola,%20vengo%20de%20la%20tienda%20en%20línea%20y%20necesito%20información." target="_blank" id="wpp-link">
+        <img id="wpp" src="/LaHerradura/View/images/WhatsApp.png" alt="WhatsApp">
+    </a>
 
     <?php 
     include(ROOT_PATH . 'View/modals/modals-View/modal-ViewProduct.php');

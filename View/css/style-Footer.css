@@ -129,3 +129,10 @@
         justify-content: center;
     }
 }
+
+/* Forzar el tamaño de los iconos del footer en todas las páginas */
+.redes {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0 5px;
+}

@@ -75,6 +75,32 @@
             box-shadow: 0 3px 5px rgb(0, 0, 0); 
             border: none; }
 
+        /* =========================================
+   WHATSAPP (FLOTANTE)
+   ========================================= */
+#wpp-link {
+    position: fixed;
+    bottom: 3%;
+    right: 3%;
+    width: 60px; 
+    height: auto;
+    z-index: 100; 
+    transition: transform 0.3s;
+    display: block; /* Asegura que el enlace tome la forma de la imagen */
+}
+
+#wpp-link:hover { transform: scale(1.1); }
+
+#wpp {
+    width: 100%; /* La imagen se adapta a su contenedor (#wpp-link) */
+    height: auto;
+}
+
+/* Y en tu media query para celulares (@media screen and (max-width: 480px)) */
+@media screen and (max-width: 480px) {
+    #wpp-link { width: 50px; right: 5%; bottom: 5%; }
+}
+
     </style>
     <link rel="shortcut icon" href="../../images/Logo_Herradura_head3.png" type="image/x-icon">
 </head>
@@ -137,6 +163,7 @@
         </div>
     </div>
 
+
     <script>
         const modelViewer = document.querySelector('model-viewer#visor-sombrero');
 
@@ -183,6 +210,10 @@
             
         });
     </script>
+
+    <a href="https://wa.me/527721437028?text=Hola,%20vengo%20de%20la%20tienda%20en%20línea%20y%20necesito%20información." target="_blank" id="wpp-link">
+        <img id="wpp" src="/LaHerradura/View/images/WhatsApp.png" alt="WhatsApp">
+    </a>
 </body>
 <footer>
         <?php 
