@@ -8,113 +8,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía de Tallas</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Cinzel Decorative', serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            overflow-y: auto; 
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10rem; 
-            margin-bottom: 4rem;
-        }
-
-        .images {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap; 
-        }
-
-        .images img {
-            width: 650px;   
-            height: auto;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        /* Panel lateral de botones */
-        .buttons {
-            display: flex;
-            flex-direction: column; /* uno debajo del otro */
-            align-items: flex-end;  /* alineados a la derecha */
-            position: fixed;        /* flotando en la pantalla */
-            right: 20px;
-            top: 200px;             /* ajusta según tu diseño */
-            gap: 15px;              /* espacio entre botones */
-        }
-
-        /* Estilo de botones */
-        .btn-editar {
-            width: 180px;           /* mismo tamaño */
-            text-align: center;
-            color: #fff;            /* letra blanca */
-            border-radius: 8px;
-            font-size: 1rem;
-            padding: 12px 20px;
-            border: none;
-            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-            cursor: pointer;
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.1),
-                0 2px 4px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            font-weight: 500;
-        }
-
-        .btn-editar:hover {
-            transform: translateY(-2px);
-            box-shadow: 
-                0 6px 12px rgba(0, 0, 0, 0.15),
-                0 4px 8px rgba(0, 0, 0, 0.1),
-                0 0 15px rgba(255, 215, 0, 0.4);
-            background: linear-gradient(135deg, #ffc107 0%, #ffd700 100%);
-            color: #fff;
-        }
-
-        .btn-editar:active {
-            transform: translateY(0);
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.1),
-                0 1px 2px rgba(0, 0, 0, 0.08);
-            background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
-        }
-
-        .btn-editar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-editar:hover::before {
-            left: 100%;
-        }
-
-        /* Botón activo */
-        .btn-activo {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%); /* verde elegante */
-            color: #fff;
-            box-shadow: 
-                0 6px 12px rgba(0, 0, 0, 0.2),
-                0 0 15px rgba(255, 215, 0, 0.4);
-        }
-    </style>
+    <link rel="stylesheet" href="../../css/style-guiaTallas.css">
     <link rel="shortcut icon" href="../../images/Logo_Herradura_head3.png" type="image/x-icon">
 </head>
 <body>
@@ -139,7 +33,7 @@ session_start();
 
     <a href="https://wa.me/527721437028?text=Hola,%20vengo%20de%20la%20tienda%20en%20línea%20y%20necesito%20información." target="_blank" id="wpp-link">
         <img id="wpp" src="/LaHerradura/View/images/WhatsApp.png" alt="WhatsApp">
-    </a>
+        </a>
 
     <footer>
         <?php 

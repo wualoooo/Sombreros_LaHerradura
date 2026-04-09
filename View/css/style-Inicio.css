@@ -1,4 +1,19 @@
 /* ====== SECCIÓN HERO / BURBUJAS ====== */
+/* =========================================
+   RESETEO Y PREVENCIÓN DE DESBORDAMIENTO
+   ========================================= */
+html, body {
+    overflow-x: hidden; /* ¡La magia! Corta cualquier elemento que intente fugarse a la derecha */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative; /* Ayuda a que los modales se anclen correctamente */
+}
+
+/* Evita que los paddings sumen ancho extra a los elementos del 100% */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 /* ====== SECCIÓN HERO / BURBUJAS ====== */
 .font-circles {
     color: #fff;

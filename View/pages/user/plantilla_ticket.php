@@ -172,7 +172,8 @@
 
         <div class="footer">
             ¡Gracias por tu preferencia!<br>
-            <strong>Sombreros La Herradura</strong> • www.sombreroslaherradura.com
+            <strong>Sombreros La Herradura</strong> • www.sombreroslaherradura.com <br>
+            Para dudas o aclaraciones <b>info@sombreroslaherradura.com</b>
         </div>
     </div>
 </body>

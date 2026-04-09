@@ -1,0 +1,170 @@
+body {
+    font-family: 'Cinzel Decorative', serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow-y: auto; 
+}
+header {
+    margin-bottom: 6rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10rem; 
+    margin-bottom: 4rem;
+    padding: 0 15px; /* Añadido un pequeño padding para que el contenido no toque los bordes en móvil */
+}
+
+.images {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap; 
+    width: 100%; /* Asegura que tome el espacio disponible */
+}
+
+.images img {
+    width: 100%; /* Cambiado: Se adapta al contenedor... */
+    max-width: 650px; /* Cambiado: ...pero nunca será más grande que 650px */
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Panel lateral de botones (Escritorio) */
+.buttons {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-end;  
+    position: fixed;        
+    right: 20px;
+    top: 200px;             
+    gap: 15px;              
+    z-index: 10; /* Asegura que los botones queden por encima de las imágenes */
+}
+
+/* Estilo de botones */
+.btn-editar {
+    width: 180px;           
+    text-align: center;
+    color: #fff;            
+    border-radius: 8px;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border: none;
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    cursor: pointer;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.btn-editar:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 0 15px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, #ffc107 0%, #ffd700 100%);
+    color: #fff;
+}
+
+.btn-editar:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
+}
+
+.btn-editar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    transition: left 0.5s;
+}
+
+.btn-editar:hover::before {
+    left: 100%;
+}
+
+/* Botón activo */
+.btn-activo {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%); 
+    color: #fff;
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* WHATSAPP (FLOTANTE) */
+#wpp-link {
+    position: fixed;
+    bottom: 3%;
+    right: 3%;
+    width: 60px; 
+    height: auto;
+    z-index: 100; 
+    transition: transform 0.3s;
+    display: block; 
+}
+
+#wpp-link:hover { transform: scale(1.1); }
+
+#wpp {
+    width: 100%; 
+    height: auto;
+}
+
+/* =========================================
+   MEDIA QUERIES (RESPONSIVE PARA MÓVILES Y TABLETS)
+   ========================================= */
+
+@media screen and (max-width: 900px) {
+    /* Convierte el panel flotante en una barra horizontal antes del contenido */
+    .buttons {
+        position: static;       /* Evita que floten sobre el contenido */
+        flex-direction: column; /* Los mantiene uno debajo del otro */
+        align-items: center;    /* ¡LA SOLUCIÓN! Los centra en la pantalla */
+        width: 100%;            /* Ocupan todo el ancho disponible */
+        margin-top: 200px;       /* Un pequeño espacio debajo del header */
+        margin-bottom: 20px;
+        right: auto;            /* Anula el 'right: 20px' del escritorio */
+    }
+
+    .btn-editar {
+        width: 90%;             /* Que no toquen los bordes de la pantalla */
+        max-width: 300px;       /* Pero que no se hagan gigantes */
+    }
+
+    .container {
+        margin-top: 3rem; /* Reduce el enorme margen superior en móviles */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .btn-editar {
+        width: 100%; /* En celulares pequeños, los botones ocupan todo el ancho */
+        max-width: 300px;
+    }
+
+    #wpp-link { 
+        width: 50px; 
+        right: 5%; 
+        bottom: 5%; 
+    }
+}
